@@ -74,14 +74,10 @@ void MainWindow::on_pushButton_2D_clicked()
 
     // Создаем виджет для отображения графика
 
-    //series->setName("рассчет");
-    //series->setColor(Qt::blue);
     series->setPen(QPen(Qt::blue, 2, Qt::SolidLine));
     //series->setPointsVisible(true);
     chart->addSeries(series);
     chart->createDefaultAxes();
-    //chart->setTitle("График данных");
-    //chart->setTitleFont(QFont("Times New Roman", 14, QFont::Bold));
     chart->setAnimationOptions(QChart::AllAnimations);
 
     // Настройка осей

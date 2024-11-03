@@ -44,6 +44,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(3dSEBox_withVTK
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        robcalculation.cpp robcalculation.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET 3dSEBox_withVTK APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
