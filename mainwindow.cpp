@@ -15,25 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     ui->GRAPH_2D->hide();
-
-    cylinderSource = vtkSmartPointer<vtkCylinderSource>::New();
-    cylinderSource->SetResolution(8);
-
-    vtkNew<vtkPolyDataMapper> mapper;
-    mapper->SetInputConnection(cylinderSource->GetOutputPort());
-
-    cylinderActor = vtkSmartPointer<vtkActor>::New();
-    cylinderActor->SetMapper(mapper);
-    cylinderActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
-
-    vtkNew<vtkRenderer> renderer;
-    renderer->AddActor(cylinderActor);
-    renderer->SetBackground(colors->GetColor3d("White").GetData());
-
-    vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
-    renderWindow->AddRenderer(renderer);
-
-    ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
+    on_pushButton_Figure_2_clicked();
 }
 
 MainWindow::~MainWindow()
@@ -101,6 +83,8 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     figure = 2;
     ui->lineEdit_size_d->show();
     ui->label_size_d->show();
+    ui->label_size_a->setText("a");
+    ui->label_size_b->setText("b");
     rectangleSource = vtkSmartPointer<vtkCubeSource>::New();
 
 
@@ -137,6 +121,8 @@ void MainWindow::on_pushButton_Figure_3_clicked()
     figure = 3;
     ui->lineEdit_size_d->hide();
     ui->label_size_d->hide();
+    ui->label_size_a->setText("r");
+    ui->label_size_b->setText("h");
     cylinderSource = vtkSmartPointer<vtkCylinderSource>::New();
     cylinderSource->SetResolution(8);
 
