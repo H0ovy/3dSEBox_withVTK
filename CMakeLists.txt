@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+﻿cmake_minimum_required(VERSION 3.5)
 
 project(3dSEBox_withVTK VERSION 0.1 LANGUAGES CXX)
 
@@ -14,6 +14,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS OpenGLWidgets)
 find_package(Qt6 REQUIRED COMPONENTS Charts)
 
+
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
@@ -21,7 +23,7 @@ set(PROJECT_SOURCES
         mainwindow.ui
 )
 
-set(VTK_DIR "../VTK-9.3.0-install-no-CASCADE/lib/cmake/vtk-9.3")
+set(VTK_DIR "C:/Work/VTK-9.3.0-install-no-CASCADE/lib/cmake/vtk-9.3")
 
 find_package(VTK COMPONENTS
   CommonColor
@@ -36,6 +38,7 @@ find_package(VTK COMPONENTS
   RenderingOpenGL2
 )
 
+
 if (NOT VTK_FOUND)
   message(FATAL_ERROR "Cube: Unable to find the VTK build folder.")
 endif()
@@ -44,7 +47,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(3dSEBox_withVTK
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        robcalculation.cpp robcalculation.h
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET 3dSEBox_withVTK APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -65,9 +68,9 @@ else()
 endif()
 
 target_link_libraries(3dSEBox_withVTK PRIVATE
-    "G:/VTK-9.3.0-install-no-CASCADE/lib/vtkGUISupportQt-9.3.lib"
-    "G:/VTK-9.3.0-install-no-CASCADE/lib/vtkInteractionWidgets-9.3.lib"
-    "G:/VTK-9.3.0-install-no-CASCADE/lib/vtkRenderingAnnotation-9.3.lib"
+    "C:/Work/VTK-9.3.0-install-no-CASCADE/lib/vtkGUISupportQt-9.3.lib"
+    "C:/Work/VTK-9.3.0-install-no-CASCADE/lib/vtkInteractionWidgets-9.3.lib"
+    "C:/Work/VTK-9.3.0-install-no-CASCADE/lib/vtkRenderingAnnotation-9.3.lib"
     Qt6::Core
     Qt6::Gui
     Qt6::Charts
@@ -75,6 +78,8 @@ target_link_libraries(3dSEBox_withVTK PRIVATE
     Qt6::OpenGL
     Qt6::OpenGLWidgets
         ${VTK_LIBRARIES})
+target_link_libraries(3dSEBox_withVTK PRIVATE Qt6::Charts)
+
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
