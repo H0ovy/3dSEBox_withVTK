@@ -6,11 +6,15 @@
 #include <vtkNamedColors.h>
 #include <vtkSmartPointer.h>
 #include <vtkCylinderSource.h>
-#include <vtkCubeSource.h>.h>
+#include <vtkCubeSource.h>
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QValueAxis>
 #include <vtkActor.h>
+#include <vtkProperty.h>
+
+
+
 
 
 QT_BEGIN_NAMESPACE
@@ -46,6 +50,7 @@ private:
     vtkSmartPointer<vtkCylinderSource> cylinderSource;
     vtkSmartPointer<vtkCubeSource> rectangleSource;
     vtkSmartPointer<vtkActor> cylinderActor;
+
 
     void updateCylinder(double radius, double height);
     bool graph_2d_exists = false;

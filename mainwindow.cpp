@@ -6,8 +6,8 @@
 #include <vtkRenderer.h>
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <QDebug>
+#include <cmath>
 #include <vtkProperty.h>
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -34,6 +34,15 @@ void MainWindow::on_pushButton_2D_clicked()
     {
         series = new QLineSeries();
         QChart *chart = new QChart();
+
+
+        int numPoints = 50;
+        for (int i = 0; i < numPoints; ++i)
+        {
+            double x = i;
+            double y = 10 * std::sin(0.1 * i);
+            series->append(x, y);
+        }
 
         series->setPen(QPen(Qt::blue, 2, Qt::SolidLine));
         chart->addSeries(series);
@@ -69,6 +78,7 @@ void MainWindow::on_pushButton_3D_clicked()
 {
     ui->qvtkWidget_GRAPH->show();
     ui->GRAPH_2D->hide();
+
 }
 
 void MainWindow::on_pushButton_Figure_1_clicked()
