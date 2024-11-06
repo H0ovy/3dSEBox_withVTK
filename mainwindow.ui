@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>510</x>
-      <y>430</y>
+      <y>450</y>
       <width>311</width>
       <height>211</height>
      </rect>
@@ -46,23 +46,23 @@
     <property name="geometry">
      <rect>
       <x>510</x>
-      <y>90</y>
+      <y>120</y>
       <width>311</width>
-      <height>331</height>
+      <height>322</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="LayoutModeling">
-     <item row="7" column="1" colspan="2">
-      <widget class="QLabel" name="label_aperture_width">
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_size_b">
        <property name="text">
-        <string>Ширина</string>
+        <string>b</string>
        </property>
       </widget>
      </item>
-     <item row="8" column="1" colspan="2">
-      <widget class="QLineEdit" name="lineEdit_aperture_width">
+     <item row="0" column="0" colspan="4">
+      <widget class="QLabel" name="label">
        <property name="text">
-        <string>0.012</string>
+        <string>Моделирование</string>
        </property>
       </widget>
      </item>
@@ -73,31 +73,24 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_aperture_height">
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_size_a">
        <property name="text">
-        <string>Высота</string>
+        <string>a</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1" colspan="2">
-      <widget class="QLineEdit" name="lineEdit_size_b">
+     <item row="9" column="0" colspan="3">
+      <widget class="QLabel" name="label_pos">
        <property name="text">
-        <string>0.12</string>
+        <string>Расположение</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_aperture">
+     <item row="7" column="1" colspan="2">
+      <widget class="QLabel" name="label_aperture_width">
        <property name="text">
-        <string>Апертура</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLineEdit" name="lineEdit_aperture_height">
-       <property name="text">
-        <string>0.012</string>
+        <string>Ширина</string>
        </property>
       </widget>
      </item>
@@ -108,10 +101,17 @@
        </property>
       </widget>
      </item>
-     <item row="11" column="0">
-      <widget class="QLineEdit" name="lineEdit_pos_x">
+     <item row="10" column="1" colspan="2">
+      <widget class="QLabel" name="label_pos_y">
        <property name="text">
-        <string>0.15</string>
+        <string>Y</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1" colspan="2">
+      <widget class="QLineEdit" name="lineEdit_aperture_width">
+       <property name="text">
+        <string>0.012</string>
        </property>
       </widget>
      </item>
@@ -119,6 +119,48 @@
       <widget class="QLineEdit" name="lineEdit_pos_y">
        <property name="text">
         <string>0.06</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLineEdit" name="lineEdit_aperture_height">
+       <property name="text">
+        <string>0.012</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_aperture_height">
+       <property name="text">
+        <string>Высота</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_aperture">
+       <property name="text">
+        <string>Апертура</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" colspan="2">
+      <widget class="QLineEdit" name="lineEdit_size_b">
+       <property name="text">
+        <string>0.12</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="4">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Корпус (в м.)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" colspan="2">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Толщина</string>
        </property>
       </widget>
      </item>
@@ -143,52 +185,10 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_size_a">
+     <item row="11" column="0">
+      <widget class="QLineEdit" name="lineEdit_pos_x">
        <property name="text">
-        <string>a</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" colspan="4">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Моделирование</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="label_size_b">
-       <property name="text">
-        <string>b</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0" colspan="3">
-      <widget class="QLabel" name="label_pos">
-       <property name="text">
-        <string>Расположение</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0" colspan="2">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Толщина</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1" colspan="2">
-      <widget class="QLabel" name="label_pos_y">
-       <property name="text">
-        <string>Y</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="4">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Корпус (в м.)</string>
+        <string>0.15</string>
        </property>
       </widget>
      </item>
@@ -522,6 +522,39 @@
       <height>301</height>
      </rect>
     </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>70</y>
+      <width>311</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QPushButton" name="pushButton_Figure_1">
+       <property name="text">
+        <string>Фигура1</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="pushButton_Figure_2">
+       <property name="text">
+        <string>Прямоугольник</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="pushButton_Figure_3">
+       <property name="text">
+        <string>Цилиндр</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
