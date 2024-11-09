@@ -3,7 +3,7 @@
 #include <math.h>
 #include <omp.h>
 #include <iostream>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QDebug>
 #include <QThread>
 
@@ -281,13 +281,13 @@ double robCalculation::func3(double y, double n, double b, double w)
 double robCalculation::doubleintegral(int *iter,double a, double b, double c, double d, double nx, double ny, double w, double L, double m,double n)
 {
     //variable to mesure the time of execution
-    QTime time;
+    QElapsedTimer timer;
     double hx = (b - a)/(nx);
     double hy = (d - c)/(ny);
     double xi, yj;
     double I = 0;
 
-    time.start();
+    timer.start();
 
     //#pragma omp parallel for schedule(dynamic, 100)
         for(int i=0; i<(int)nx; i++)
@@ -349,9 +349,9 @@ double robCalculation::ren(int *iter,double freq, double a, double b,double p, d
     dcomp z3 = 0;
     std::complex<double> vp = 0;
     //variable to mesure the time of execution
-    QTime time;
+    QElapsedTimer timer;
 
-    time.start();
+    timer.start();
         for (int mm=1; mm<=(int)m; mm++) {
             for (int nn=0; nn<=n; nn++) {
                 // Характеристический импеданс и постоянная распространения в корпусе
@@ -460,9 +460,9 @@ double robCalculation::Dehkhoda_2007(int *iter, double freq, double a, double b,
     dcomp z3(0,0);
     dcomp vp(0,0);
 
-    QTime time;
+    QElapsedTimer timer;
 
-    time.start();
+    timer.start();
 /*
 #pragma omp parallel shared(lambda, vp, vpp, v1, v2, kg, k0, p, j, z1, z2, z3, zg, d, a)
     {
