@@ -127,7 +127,7 @@ void MainWindow::on_pushButton_Figure_1_clicked()
 
 
     ///{ Если размеры выходят за рамки модели
-    if (X_shift + notchDepth >= length)
+    if (X_shift + notchDepth >= length && X_shift != 0)
     {
         X_shift = 0.0001;
         notchDepth = length / 4;
@@ -151,7 +151,7 @@ void MainWindow::on_pushButton_Figure_1_clicked()
         ui->lineEdit_size_a->setPalette(*palette);
     }
 
-    if (Y_shift + notchHeight >= height)
+    if (Y_shift + notchHeight >= height && Y_shift != 0)
     {
         Y_shift = 0.0001;
         notchHeight = height / 4;
@@ -225,10 +225,10 @@ void MainWindow::on_pushButton_Figure_1_clicked()
     notchSource->SetZLength(notchWidth);
     notchSource->Update();
 
-    notchTransform = vtkSmartPointer<vtkTransform>::New();
+    vtkNew<vtkTransform> notchTransform;
     notchTransform->Translate(-(length / 2) + (notchDepth / 2) + X_shift /*X*/, -(height / 2) + (notchHeight / 2) + Y_shift /*Z*/, (width / 2) - 0.00099 /*Y*/ );
 
-    notchTransformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+    vtkNew<vtkTransformPolyDataFilter>notchTransformFilter;
     notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
     notchTransformFilter->SetTransform(notchTransform);
     notchTransformFilter->Update();
@@ -276,8 +276,9 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     ui->label_horizontally->show();
     ui->label_vertically->show();
     ui->label_col->show();
-    \
-        rectangleSource = vtkSmartPointer<vtkCubeSource>::New();
+
+    rectangleSource = vtkSmartPointer<vtkCubeSource>::New();
+
     double width = ui->lineEdit_size_d->text().toDouble();      // Y
     double height = ui->lineEdit_size_b->text().toDouble();     // Z
     double length = ui->lineEdit_size_a->text().toDouble();     // X
@@ -350,11 +351,11 @@ void MainWindow::on_pushButton_Figure_2_clicked()
             double notchPosX = gridOffsetX + col * horizontalSpacing;
             double notchPosY = gridOffsetY + row * verticalSpacing;
 
-            vtkSmartPointer<vtkTransform> notchTransform = vtkSmartPointer<vtkTransform>::New();
+            vtkNew<vtkTransform> notchTransform;
             notchTransform->Translate(notchPosX, notchPosY, (width / 2) - 0.00099);
 
 
-            vtkSmartPointer<vtkTransformPolyDataFilter> notchTransformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+            vtkNew<vtkTransformPolyDataFilter> notchTransformFilter;
             notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
             notchTransformFilter->SetTransform(notchTransform);
             notchTransformFilter->Update();
@@ -441,8 +442,8 @@ void MainWindow::on_pushButton_Figure_3_clicked()
 
 void MainWindow::on_lineEdit_size_a_textChanged(const QString &arg1)
 {
-    // if(arg1.toDouble() <= 0)
-    //     return;
+    if(arg1.toDouble() <= 0)
+        return;
 
     // if(arg1.toDouble() <= ui->lineEdit_aperture_width->text().toDouble()){
     //     QPalette *palette = new QPalette();
@@ -544,12 +545,18 @@ void MainWindow::on_lineEdit_pos_y_textChanged(const QString &arg1)
 
 void MainWindow::on_lineEdit_aperture_height_textChanged(const QString &arg1)
 {
+    if(arg1.toDouble() <= 0)
+        return;
+
     on_pushButton_Figure_1_clicked();
 }
 
 
 void MainWindow::on_lineEdit_aperture_width_textChanged(const QString &arg1)
 {
+    if(arg1.toDouble() <= 0)
+        return;
+
     on_pushButton_Figure_1_clicked();
 }
 

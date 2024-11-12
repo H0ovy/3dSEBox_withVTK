@@ -55,9 +55,6 @@ private:
     vtkSmartPointer<vtkCubeSource> rectangleSource;
     vtkSmartPointer<vtkActor> cylinderActor;
 
-    vtkSmartPointer<vtkTransform> notchTransform;
-    vtkSmartPointer<vtkTransformPolyDataFilter> notchTransformFilter;
-
     void updateCylinder(double radius, double height);
     bool graph_2d_exists = false;
     QLineSeries *series;
