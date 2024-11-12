@@ -45,6 +45,10 @@ private slots:
 
     void on_lineEdit_pos_y_textChanged(const QString &arg1);
 
+    void on_lineEdit_aperture_height_textChanged(const QString &arg1);
+
+    void on_lineEdit_aperture_width_textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     vtkSmartPointer<vtkCylinderSource> cylinderSource;
