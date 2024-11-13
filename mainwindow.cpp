@@ -312,8 +312,9 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_aperture_height->setPalette(palette);
         ui->lineEdit_pos_vertically->setPalette(palette);
-        QMessageBox::warning(this, "Warning", "Прямоугольники перискаются по ширине. Пожалуйста, уменьшите высоту или уменьшите вертикальный интервал.");
-        intersectionDetected = true; // Set intersection flag
+       // QMessageBox::warning(this, "Warning", "Прямоугольники перискаются по ширине. Пожалуйста, уменьшите высоту или уменьшите вертикальный интервал.");
+        intersectionDetected = true;
+        goto after_error;
     } else {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::white);
@@ -326,8 +327,8 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_aperture_width->setPalette(palette);
         ui->lineEdit_pos_horizontally->setPalette(palette);
-        QMessageBox::warning(this, "Warning", "Прямоугольники перискаются по высоте. Пожалуйста, уменьшите ширину или уменьшите горизонтальный интервал.");
-        intersectionDetected = true; // Set intersection flag
+        intersectionDetected = true;
+         goto after_error;
     } else {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::white);
@@ -335,13 +336,15 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         ui->lineEdit_pos_horizontally->setPalette(palette);
     }
 
+
     if (exceedsWidth) {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_col_horizontally->setPalette(palette);
         ui->lineEdit_pos_horizontally->setPalette(palette);
-        QMessageBox::warning(this, "Warning", "Сетка превышает ширину прямоугольника. Пожалуйста, уменьшите количество столбцов или уменьшите горизонтальный интервал.");
-        intersectionDetected = true; // Set intersection flag
+       // QMessageBox::warning(this, "Warning", "Сетка превышает ширину прямоугольника. Пожалуйста, уменьшите количество столбцов или уменьшите горизонтальный интервал.");
+        intersectionDetected = true;
+         goto after_error;
     } else {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::white);
@@ -354,8 +357,9 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_col_vertically->setPalette(palette);
         ui->lineEdit_pos_vertically->setPalette(palette);
-        QMessageBox::warning(this, "Warning", "Сетка превышает высоту прямоугольника. Пожалуйста, уменьшите количество строк или уменьшите вертикальный интервал.");
-        intersectionDetected = true; // Set intersection flag
+       // QMessageBox::warning(this, "Warning", "Сетка превышает высоту прямоугольника. Пожалуйста, уменьшите количество строк или уменьшите вертикальный интервал.");
+        intersectionDetected = true;
+         goto after_error;
     } else {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::white);
@@ -368,7 +372,8 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_aperture_width->setPalette(palette);
-        intersectionDetected = true; // Set intersection flag
+        intersectionDetected = true;
+         goto after_error;
     } else {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::white);
@@ -380,19 +385,18 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_aperture_height->setPalette(palette);
-        intersectionDetected = true; // Set intersection flag
+        intersectionDetected = true;
+         goto after_error;
     } else {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::white);
         ui->lineEdit_aperture_height->setPalette(palette);
     }
-
-    // Check if any intersection has been detected, if so, stop further execution
+after_error:
     if (intersectionDetected) {
-        return; // Prevent further processing if there's an intersection
+        return;
     }
 
-    // If no intersection, proceed with the model creation
     notchSource->SetYLength(notchHeight);
     notchSource->SetXLength(notchWidth);
     notchSource->SetZLength(notchDepth);
@@ -663,4 +667,3 @@ void MainWindow::on_lineEdit_pos_vertically_textChanged(const QString &arg1)//р
 {
     on_pushButton_Figure_2_clicked();
 }
-
