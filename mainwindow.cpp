@@ -127,64 +127,108 @@ void MainWindow::on_pushButton_Figure_1_clicked()
 
 
     ///{ Если размеры выходят за рамки модели
-    if (notchHeight >= height){
-        notchHeight = height / 4;
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::red);
-        ui->lineEdit_aperture_height->setPalette(*palette);
-    }
-    else{
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::white);
-        ui->lineEdit_aperture_height->setPalette(*palette);
-    }
-
-    if (notchDepth >= length){
-        notchDepth = length / 4;
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::red);
-        ui->lineEdit_aperture_width->setPalette(*palette);
-    }
-    else{
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::white);
-        ui->lineEdit_aperture_width->setPalette(*palette);
-    }
-
-    if (X_shift + notchDepth >= length){
+    if (X_shift + notchDepth >= length && X_shift != 0)
+    {
         X_shift = 0.0001;
+        notchDepth = length / 4;
+
         QPalette *palette = new QPalette();
         palette->setColor(QPalette::Base,Qt::red);
-        ui->lineEdit_pos_x->setPalette(*palette);
+
+        ui->lineEdit_pos_x->setPalette(*palette);           // X shift
+        ui->lineEdit_aperture_width->setPalette(*palette);  // NotchDepth
+        ui->lineEdit_size_a->setPalette(*palette);          // Length
+
+        goto after_error;
     }
-    else{
+    else
+    {
         QPalette *palette = new QPalette();
         palette->setColor(QPalette::Base,Qt::white);
+
         ui->lineEdit_pos_x->setPalette(*palette);
+        ui->lineEdit_aperture_width->setPalette(*palette);
+        ui->lineEdit_size_a->setPalette(*palette);
     }
 
-    if (Y_shift + notchHeight >= height){
+    if (Y_shift + notchHeight >= height && Y_shift != 0)
+    {
         Y_shift = 0.0001;
+        notchHeight = height / 4;
+
         QPalette *palette = new QPalette();
         palette->setColor(QPalette::Base,Qt::red);
-        ui->lineEdit_pos_y->setPalette(*palette);
+
+        ui->lineEdit_pos_y->setPalette(*palette);           //Y shift
+        ui->lineEdit_aperture_height->setPalette(*palette); // NotchHeight
+        ui->lineEdit_size_b->setPalette(*palette);          // Height
+
+        goto after_error;
     }
-    else{
+    else
+    {
         QPalette *palette = new QPalette();
         palette->setColor(QPalette::Base,Qt::white);
+
         ui->lineEdit_pos_y->setPalette(*palette);
+        ui->lineEdit_aperture_height->setPalette(*palette);
+        ui->lineEdit_size_b->setPalette(*palette);
+    }
+
+    if (notchHeight >= height)
+    {
+        notchHeight = height / 4;
+
+        QPalette *palette = new QPalette();
+        palette->setColor(QPalette::Base,Qt::red);
+
+        ui->lineEdit_aperture_height->setPalette(*palette); // NotchHeight
+        ui->lineEdit_size_b->setPalette(*palette);          // Height
+
+        goto after_error;
+    }
+    else
+    {
+        QPalette *palette = new QPalette();
+        palette->setColor(QPalette::Base,Qt::white);
+
+        ui->lineEdit_aperture_height->setPalette(*palette);
+        ui->lineEdit_size_b->setPalette(*palette);
+    }
+
+    if (notchDepth >= length)
+    {
+        notchDepth = length / 4;
+
+        QPalette *palette = new QPalette();
+        palette->setColor(QPalette::Base,Qt::red);
+
+        ui->lineEdit_aperture_width->setPalette(*palette);  // NotchDepth
+        ui->lineEdit_size_a->setPalette(*palette);          // Length
+
+        goto after_error;
+    }
+    else
+    {
+        QPalette *palette = new QPalette();
+        palette->setColor(QPalette::Base,Qt::white);
+
+        ui->lineEdit_aperture_width->setPalette(*palette);
+        ui->lineEdit_size_a->setPalette(*palette);
     }
     ///}
+
+after_error:
 
     notchSource->SetYLength(notchHeight);
     notchSource->SetXLength(notchDepth);
     notchSource->SetZLength(notchWidth);
     notchSource->Update();
 
-    notchTransform = vtkSmartPointer<vtkTransform>::New();
+    vtkNew<vtkTransform> notchTransform;
     notchTransform->Translate(-(length / 2) + (notchDepth / 2) + X_shift /*X*/, -(height / 2) + (notchHeight / 2) + Y_shift /*Z*/, (width / 2) - 0.00099 /*Y*/ );
 
-    notchTransformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+    vtkNew<vtkTransformPolyDataFilter>notchTransformFilter;
     notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
     notchTransformFilter->SetTransform(notchTransform);
     notchTransformFilter->Update();
@@ -209,11 +253,10 @@ void MainWindow::on_pushButton_Figure_1_clicked()
     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
     renderWindow->AddRenderer(renderer);
 
-
-
     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
     ui->qvtkWidget_3D_MODEL->update();
 }
+
 
 void MainWindow::on_pushButton_Figure_2_clicked()
 {
@@ -234,7 +277,7 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     ui->label_horizontally->show();
     ui->label_vertically->show();
     ui->label_col->show();
-\
+
     rectangleSource = vtkSmartPointer<vtkCubeSource>::New();
     double width = ui->lineEdit_size_d->text().toDouble();      // Y
     double height = ui->lineEdit_size_b->text().toDouble();     // Z
@@ -245,42 +288,114 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     rectangleSource->SetZLength(width);
     rectangleSource->Update();
 
-
     vtkNew<vtkCubeSource> notchSource;
-    double notchWidth = 0.002;
-    double notchHeight = ui->lineEdit_aperture_height->text().toDouble();
-    double notchDepth = ui->lineEdit_aperture_width->text().toDouble();
 
+    double notchWidth = ui->lineEdit_aperture_width->text().toDouble();
+    double notchHeight = ui->lineEdit_aperture_height->text().toDouble();
+    double notchDepth = 0.002;
 
     int rows = ui->lineEdit_col_vertically->text().toInt();
     int cols = ui->lineEdit_col_horizontally->text().toInt();
 
+    double horizontalSpacing = ui->lineEdit_pos_horizontally->text().toDouble();
+    double verticalSpacing = ui->lineEdit_pos_vertically->text().toDouble();
+
+    double totalGridWidth = (cols - 1) * horizontalSpacing + notchWidth;
+    double totalGridHeight = (rows - 1) * verticalSpacing + notchHeight;
+
+    bool exceedsWidth = totalGridWidth > length;
+    bool exceedsHeight = totalGridHeight > height;
+    bool intersectionDetected = false;
+
+    if (notchHeight >= verticalSpacing) {
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::red);
+        ui->lineEdit_aperture_height->setPalette(palette);
+        ui->lineEdit_pos_vertically->setPalette(palette);
+        QMessageBox::warning(this, "Warning", "Прямоугольники перискаются по ширине. Пожалуйста, уменьшите высоту или уменьшите вертикальный интервал.");
+        intersectionDetected = true; // Set intersection flag
+    } else {
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::white);
+        ui->lineEdit_aperture_height->setPalette(palette);
+        ui->lineEdit_pos_vertically->setPalette(palette);
+    }
+
+    if (notchWidth >= horizontalSpacing) {
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::red);
+        ui->lineEdit_aperture_width->setPalette(palette);
+        ui->lineEdit_pos_horizontally->setPalette(palette);
+        QMessageBox::warning(this, "Warning", "Прямоугольники перискаются по высоте. Пожалуйста, уменьшите ширину или уменьшите горизонтальный интервал.");
+        intersectionDetected = true; // Set intersection flag
+    } else {
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::white);
+        ui->lineEdit_aperture_width->setPalette(palette);
+        ui->lineEdit_pos_horizontally->setPalette(palette);
+    }
+
+    if (exceedsWidth) {
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::red);
+        ui->lineEdit_col_horizontally->setPalette(palette);
+        ui->lineEdit_pos_horizontally->setPalette(palette);
+        QMessageBox::warning(this, "Warning", "Сетка превышает ширину прямоугольника. Пожалуйста, уменьшите количество столбцов или уменьшите горизонтальный интервал.");
+        intersectionDetected = true; // Set intersection flag
+    } else {
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::white);
+        ui->lineEdit_col_horizontally->setPalette(palette);
+        ui->lineEdit_pos_horizontally->setPalette(palette);
+    }
+
+    if (exceedsHeight) {
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::red);
+        ui->lineEdit_col_vertically->setPalette(palette);
+        ui->lineEdit_pos_vertically->setPalette(palette);
+        QMessageBox::warning(this, "Warning", "Сетка превышает высоту прямоугольника. Пожалуйста, уменьшите количество строк или уменьшите вертикальный интервал.");
+        intersectionDetected = true; // Set intersection flag
+    } else {
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::white);
+        ui->lineEdit_col_vertically->setPalette(palette);
+        ui->lineEdit_pos_vertically->setPalette(palette);
+    }
+
+    if (notchWidth >= length) {
+        notchWidth = length / 4;
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::red);
+        ui->lineEdit_aperture_width->setPalette(palette);
+        intersectionDetected = true; // Set intersection flag
+    } else {
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::white);
+        ui->lineEdit_aperture_width->setPalette(palette);
+    }
+
     if (notchHeight >= height) {
         notchHeight = height / 4;
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base, Qt::red);
-        ui->lineEdit_aperture_height->setPalette(*palette);
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::red);
+        ui->lineEdit_aperture_height->setPalette(palette);
+        intersectionDetected = true; // Set intersection flag
     } else {
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base, Qt::white);
-        ui->lineEdit_aperture_height->setPalette(*palette);
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::white);
+        ui->lineEdit_aperture_height->setPalette(palette);
     }
 
-    if (notchDepth >= length) {
-        notchDepth = length / 4;
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base, Qt::red);
-        ui->lineEdit_aperture_width->setPalette(*palette);
-    } else {
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base, Qt::white);
-        ui->lineEdit_aperture_width->setPalette(*palette);
+    // Check if any intersection has been detected, if so, stop further execution
+    if (intersectionDetected) {
+        return; // Prevent further processing if there's an intersection
     }
 
-
+    // If no intersection, proceed with the model creation
     notchSource->SetYLength(notchHeight);
-    notchSource->SetXLength(notchDepth);
-    notchSource->SetZLength(notchWidth);
+    notchSource->SetXLength(notchWidth);
+    notchSource->SetZLength(notchDepth);
     notchSource->Update();
 
     vtkNew<vtkRenderer> renderer;
@@ -293,24 +408,16 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     rectangleActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
     renderer->AddActor(rectangleActor);
 
-
-    double horizontalSpacing = ui->lineEdit_pos_horizontally->text().toDouble();
-    double verticalSpacing = ui->lineEdit_pos_vertically->text().toDouble();
-
-    double totalGridWidth = (cols - 1) * horizontalSpacing;
-    double totalGridHeight = (rows - 1) * verticalSpacing;
-    double gridOffsetX = -(totalGridWidth / 2.0);
-    double gridOffsetY = -(totalGridHeight / 2.0);
+    double gridOffsetX = -(totalGridWidth / 2.0) + (notchWidth / 2.0);
+    double gridOffsetY = -(totalGridHeight / 2.0) + (notchHeight / 2.0);
 
     for (int row = 0; row < rows; ++row) {
         for (int col = 0; col < cols; ++col) {
-
             double notchPosX = gridOffsetX + col * horizontalSpacing;
             double notchPosY = gridOffsetY + row * verticalSpacing;
 
             vtkSmartPointer<vtkTransform> notchTransform = vtkSmartPointer<vtkTransform>::New();
-            notchTransform->Translate(notchPosX, notchPosY, (width / 2) - 0.00099);
-
+            notchTransform->Translate(notchPosX, notchPosY, (width / 2.0) - 0.001);
 
             vtkSmartPointer<vtkTransformPolyDataFilter> notchTransformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
             notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
@@ -324,20 +431,16 @@ void MainWindow::on_pushButton_Figure_2_clicked()
             notchActor->SetMapper(notchMapper);
             notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
 
-
             renderer->AddActor(notchActor);
         }
     }
-
 
     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
     renderWindow->AddRenderer(renderer);
     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
     ui->qvtkWidget_3D_MODEL->update();
-
-
-
 }
+
 
 void MainWindow::on_pushButton_Figure_3_clicked()
 {
@@ -398,23 +501,21 @@ void MainWindow::on_pushButton_Figure_3_clicked()
     ui->qvtkWidget_3D_MODEL->update();
 
 }
-
 void MainWindow::on_lineEdit_size_a_textChanged(const QString &arg1)
 {
     if(arg1.toDouble() <= 0)
         return;
 
-    if(arg1.toDouble() <= ui->lineEdit_aperture_width->text().toDouble()){
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::red);
-        ui->lineEdit_size_a->setPalette(*palette);
-        return;
-    }
-    else{
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::white);
-        ui->lineEdit_size_a->setPalette(*palette);
-    }
+    // if(arg1.toDouble() <= ui->lineEdit_aperture_width->text().toDouble()){
+    //     QPalette *palette = new QPalette();
+    //     palette->setColor(QPalette::Base,Qt::red);
+    //     return;
+    // }
+    // else{
+    //     QPalette *palette = new QPalette();
+    //     palette->setColor(QPalette::Base,Qt::white);
+    //     ui->lineEdit_size_a->setPalette(*palette);
+    // }
 
     double length = arg1.toDouble();
     switch (figure) {
@@ -431,31 +532,26 @@ void MainWindow::on_lineEdit_size_a_textChanged(const QString &arg1)
         ui->qvtkWidget_3D_MODEL->update();
         break;
     case 1:
-        rectangleSource->SetXLength(length);
-        rectangleSource->Update();
-        ui->qvtkWidget_3D_MODEL->renderWindow()->Render();
-        ui->qvtkWidget_3D_MODEL->update();
+        on_pushButton_Figure_1_clicked();
         break;
     }
 }
-
-
 void MainWindow::on_lineEdit_size_b_textChanged(const QString &arg1)
 {
     if(arg1.toDouble() <= 0)
         return;
 
-    if(arg1.toDouble() <= ui->lineEdit_aperture_height->text().toDouble()){
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::red);
-        ui->lineEdit_size_b->setPalette(*palette);
-        return;
-    }
-    else{
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::white);
-        ui->lineEdit_size_b->setPalette(*palette);
-    }
+    // if(arg1.toDouble() <= ui->lineEdit_aperture_height->text().toDouble()){
+    //     QPalette *palette = new QPalette();
+    //     palette->setColor(QPalette::Base,Qt::red);
+    //     ui->lineEdit_size_b->setPalette(*palette);
+    //     return;
+    // }
+    // else{
+    //     QPalette *palette = new QPalette();
+    //     palette->setColor(QPalette::Base,Qt::white);
+    //     ui->lineEdit_size_b->setPalette(*palette);
+    // }
 
     double height = arg1.toDouble();
     switch (figure) {
@@ -472,10 +568,7 @@ void MainWindow::on_lineEdit_size_b_textChanged(const QString &arg1)
         ui->qvtkWidget_3D_MODEL->update();
         break;
     case 1:
-        rectangleSource->SetYLength(height);
-        rectangleSource->Update();
-        ui->qvtkWidget_3D_MODEL->renderWindow()->Render();
-        ui->qvtkWidget_3D_MODEL->update();
+        on_pushButton_Figure_1_clicked();
         break;
 
     }
@@ -487,16 +580,12 @@ void MainWindow::on_lineEdit_size_d_textChanged(const QString &arg1)
     if(arg1.toDouble() <= 0)
         return;
 
-    double width = arg1.toDouble();
+    //double width = arg1.toDouble();
     switch (figure) {
     case 2:
-
         break;
     case 1:
-        rectangleSource->SetZLength(width);
-        rectangleSource->Update();
-        ui->qvtkWidget_3D_MODEL->renderWindow()->Render();
-        ui->qvtkWidget_3D_MODEL->update();
+        on_pushButton_Figure_1_clicked();
         break;
     }
 }
@@ -504,24 +593,74 @@ void MainWindow::on_lineEdit_size_d_textChanged(const QString &arg1)
 
 void MainWindow::on_lineEdit_pos_x_textChanged(const QString &arg1)
 {
-    switch (figure){
-    case 1:
-        on_pushButton_Figure_2_clicked();
-        break;
-    default:
-        break;
-    }
+    on_pushButton_Figure_1_clicked();
 }
 
 
 void MainWindow::on_lineEdit_pos_y_textChanged(const QString &arg1)
 {
-    switch (figure){
-    case 1:
+    on_pushButton_Figure_1_clicked();
+}
+
+void MainWindow::on_lineEdit_aperture_height_textChanged(const QString &arg1)
+{
+    if(arg1.toDouble() <= 0)
+        return;
+    switch (figure) {
+    case 3:
+        on_pushButton_Figure_3_clicked();
+        break;
+    case 2:
         on_pushButton_Figure_2_clicked();
         break;
-    default:
+    case 1:
+        on_pushButton_Figure_1_clicked();
         break;
     }
+
+}
+
+
+void MainWindow::on_lineEdit_aperture_width_textChanged(const QString &arg1)
+{
+    if(arg1.toDouble() <= 0)
+        return;
+    switch (figure) {
+    case 3:
+        on_pushButton_Figure_3_clicked();
+        break;
+    case 2:
+        on_pushButton_Figure_2_clicked();
+        break;
+    case 1:
+        on_pushButton_Figure_1_clicked();
+        break;
+    }
+
+}
+
+
+void MainWindow::on_lineEdit_col_horizontally_textChanged(const QString &arg1)//количество по горизонтале
+{
+
+    on_pushButton_Figure_2_clicked();
+}
+
+
+void MainWindow::on_lineEdit_col_vertically_textChanged(const QString &arg1)//количество по вертикале
+{
+    on_pushButton_Figure_2_clicked();
+}
+
+
+void MainWindow::on_lineEdit_pos_horizontally_textChanged(const QString &arg1)//количество по горизонтале
+{
+    on_pushButton_Figure_2_clicked();
+}
+
+
+void MainWindow::on_lineEdit_pos_vertically_textChanged(const QString &arg1)//растояние  по вертикале
+{
+    on_pushButton_Figure_2_clicked();
 }
 

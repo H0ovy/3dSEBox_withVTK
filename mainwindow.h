@@ -11,6 +11,7 @@
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QValueAxis>
 #include <vtkActor.h>
+#include <QMessageBox>
 #include <vtkTransformPolyDataFilter.h>
 
 
@@ -27,7 +28,7 @@ public:
     ~MainWindow();
 
 private slots:
-    ///Графики
+               ///Графики
     void on_pushButton_2D_clicked();
     void on_pushButton_3D_clicked();
 
@@ -45,14 +46,23 @@ private slots:
 
     void on_lineEdit_pos_y_textChanged(const QString &arg1);
 
+    void on_lineEdit_aperture_height_textChanged(const QString &arg1);
+
+    void on_lineEdit_aperture_width_textChanged(const QString &arg1);
+
+    void on_lineEdit_col_horizontally_textChanged(const QString &arg1);
+
+    void on_lineEdit_col_vertically_textChanged(const QString &arg1);
+
+    void on_lineEdit_pos_horizontally_textChanged(const QString &arg1);
+
+    void on_lineEdit_pos_vertically_textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     vtkSmartPointer<vtkCylinderSource> cylinderSource;
     vtkSmartPointer<vtkCubeSource> rectangleSource;
     vtkSmartPointer<vtkActor> cylinderActor;
-
-    vtkSmartPointer<vtkTransform> notchTransform;
-    vtkSmartPointer<vtkTransformPolyDataFilter> notchTransformFilter;
 
     void updateCylinder(double radius, double height);
     bool graph_2d_exists = false;
