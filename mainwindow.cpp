@@ -319,16 +319,14 @@ void MainWindow::on_pushButton_Figure_2_clicked()
 
     bool exceedsWidth = totalGridWidth > length;
     bool exceedsHeight = totalGridHeight > height;
-    bool intersectionDetected = false;
 
+    ///{ Если размеры выходят за рамки модели
     if (notchHeight >= verticalSpacing)
     {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_aperture_height->setPalette(palette);
         ui->lineEdit_pos_vertically->setPalette(palette);
-        //QMessageBox::warning(this, "Warning", "Прямоугольники перискаются по ширине. Пожалуйста, уменьшите высоту или уменьшите вертикальный интервал.");
-        intersectionDetected = true; // Set intersection flag
 
         goto after_error;
     }
@@ -346,8 +344,6 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_aperture_width->setPalette(palette);
         ui->lineEdit_pos_horizontally->setPalette(palette);
-        //QMessageBox::warning(this, "Warning", "Прямоугольники перискаются по высоте. Пожалуйста, уменьшите ширину или уменьшите горизонтальный интервал.");
-        intersectionDetected = true; // Set intersection flag
 
         goto after_error;
     }
@@ -365,8 +361,6 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_col_horizontally->setPalette(palette);
         ui->lineEdit_pos_horizontally->setPalette(palette);
-        //QMessageBox::warning(this, "Warning", "Сетка превышает ширину прямоугольника. Пожалуйста, уменьшите количество столбцов или уменьшите горизонтальный интервал.");
-        intersectionDetected = true; // Set intersection flag
 
         goto after_error;
     }
@@ -384,8 +378,6 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_col_vertically->setPalette(palette);
         ui->lineEdit_pos_vertically->setPalette(palette);
-        //QMessageBox::warning(this, "Warning", "Сетка превышает высоту прямоугольника. Пожалуйста, уменьшите количество строк или уменьшите вертикальный интервал.");
-        intersectionDetected = true; // Set intersection flag
 
         goto after_error;
     }
@@ -403,7 +395,6 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_aperture_width->setPalette(palette);
-        intersectionDetected = true; // Set intersection flag
 
         goto after_error;
     }
@@ -420,7 +411,6 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_aperture_height->setPalette(palette);
-        intersectionDetected = true; // Set intersection flag
 
         goto after_error;
     }
@@ -430,12 +420,10 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         palette.setColor(QPalette::Base, Qt::white);
         ui->lineEdit_aperture_height->setPalette(palette);
     }
+    ///}
 
     after_error:
 
-    if (intersectionDetected) {
-        return;
-    }
 
     notchSource->SetYLength(notchHeight);
     notchSource->SetXLength(notchWidth);
@@ -518,6 +506,7 @@ void MainWindow::on_pushButton_Figure_3_clicked()
     double notchRadius = ui->lineEdit_aperture_height->text().toDouble();
     double notchHeight = height / 2 ;
 
+    ///{ Если размеры выходят за рамки модели
     if(notchRadius >= radius)
     {
         notchRadius = radius / 4;
@@ -533,6 +522,7 @@ void MainWindow::on_pushButton_Figure_3_clicked()
         ui->lineEdit_aperture_height->setPalette(palette);
         ui->lineEdit_size_b->setPalette(palette);
     }
+    ///}
 
     cylinderSource = vtkSmartPointer<vtkCylinderSource>::New();
     cylinderSource->SetResolution(40);
