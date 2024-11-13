@@ -12,6 +12,19 @@
 #include <vtkBooleanOperationPolyDataFilter.h>
 #include <vtkBox.h>
 #include <vtkTransform.h>
+//график
+#include <vtkRenderer.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkSmartPointer.h>
+#include <vtkPoints.h>
+#include <vtkPolyData.h>
+#include <vtkPolyLine.h>
+#include <vtkCellArray.h>
+#include <vtkDataSetMapper.h>
+#include <vtkProperty.h>
+#include <vtkCubeAxesActor2D.h>
+#include <vtkInteractorStyleTrackballCamera.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -82,11 +95,73 @@ void MainWindow::on_pushButton_2D_clicked()
 
 void MainWindow::on_pushButton_3D_clicked()
 {
+    // Показываем 3D-виджет и скрываем 2D-график
     ui->qvtkWidget_GRAPH->show();
     ui->GRAPH_2D->hide();
 
-}
+    // Создаем объект vtkPoints и добавляем статичные точки
+    vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
+    points->InsertNextPoint(0.0, 0.0, 3.0);
+    points->InsertNextPoint(1.0, 4.0, 0.0);
+    points->InsertNextPoint(0.0, 1.0, 0.0);
+    points->InsertNextPoint(4.0, 0.0, 3.0);
+    points->InsertNextPoint(1.0, 4.0, 7.0);
+    points->InsertNextPoint(0.0, 6.0, 0.0);
 
+    // Создаем PolyLine для соединения точек линией
+    vtkSmartPointer<vtkPolyLine> polyLine = vtkSmartPointer<vtkPolyLine>::New();
+    polyLine->GetPointIds()->SetNumberOfIds(6);
+    for (unsigned int i = 0; i < 6; i++)
+    {
+        polyLine->GetPointIds()->SetId(i, i);
+    }
+
+    // Создаем объект PolyData и добавляем точки и линии
+    vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
+    polyData->SetPoints(points);
+    vtkSmartPointer<vtkCellArray> cells = vtkSmartPointer<vtkCellArray>::New();
+    cells->InsertNextCell(polyLine);
+    polyData->SetLines(cells);
+
+    // Настройка маппера и актора для визуализации данных
+    vtkSmartPointer<vtkDataSetMapper> mapper = vtkSmartPointer<vtkDataSetMapper>::New();
+    mapper->SetInputData(polyData);
+
+    vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+    actor->GetProperty()->SetLineWidth(2);  // Толщина линии
+    actor->GetProperty()->SetColor(0, 0, 0); // Черный цвет линии
+    actor->SetMapper(mapper);
+
+    // Создание рендера и добавление его в окно
+    vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
+    ui->qvtkWidget_GRAPH->renderWindow()->AddRenderer(renderer);
+
+    // Устанавливаем белый фон
+    renderer->SetBackground(1.0, 1.0, 1.0); // RGB для белого цвета
+
+    // Настройка рендеринга и взаимодействия
+    vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
+    renderWindowInteractor->SetRenderWindow(ui->qvtkWidget_GRAPH->renderWindow());
+
+    renderer->AddActor(actor);
+
+    // Настройка стиля взаимодействия
+    vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
+    renderWindowInteractor->SetInteractorStyle(style);
+
+    // Добавление осей
+    vtkSmartPointer<vtkCubeAxesActor2D> axes = vtkSmartPointer<vtkCubeAxesActor2D>::New();
+    axes->SetInputData(polyData);
+    axes->SetFontFactor(3.0);
+    axes->SetFlyModeToNone();
+    axes->SetCamera(renderer->GetActiveCamera());
+
+    renderer->AddViewProp(axes);
+
+    // Обновляем окно для отображения данных
+    ui->qvtkWidget_GRAPH->renderWindow()->Render();
+    renderWindowInteractor->Start();
+}
 void MainWindow::on_pushButton_Figure_1_clicked()
 {
     figure = 1;
@@ -292,7 +367,7 @@ void MainWindow::on_pushButton_Figure_2_clicked()
 
     double notchWidth = ui->lineEdit_aperture_width->text().toDouble();
     double notchHeight = ui->lineEdit_aperture_height->text().toDouble();
-    double notchDepth = 0.002;
+    double notchDepth = 0.003;
 
     int rows = ui->lineEdit_col_vertically->text().toInt();
     int cols = ui->lineEdit_col_horizontally->text().toInt();
@@ -312,7 +387,6 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_aperture_height->setPalette(palette);
         ui->lineEdit_pos_vertically->setPalette(palette);
-       // QMessageBox::warning(this, "Warning", "Прямоугольники перискаются по ширине. Пожалуйста, уменьшите высоту или уменьшите вертикальный интервал.");
         intersectionDetected = true;
         goto after_error;
     } else {
@@ -342,7 +416,6 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_col_horizontally->setPalette(palette);
         ui->lineEdit_pos_horizontally->setPalette(palette);
-       // QMessageBox::warning(this, "Warning", "Сетка превышает ширину прямоугольника. Пожалуйста, уменьшите количество столбцов или уменьшите горизонтальный интервал.");
         intersectionDetected = true;
          goto after_error;
     } else {
@@ -357,7 +430,6 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_col_vertically->setPalette(palette);
         ui->lineEdit_pos_vertically->setPalette(palette);
-       // QMessageBox::warning(this, "Warning", "Сетка превышает высоту прямоугольника. Пожалуйста, уменьшите количество строк или уменьшите вертикальный интервал.");
         intersectionDetected = true;
          goto after_error;
     } else {
@@ -451,15 +523,55 @@ void MainWindow::on_pushButton_Figure_3_clicked()
     figure = 3;
     ui->lineEdit_size_d->hide();
     ui->label_size_d->hide();
-    ui->label_size_a->setText("r");
-    ui->label_size_b->setText("h");
+    ui->label_size_a->setText("h");
+    ui->label_size_b->setText("r");
+    ui->label_aperture_height->setText("Радиус");
+    ui->label_aperture_width->hide();
+    ui->lineEdit_aperture_width->hide();
+
+    ui->lineEdit_col_horizontally->hide();
+    ui->lineEdit_col_vertically->hide();
+    ui->lineEdit_pos_horizontally->hide();
+    ui->lineEdit_pos_vertically->hide();
+    ui->label_pos_x->hide();
+    ui->label_pos_y->hide();
+    ui->lineEdit_pos_x->hide();
+    ui->lineEdit_pos_y->hide();
+
+    ui->lineEdit_col_vertically->hide();
+    ui->lineEdit_col_horizontally->hide();
+    ui->label_horizontally->hide();
+    ui->label_vertically->hide();
+    ui->label_pos->hide();
+
+    double radius = ui->lineEdit_size_b->text().toDouble();
+    double height = ui->lineEdit_size_a->text().toDouble();
+
+    double notchRadius = ui->lineEdit_aperture_height->text().toDouble();
+    double notchHeight = height / 2 ;
+
+    if(notchRadius >= radius)
+    {
+        notchRadius = radius / 4;
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::red);
+        ui->lineEdit_aperture_height->setPalette(palette);
+        ui->lineEdit_size_b->setPalette(palette);
+    }
+    else
+    {
+        QPalette palette;
+        palette.setColor(QPalette::Base, Qt::white);
+        ui->lineEdit_aperture_height->setPalette(palette);
+        ui->lineEdit_size_b->setPalette(palette);
+    }
+
     cylinderSource = vtkSmartPointer<vtkCylinderSource>::New();
     cylinderSource->SetResolution(40);
 
     vtkNew<vtkPolyDataMapper> mapper;
     mapper->SetInputConnection(cylinderSource->GetOutputPort());
-    double radius = ui->lineEdit_size_b->text().toDouble();
-    double height = ui->lineEdit_size_a->text().toDouble();
+
     cylinderSource->SetHeight(height);
     cylinderSource->SetRadius(radius);
     cylinderSource->Update();
@@ -467,8 +579,7 @@ void MainWindow::on_pushButton_Figure_3_clicked()
 
     vtkNew<vtkCylinderSource> notchSource;
     notchSource->SetResolution(40);
-    double notchRadius =radius / 2 ;
-    double notchHeight = height / 2 ;
+
     notchSource->SetHeight(notchHeight);
     notchSource->SetRadius(notchRadius);
     notchSource->Update();
@@ -476,6 +587,7 @@ void MainWindow::on_pushButton_Figure_3_clicked()
     vtkNew<vtkTransform> notchTransform;
     notchTransform->Translate(0, -(height / 2 - notchHeight / 2+ 0.001), 0);
     notchTransform->Update();
+
     vtkNew<vtkTransformPolyDataFilter> notchTransformFilter;
     notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
     notchTransformFilter->SetTransform(notchTransform);
@@ -483,12 +595,14 @@ void MainWindow::on_pushButton_Figure_3_clicked()
 
     vtkNew<vtkPolyDataMapper> notchMapper;
     notchMapper->SetInputConnection(notchTransformFilter->GetOutputPort());
+
     vtkNew<vtkActor> notchActor;
     notchActor->SetMapper(notchMapper);
     notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
 
     vtkNew<vtkPolyDataMapper> cylinderMapper;
     cylinderMapper->SetInputConnection(cylinderSource->GetOutputPort());
+
     vtkNew<vtkActor> cylinderActor;
     cylinderActor->SetMapper(cylinderMapper);
     cylinderActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
@@ -667,3 +781,4 @@ void MainWindow::on_lineEdit_pos_vertically_textChanged(const QString &arg1)//р
 {
     on_pushButton_Figure_2_clicked();
 }
+
