@@ -306,7 +306,7 @@ void MainWindow::on_pushButton_Figure_2_clicked()
 
     double notchWidth = ui->lineEdit_aperture_width->text().toDouble();
     double notchHeight = ui->lineEdit_aperture_height->text().toDouble();
-    double notchDepth = 0.002;
+    double notchDepth = 0.003;
 
     int rows = ui->lineEdit_col_vertically->text().toInt();
     int cols = ui->lineEdit_col_horizontally->text().toInt();
@@ -651,8 +651,10 @@ void MainWindow::on_lineEdit_size_d_textChanged(const QString &arg1)
         return;
 
     //double width = arg1.toDouble();
-    switch (figure) {
+    switch (figure)
+    {
     case 2:
+        on_pushButton_Figure_2_clicked();
         break;
     case 1:
         on_pushButton_Figure_1_clicked();
@@ -676,7 +678,8 @@ void MainWindow::on_lineEdit_aperture_height_textChanged(const QString &arg1)
 {
     if(arg1.toDouble() <= 0)
         return;
-    switch (figure) {
+    switch (figure)
+    {
     case 3:
         on_pushButton_Figure_3_clicked();
         break;
@@ -695,10 +698,9 @@ void MainWindow::on_lineEdit_aperture_width_textChanged(const QString &arg1)
 {
     if(arg1.toDouble() <= 0)
         return;
-    switch (figure) {
-    case 3:
-        on_pushButton_Figure_3_clicked();
-        break;
+
+    switch (figure)
+    {
     case 2:
         on_pushButton_Figure_2_clicked();
         break;
@@ -712,6 +714,8 @@ void MainWindow::on_lineEdit_aperture_width_textChanged(const QString &arg1)
 
 void MainWindow::on_lineEdit_col_horizontally_textChanged(const QString &arg1)//количество по горизонтале
 {
+    if(arg1.toDouble() <= 0)
+        return;
 
     on_pushButton_Figure_2_clicked();
 }
@@ -719,17 +723,26 @@ void MainWindow::on_lineEdit_col_horizontally_textChanged(const QString &arg1)//
 
 void MainWindow::on_lineEdit_col_vertically_textChanged(const QString &arg1)//количество по вертикале
 {
+    if(arg1.toDouble() <= 0)
+        return;
+
     on_pushButton_Figure_2_clicked();
 }
 
 
 void MainWindow::on_lineEdit_pos_horizontally_textChanged(const QString &arg1)//количество по горизонтале
 {
+    if(arg1.toDouble() <= 0)
+        return;
+
     on_pushButton_Figure_2_clicked();
 }
 
 
 void MainWindow::on_lineEdit_pos_vertically_textChanged(const QString &arg1)//растояние  по вертикале
 {
+    if(arg1.toDouble() <= 0)
+        return;
+
     on_pushButton_Figure_2_clicked();
 }
