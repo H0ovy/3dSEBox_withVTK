@@ -499,6 +499,7 @@ void MainWindow::on_pushButton_Figure_3_clicked()
     ui->label_horizontally->hide();
     ui->label_vertically->hide();
     ui->label_pos->hide();
+    ui->label_col->hide();
 
     double radius = ui->lineEdit_size_b->text().toDouble();
     double height = ui->lineEdit_size_a->text().toDouble();
