@@ -10,9 +10,40 @@
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
 #include <QtCharts/QValueAxis>
-#include <vtkActor.h>
 #include <QMessageBox>
 #include <vtkTransformPolyDataFilter.h>
+
+#include <QDebug>
+#include <cmath>
+
+#include <vtkBooleanOperationPolyDataFilter.h>
+#include <vtkBox.h>
+#include <vtkTransform.h>
+//график
+#include <QVTKOpenGLNativeWidget.h>
+#include <vtkGenericOpenGLRenderWindow.h>
+#include <vtkRenderer.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkPoints.h>
+#include <vtkPolyData.h>
+#include <vtkDelaunay2D.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkActor.h>
+#include <vtkProperty.h>
+#include <vtkFloatArray.h>
+#include <vtkPointData.h>
+#include <vtkInteractorStyleTrackballCamera.h>
+#include <vtkAxesActor.h>
+#include <vtkOrientationMarkerWidget.h>
+#include <vtkRenderWindow.h>
+#include <vtkCamera.h>
+#include <vtkSmartPointer.h>
+#include <vtkDataSetMapper.h>
+#include <vtkInteractorStyleTrackball.h>
+#include <vtkSimplePointsReader.h>
+#include <vtkWarpScalar.h>
+#include <vtkAxisActor2D.h>
+#include <vtkCubeAxesActor2D.h>
 
 
 QT_BEGIN_NAMESPACE
