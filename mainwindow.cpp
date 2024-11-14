@@ -758,6 +758,8 @@ void MainWindow::on_lineEdit_aperture_width_textChanged(const QString &arg1)
 
 void MainWindow::on_lineEdit_col_horizontally_textChanged(const QString &arg1)//количество по горизонтале
 {
+    if(arg1.toDouble() <= 0)
+        return;
 
     on_pushButton_Figure_2_clicked();
 }
@@ -765,18 +767,26 @@ void MainWindow::on_lineEdit_col_horizontally_textChanged(const QString &arg1)//
 
 void MainWindow::on_lineEdit_col_vertically_textChanged(const QString &arg1)//количество по вертикале
 {
+    if(arg1.toDouble() <= 0)
+        return;
+
     on_pushButton_Figure_2_clicked();
 }
 
 
 void MainWindow::on_lineEdit_pos_horizontally_textChanged(const QString &arg1)//количество по горизонтале
 {
+    if(arg1.toDouble() <= 0)
+        return;
+
     on_pushButton_Figure_2_clicked();
 }
 
 
 void MainWindow::on_lineEdit_pos_vertically_textChanged(const QString &arg1)//растояние  по вертикале
 {
+    if(arg1.toDouble() <= 0)
+        return;
+
     on_pushButton_Figure_2_clicked();
 }
-
