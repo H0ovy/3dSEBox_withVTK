@@ -742,9 +742,6 @@ void MainWindow::on_lineEdit_aperture_width_textChanged(const QString &arg1)
     if(arg1.toDouble() <= 0)
         return;
     switch (figure) {
-    case 3:
-        on_pushButton_Figure_3_clicked();
-        break;
     case 2:
         on_pushButton_Figure_2_clicked();
         break;
