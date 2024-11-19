@@ -42,7 +42,6 @@ void MainWindow::on_pushButton_2D_clicked()
 
         series->setPen(QPen(Qt::blue, 2, Qt::SolidLine));
         chart->addSeries(series);
-        chart->createDefaultAxes();
         chart->setAnimationOptions(QChart::AllAnimations);
 
         QValueAxis *axisX = new QValueAxis;
@@ -51,7 +50,7 @@ void MainWindow::on_pushButton_2D_clicked()
         axisX->setLabelsFont(QFont("Arial", 10));
         axisX->setLabelFormat("%d");
         axisX->setTickCount(10);
-        chart->setAxisX(axisX, series);
+        chart->addAxis(axisX, Qt::AlignBottom);
 
         QValueAxis *axisY = new QValueAxis;
         axisY->setTitleText("ЭЭ, дБ");
@@ -59,7 +58,10 @@ void MainWindow::on_pushButton_2D_clicked()
         axisY->setLabelsFont(QFont("Arial", 10));
         axisY->setLabelFormat("%.2f");
         axisY->setTickCount(10);
-        chart->setAxisY(axisY, series);
+        chart->addAxis(axisY, Qt::AlignLeft);
+
+        series->attachAxis(axisX);
+        series->attachAxis(axisY);
 
         ui->GRAPH_2D->setChart(chart);
         ui->GRAPH_2D->setRenderHint(QPainter::Antialiasing);
@@ -641,18 +643,6 @@ void MainWindow::on_lineEdit_size_a_textChanged(const QString &arg1)
     if(arg1.toDouble() <= 0)
         return;
 
-    // if(arg1.toDouble() <= ui->lineEdit_aperture_width->text().toDouble()){
-    //     QPalette *palette = new QPalette();
-    //     palette->setColor(QPalette::Base,Qt::red);
-    //     return;
-    // }
-    // else{
-    //     QPalette *palette = new QPalette();
-    //     palette->setColor(QPalette::Base,Qt::white);
-    //     ui->lineEdit_size_a->setPalette(*palette);
-    // }
-
-    double length = arg1.toDouble();
     switch (figure) {
     case 3:
         on_pushButton_Figure_3_clicked();
@@ -672,19 +662,6 @@ void MainWindow::on_lineEdit_size_b_textChanged(const QString &arg1)
     if(arg1.toDouble() <= 0)
         return;
 
-    // if(arg1.toDouble() <= ui->lineEdit_aperture_height->text().toDouble()){
-    //     QPalette *palette = new QPalette();
-    //     palette->setColor(QPalette::Base,Qt::red);
-    //     ui->lineEdit_size_b->setPalette(*palette);
-    //     return;
-    // }
-    // else{
-    //     QPalette *palette = new QPalette();
-    //     palette->setColor(QPalette::Base,Qt::white);
-    //     ui->lineEdit_size_b->setPalette(*palette);
-    // }
-
-    double height = arg1.toDouble();
     switch (figure) {
     case 3:
         on_pushButton_Figure_3_clicked();
