@@ -83,8 +83,10 @@ void MainWindow::on_pushButton_3D_clicked()
     double spacingX = 1.0;
     double spacingY = 1.0;
 
-    for (int i = 0; i < gridSizeX; i++) {
-        for (int j = 0; j < gridSizeY; j++) {
+    for (int i = 0; i < gridSizeX; i++)
+    {
+        for (int j = 0; j < gridSizeY; j++)
+        {
             double x = i * spacingX;
             double y = j * spacingY;
             double z = sin(sqrt(x * x + y * y * 2)) * 2;
@@ -108,7 +110,6 @@ void MainWindow::on_pushButton_3D_clicked()
     vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
 
-
     vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
     renderer->AddActor(actor);
     renderer->SetBackground(1.0, 1.0, 1.0);
@@ -119,7 +120,6 @@ void MainWindow::on_pushButton_3D_clicked()
 
     vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
     renderWindow->GetInteractor()->SetInteractorStyle(style);
-
 
     vtkSmartPointer<vtkAxesActor> orientationAxes = vtkSmartPointer<vtkAxesActor>::New();
     orientationAxes->SetTotalLength(10.0, 10.0, 10.0);
@@ -142,8 +142,6 @@ void MainWindow::on_pushButton_3D_clicked()
     camera->SetFocalPoint(25, 25, 0);
     camera->SetViewUp(0, 0, 1);
     renderer->ResetCameraClippingRange();
-
-
 
     vtkSmartPointer<vtkAxisActor2D> xAxis = cubeAxes->GetXAxisActor2D();
     xAxis->SetAdjustLabels(1);
@@ -379,6 +377,7 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     bool exceedsHeight = totalGridHeight > height;
     bool intersectionDetected = false;
 
+    ///{ Если размеры выходят за рамки модели
     if (notchHeight >= verticalSpacing) {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::red);
@@ -386,7 +385,9 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         ui->lineEdit_pos_vertically->setPalette(palette);
         intersectionDetected = true;
         goto after_error;
-    } else {
+    }
+    else
+    {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::white);
         ui->lineEdit_aperture_height->setPalette(palette);
@@ -400,7 +401,9 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         ui->lineEdit_pos_horizontally->setPalette(palette);
         intersectionDetected = true;
         goto after_error;
-    } else {
+    }
+    else
+    {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::white);
         ui->lineEdit_aperture_width->setPalette(palette);
@@ -413,13 +416,17 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_col_horizontally->setPalette(palette);
         ui->lineEdit_pos_horizontally->setPalette(palette);
+        ui->lineEdit_size_a->setPalette(palette);
         intersectionDetected = true;
         goto after_error;
-    } else {
+    }
+    else
+    {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::white);
         ui->lineEdit_col_horizontally->setPalette(palette);
         ui->lineEdit_pos_horizontally->setPalette(palette);
+        ui->lineEdit_size_a->setPalette(palette);
     }
 
     if (exceedsHeight) {
@@ -427,13 +434,17 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_col_vertically->setPalette(palette);
         ui->lineEdit_pos_vertically->setPalette(palette);
+        ui->lineEdit_size_b->setPalette(palette);
         intersectionDetected = true;
         goto after_error;
-    } else {
+    }
+    else
+    {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::white);
         ui->lineEdit_col_vertically->setPalette(palette);
         ui->lineEdit_pos_vertically->setPalette(palette);
+        ui->lineEdit_size_b->setPalette(palette);
     }
 
     if (notchWidth >= length) {
@@ -443,7 +454,9 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         ui->lineEdit_aperture_width->setPalette(palette);
         intersectionDetected = true;
         goto after_error;
-    } else {
+    }
+    else
+    {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::white);
         ui->lineEdit_aperture_width->setPalette(palette);
@@ -456,11 +469,15 @@ void MainWindow::on_pushButton_Figure_2_clicked()
         ui->lineEdit_aperture_height->setPalette(palette);
         intersectionDetected = true;
         goto after_error;
-    } else {
+    }
+    else
+    {
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::white);
         ui->lineEdit_aperture_height->setPalette(palette);
     }
+    ///}
+
 after_error:
     if (intersectionDetected) {
         return;
@@ -641,10 +658,7 @@ void MainWindow::on_lineEdit_size_a_textChanged(const QString &arg1)
         on_pushButton_Figure_3_clicked();
         break;
     case 2:
-        rectangleSource->SetXLength(length);
-        rectangleSource->Update();
-        ui->qvtkWidget_3D_MODEL->renderWindow()->Render();
-        ui->qvtkWidget_3D_MODEL->update();
+        on_pushButton_Figure_2_clicked();
         break;
     case 1:
         on_pushButton_Figure_1_clicked();
@@ -676,10 +690,7 @@ void MainWindow::on_lineEdit_size_b_textChanged(const QString &arg1)
         on_pushButton_Figure_3_clicked();
         break;
     case 2:
-        rectangleSource->SetYLength(height);
-        rectangleSource->Update();
-        ui->qvtkWidget_3D_MODEL->renderWindow()->Render();
-        ui->qvtkWidget_3D_MODEL->update();
+        on_pushButton_Figure_2_clicked();
         break;
     case 1:
         on_pushButton_Figure_1_clicked();
