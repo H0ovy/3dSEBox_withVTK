@@ -1,4 +1,6 @@
 ﻿#include "mainwindow.h"
+#include "modelsfigure.h"
+
 #include "./ui_mainwindow.h"
 
 
@@ -13,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     on_pushButton_2D_clicked();
 
 }
+
 
 MainWindow::~MainWindow()
 {
@@ -153,8 +156,12 @@ void MainWindow::on_pushButton_3D_clicked()
 
 }
 
+ModelsFigure modelsFigure;
+
 void MainWindow::on_pushButton_Figure_1_clicked()
 {
+    figure = 1;
+
     ui->lineEdit_size_d->show();
     ui->label_size_d->show();
     ui->label_size_a->setText("a");
@@ -179,155 +186,206 @@ void MainWindow::on_pushButton_Figure_1_clicked()
     ui->label_horizontally->hide();
     ui->label_vertically->hide();
     ui->label_col->hide();
-    rectangleSource = vtkSmartPointer<vtkCubeSource>::New();
-    double width = ui->lineEdit_size_d->text().toDouble();      //Y
-    double height = ui->lineEdit_size_b->text().toDouble();     //Z
-    double length = ui->lineEdit_size_a->text().toDouble();     //X
 
-    rectangleSource->SetYLength(height);
-    rectangleSource->SetXLength(length);
-    rectangleSource->SetZLength(width);
-    rectangleSource->Update();
+    double length = ui->lineEdit_size_a->text().toDouble();
+    double width = ui->lineEdit_size_d->text().toDouble();
+    double height = ui->lineEdit_size_b->text().toDouble();
+    double notchDepth = ui->lineEdit_aperture_width->text().toDouble();
+    double notchWidth = 0.002; // фиксированное значение ширины выреза
+    double notchHeight = ui->lineEdit_aperture_height->text().toDouble();
+    double xShift = ui->lineEdit_pos_x->text().toDouble();
+    double yShift = ui->lineEdit_pos_y->text().toDouble();
 
-    vtkNew<vtkCubeSource> notchSource;
-    double notchWidth = 0.002;                                              //Y
-    double notchHeight = ui->lineEdit_aperture_height->text().toDouble();   //Z - в нормальной системе координат
-    double notchDepth = ui->lineEdit_aperture_width->text().toDouble();     //X
-
-    double X_shift = ui->lineEdit_pos_x->text().toDouble();
-    double Y_shift = ui->lineEdit_pos_y->text().toDouble();
-
-
-    ///{ Если размеры выходят за рамки модели
-    if (X_shift + notchDepth >= length && X_shift != 0)
-    {
-        X_shift = 0.0001;
-        notchDepth = length / 4;
-
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::red);
-
-        ui->lineEdit_pos_x->setPalette(*palette);           // X shift
-        ui->lineEdit_aperture_width->setPalette(*palette);  // NotchDepth
-        ui->lineEdit_size_a->setPalette(*palette);          // Length
-
-        goto after_error;
-    }
-    else
-    {
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::white);
-
-        ui->lineEdit_pos_x->setPalette(*palette);
-        ui->lineEdit_aperture_width->setPalette(*palette);
-        ui->lineEdit_size_a->setPalette(*palette);
-    }
-
-    if (Y_shift + notchHeight >= height && Y_shift != 0)
-    {
-        Y_shift = 0.0001;
-        notchHeight = height / 4;
-
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::red);
-
-        ui->lineEdit_pos_y->setPalette(*palette);           //Y shift
-        ui->lineEdit_aperture_height->setPalette(*palette); // NotchHeight
-        ui->lineEdit_size_b->setPalette(*palette);          // Height
-
-        goto after_error;
-    }
-    else
-    {
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::white);
-
-        ui->lineEdit_pos_y->setPalette(*palette);
-        ui->lineEdit_aperture_height->setPalette(*palette);
-        ui->lineEdit_size_b->setPalette(*palette);
-    }
-
-    if (notchHeight >= height)
-    {
-        notchHeight = height / 4;
-
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::red);
-
-        ui->lineEdit_aperture_height->setPalette(*palette); // NotchHeight
-        ui->lineEdit_size_b->setPalette(*palette);          // Height
-
-        goto after_error;
-    }
-    else
-    {
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::white);
-
-        ui->lineEdit_aperture_height->setPalette(*palette);
-        ui->lineEdit_size_b->setPalette(*palette);
-    }
-
-    if (notchDepth >= length)
-    {
-        notchDepth = length / 4;
-
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::red);
-
-        ui->lineEdit_aperture_width->setPalette(*palette);  // NotchDepth
-        ui->lineEdit_size_a->setPalette(*palette);          // Length
-
-        goto after_error;
-    }
-    else
-    {
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::white);
-
-        ui->lineEdit_aperture_width->setPalette(*palette);
-        ui->lineEdit_size_a->setPalette(*palette);
-    }
-    ///}
-
-after_error:
-
-    notchSource->SetYLength(notchHeight);
-    notchSource->SetXLength(notchDepth);
-    notchSource->SetZLength(notchWidth);
-    notchSource->Update();
-
-    vtkNew<vtkTransform> notchTransform;
-    notchTransform->Translate(-(length / 2) + (notchDepth / 2) + X_shift /*X*/, -(height / 2) + (notchHeight / 2) + Y_shift /*Z*/, (width / 2) - 0.00099 /*Y*/ );
-
-    vtkNew<vtkTransformPolyDataFilter>notchTransformFilter;
-    notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
-    notchTransformFilter->SetTransform(notchTransform);
-    notchTransformFilter->Update();
-    vtkNew<vtkPolyDataMapper> notchMapper;
-    notchMapper->SetInputConnection(notchTransformFilter->GetOutputPort());
-
-    vtkNew<vtkActor> notchActor;
-    notchActor->SetMapper(notchMapper);
-    notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
-
-    vtkNew<vtkPolyDataMapper> mapper;
-    mapper->SetInputConnection(rectangleSource->GetOutputPort());
-    vtkNew<vtkActor> rectangleActor;
-    rectangleActor->SetMapper(mapper);
-    rectangleActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
-
-    vtkNew<vtkRenderer> renderer;
-    renderer->SetBackground(colors->GetColor3d("White").GetData());
-    renderer->AddActor(rectangleActor);
-    renderer->AddActor(notchActor);
+    vtkSmartPointer<vtkRenderer> renderer = modelsFigure.createFigure1(
+        length, width, height, notchDepth, notchWidth, notchHeight, xShift, yShift,
+        ui->lineEdit_pos_x, ui->lineEdit_pos_y,
+        ui->lineEdit_aperture_width, ui->lineEdit_aperture_height,
+        ui->lineEdit_size_a, ui->lineEdit_size_b
+        );
 
     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
     renderWindow->AddRenderer(renderer);
-
     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
     ui->qvtkWidget_3D_MODEL->update();
 }
+
+///old create for Figure 1
+// void MainWindow::on_pushButton_Figure_1_clicked()
+// {
+//     figure = 1;
+//     ui->lineEdit_size_d->show();
+//     ui->label_size_d->show();
+//     ui->label_size_a->setText("a");
+//     ui->label_size_b->setText("b");
+//     ui->label_pos_x->setText("X");
+//     ui->label_pos_x->show();
+//     ui->label_pos_y->setText("Y");
+//     ui->label_pos_y->show();
+//     ui->label_pos->setText("Расположение");
+//     ui->lineEdit_pos_x->show();
+//     ui->lineEdit_pos_y->show();
+//     ui->lineEdit_col_horizontally->hide();
+//     ui->lineEdit_col_vertically->hide();
+//     ui->lineEdit_pos_horizontally->hide();
+//     ui->lineEdit_pos_vertically->hide();
+//     ui->label_pos->show();
+
+//     ui->label_aperture_height->setText("Высота");
+//     ui->label_aperture_width->show();
+//     ui->lineEdit_aperture_width->show();
+
+//     ui->label_horizontally->hide();
+//     ui->label_vertically->hide();
+//     ui->label_col->hide();
+
+//     rectangleSource = vtkSmartPointer<vtkCubeSource>::New();
+//     double width = ui->lineEdit_size_d->text().toDouble();      //Y
+//     double height = ui->lineEdit_size_b->text().toDouble();     //Z
+//     double length = ui->lineEdit_size_a->text().toDouble();     //X
+
+//     rectangleSource->SetYLength(height);
+//     rectangleSource->SetXLength(length);
+//     rectangleSource->SetZLength(width);
+//     rectangleSource->Update();
+
+//     vtkNew<vtkCubeSource> notchSource;
+//     double notchWidth = 0.002;                                              //Y
+//     double notchHeight = ui->lineEdit_aperture_height->text().toDouble();   //Z - в нормальной системе координат
+//     double notchDepth = ui->lineEdit_aperture_width->text().toDouble();     //X
+
+//     double X_shift = ui->lineEdit_pos_x->text().toDouble();
+//     double Y_shift = ui->lineEdit_pos_y->text().toDouble();
+
+
+//     ///{ Если размеры выходят за рамки модели
+//     if (X_shift + notchDepth >= length && X_shift != 0)
+//     {
+//         X_shift = 0.0001;
+//         notchDepth = length / 4;
+
+//         QPalette *palette = new QPalette();
+//         palette->setColor(QPalette::Base,Qt::red);
+
+//         ui->lineEdit_pos_x->setPalette(*palette);           // X shift
+//         ui->lineEdit_aperture_width->setPalette(*palette);  // NotchDepth
+//         ui->lineEdit_size_a->setPalette(*palette);          // Length
+
+//         goto after_error;
+//     }
+//     else
+//     {
+//         QPalette *palette = new QPalette();
+//         palette->setColor(QPalette::Base,Qt::white);
+
+//         ui->lineEdit_pos_x->setPalette(*palette);
+//         ui->lineEdit_aperture_width->setPalette(*palette);
+//         ui->lineEdit_size_a->setPalette(*palette);
+//     }
+
+//     if (Y_shift + notchHeight >= height && Y_shift != 0)
+//     {
+//         Y_shift = 0.0001;
+//         notchHeight = height / 4;
+
+//         QPalette *palette = new QPalette();
+//         palette->setColor(QPalette::Base,Qt::red);
+
+//         ui->lineEdit_pos_y->setPalette(*palette);           //Y shift
+//         ui->lineEdit_aperture_height->setPalette(*palette); // NotchHeight
+//         ui->lineEdit_size_b->setPalette(*palette);          // Height
+
+//         goto after_error;
+//     }
+//     else
+//     {
+//         QPalette *palette = new QPalette();
+//         palette->setColor(QPalette::Base,Qt::white);
+
+//         ui->lineEdit_pos_y->setPalette(*palette);
+//         ui->lineEdit_aperture_height->setPalette(*palette);
+//         ui->lineEdit_size_b->setPalette(*palette);
+//     }
+
+//     if (notchHeight >= height)
+//     {
+//         notchHeight = height / 4;
+
+//         QPalette *palette = new QPalette();
+//         palette->setColor(QPalette::Base,Qt::red);
+
+//         ui->lineEdit_aperture_height->setPalette(*palette); // NotchHeight
+//         ui->lineEdit_size_b->setPalette(*palette);          // Height
+
+//         goto after_error;
+//     }
+//     else
+//     {
+//         QPalette *palette = new QPalette();
+//         palette->setColor(QPalette::Base,Qt::white);
+
+//         ui->lineEdit_aperture_height->setPalette(*palette);
+//         ui->lineEdit_size_b->setPalette(*palette);
+//     }
+
+//     if (notchDepth >= length)
+//     {
+//         notchDepth = length / 4;
+
+//         QPalette *palette = new QPalette();
+//         palette->setColor(QPalette::Base,Qt::red);
+
+//         ui->lineEdit_aperture_width->setPalette(*palette);  // NotchDepth
+//         ui->lineEdit_size_a->setPalette(*palette);          // Length
+
+//         goto after_error;
+//     }
+//     else
+//     {
+//         QPalette *palette = new QPalette();
+//         palette->setColor(QPalette::Base,Qt::white);
+
+//         ui->lineEdit_aperture_width->setPalette(*palette);
+//         ui->lineEdit_size_a->setPalette(*palette);
+//     }
+
+// after_error:
+
+//     notchSource->SetYLength(notchHeight);
+//     notchSource->SetXLength(notchDepth);
+//     notchSource->SetZLength(notchWidth);
+//     notchSource->Update();
+
+//     vtkNew<vtkTransform> notchTransform;
+//     notchTransform->Translate(-(length / 2) + (notchDepth / 2) + X_shift /*X*/, -(height / 2) + (notchHeight / 2) + Y_shift /*Z*/, (width / 2) - 0.00099 /*Y*/ );
+
+//     vtkNew<vtkTransformPolyDataFilter>notchTransformFilter;
+//     notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
+//     notchTransformFilter->SetTransform(notchTransform);
+//     notchTransformFilter->Update();
+//     vtkNew<vtkPolyDataMapper> notchMapper;
+//     notchMapper->SetInputConnection(notchTransformFilter->GetOutputPort());
+
+//     vtkNew<vtkActor> notchActor;
+//     notchActor->SetMapper(notchMapper);
+//     notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+
+//     vtkNew<vtkPolyDataMapper> mapper;
+//     mapper->SetInputConnection(rectangleSource->GetOutputPort());
+//     vtkNew<vtkActor> rectangleActor;
+//     rectangleActor->SetMapper(mapper);
+//     rectangleActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
+
+//     vtkNew<vtkRenderer> renderer;
+//     renderer->SetBackground(colors->GetColor3d("White").GetData());
+//     renderer->AddActor(rectangleActor);
+//     renderer->AddActor(notchActor);
+
+//     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
+//     renderWindow->AddRenderer(renderer);
+
+//     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
+//     ui->qvtkWidget_3D_MODEL->update();
+// }
 
 
 void MainWindow::on_pushButton_Figure_2_clicked()
@@ -349,18 +407,9 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     ui->label_horizontally->show();
     ui->label_vertically->show();
     ui->label_col->show();
-
-    rectangleSource = vtkSmartPointer<vtkCubeSource>::New();
-    double width = ui->lineEdit_size_d->text().toDouble();      // Y
-    double height = ui->lineEdit_size_b->text().toDouble();     // Z
-    double length = ui->lineEdit_size_a->text().toDouble();     // X
-
-    rectangleSource->SetYLength(height);
-    rectangleSource->SetXLength(length);
-    rectangleSource->SetZLength(width);
-    rectangleSource->Update();
-
-    vtkNew<vtkCubeSource> notchSource;
+    double width = ui->lineEdit_size_d->text().toDouble();
+    double height = ui->lineEdit_size_b->text().toDouble();
+    double length = ui->lineEdit_size_a->text().toDouble();
 
     double notchWidth = ui->lineEdit_aperture_width->text().toDouble();
     double notchHeight = ui->lineEdit_aperture_height->text().toDouble();
@@ -372,160 +421,12 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     double horizontalSpacing = ui->lineEdit_pos_horizontally->text().toDouble();
     double verticalSpacing = ui->lineEdit_pos_vertically->text().toDouble();
 
-    double totalGridWidth = (cols - 1) * horizontalSpacing + notchWidth;
-    double totalGridHeight = (rows - 1) * verticalSpacing + notchHeight;
-
-    bool exceedsWidth = totalGridWidth > length;
-    bool exceedsHeight = totalGridHeight > height;
-    bool intersectionDetected = false;
-
-    ///{ Если размеры выходят за рамки модели
-    if (notchHeight >= verticalSpacing) {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        ui->lineEdit_aperture_height->setPalette(palette);
-        ui->lineEdit_pos_vertically->setPalette(palette);
-        intersectionDetected = true;
-        goto after_error;
-    }
-    else
-    {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        ui->lineEdit_aperture_height->setPalette(palette);
-        ui->lineEdit_pos_vertically->setPalette(palette);
-    }
-
-    if (notchWidth >= horizontalSpacing) {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        ui->lineEdit_aperture_width->setPalette(palette);
-        ui->lineEdit_pos_horizontally->setPalette(palette);
-        intersectionDetected = true;
-        goto after_error;
-    }
-    else
-    {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        ui->lineEdit_aperture_width->setPalette(palette);
-        ui->lineEdit_pos_horizontally->setPalette(palette);
-    }
-
-
-    if (exceedsWidth) {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        ui->lineEdit_col_horizontally->setPalette(palette);
-        ui->lineEdit_pos_horizontally->setPalette(palette);
-        ui->lineEdit_size_a->setPalette(palette);
-        intersectionDetected = true;
-        goto after_error;
-    }
-    else
-    {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        ui->lineEdit_col_horizontally->setPalette(palette);
-        ui->lineEdit_pos_horizontally->setPalette(palette);
-        ui->lineEdit_size_a->setPalette(palette);
-    }
-
-    if (exceedsHeight) {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        ui->lineEdit_col_vertically->setPalette(palette);
-        ui->lineEdit_pos_vertically->setPalette(palette);
-        ui->lineEdit_size_b->setPalette(palette);
-        intersectionDetected = true;
-        goto after_error;
-    }
-    else
-    {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        ui->lineEdit_col_vertically->setPalette(palette);
-        ui->lineEdit_pos_vertically->setPalette(palette);
-        ui->lineEdit_size_b->setPalette(palette);
-    }
-
-    if (notchWidth >= length) {
-        notchWidth = length / 4;
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        ui->lineEdit_aperture_width->setPalette(palette);
-        intersectionDetected = true;
-        goto after_error;
-    }
-    else
-    {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        ui->lineEdit_aperture_width->setPalette(palette);
-    }
-
-    if (notchHeight >= height) {
-        notchHeight = height / 4;
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        ui->lineEdit_aperture_height->setPalette(palette);
-        intersectionDetected = true;
-        goto after_error;
-    }
-    else
-    {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        ui->lineEdit_aperture_height->setPalette(palette);
-    }
-    ///}
-
-after_error:
-    if (intersectionDetected) {
-        return;
-    }
-
-    notchSource->SetYLength(notchHeight);
-    notchSource->SetXLength(notchWidth);
-    notchSource->SetZLength(notchDepth);
-    notchSource->Update();
-
     vtkNew<vtkRenderer> renderer;
     renderer->SetBackground(colors->GetColor3d("White").GetData());
 
-    vtkNew<vtkPolyDataMapper> mapper;
-    mapper->SetInputConnection(rectangleSource->GetOutputPort());
-    vtkNew<vtkActor> rectangleActor;
-    rectangleActor->SetMapper(mapper);
-    rectangleActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
-    renderer->AddActor(rectangleActor);
-
-    double gridOffsetX = -(totalGridWidth / 2.0) + (notchWidth / 2.0);
-    double gridOffsetY = -(totalGridHeight / 2.0) + (notchHeight / 2.0);
-
-    for (int row = 0; row < rows; ++row) {
-        for (int col = 0; col < cols; ++col) {
-            double notchPosX = gridOffsetX + col * horizontalSpacing;
-            double notchPosY = gridOffsetY + row * verticalSpacing;
-
-            vtkSmartPointer<vtkTransform> notchTransform = vtkSmartPointer<vtkTransform>::New();
-            notchTransform->Translate(notchPosX, notchPosY, (width / 2.0) - 0.001);
-
-            vtkSmartPointer<vtkTransformPolyDataFilter> notchTransformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
-            notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
-            notchTransformFilter->SetTransform(notchTransform);
-            notchTransformFilter->Update();
-
-            vtkNew<vtkPolyDataMapper> notchMapper;
-            notchMapper->SetInputConnection(notchTransformFilter->GetOutputPort());
-
-            vtkNew<vtkActor> notchActor;
-            notchActor->SetMapper(notchMapper);
-            notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
-
-            renderer->AddActor(notchActor);
-        }
-    }
+    modelsFigure.createFigure2(renderer, width, height, length, notchWidth, notchHeight, notchDepth, rows, cols, horizontalSpacing, verticalSpacing,
+    ui->lineEdit_aperture_height, ui->lineEdit_pos_vertically, ui->lineEdit_aperture_width,
+    ui->lineEdit_pos_horizontally, ui->lineEdit_col_horizontally, ui->lineEdit_size_a, ui->lineEdit_col_vertically, ui->lineEdit_size_b);
 
     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
     renderWindow->AddRenderer(renderer);
@@ -537,6 +438,7 @@ after_error:
 void MainWindow::on_pushButton_Figure_3_clicked()
 {
     figure = 3;
+
     ui->lineEdit_size_d->hide();
     ui->label_size_d->hide();
     ui->label_size_a->setText("h");
@@ -583,60 +485,120 @@ void MainWindow::on_pushButton_Figure_3_clicked()
         ui->lineEdit_size_b->setPalette(palette);
     }
 
-    cylinderSource = vtkSmartPointer<vtkCylinderSource>::New();
-    cylinderSource->SetResolution(40);
+    vtkSmartPointer<vtkRenderer> renderer = modelsFigure.createFigure3(height, radius, notchHeight, notchRadius);
 
-    vtkNew<vtkPolyDataMapper> mapper;
-    mapper->SetInputConnection(cylinderSource->GetOutputPort());
-
-    cylinderSource->SetHeight(height);
-    cylinderSource->SetRadius(radius);
-    cylinderSource->Update();
-
-
-    vtkNew<vtkCylinderSource> notchSource;
-    notchSource->SetResolution(40);
-
-    notchSource->SetHeight(notchHeight);
-    notchSource->SetRadius(notchRadius);
-    notchSource->Update();
-
-    vtkNew<vtkTransform> notchTransform;
-    notchTransform->Translate(0, -(height / 2 - notchHeight / 2+ 0.001), 0);
-    notchTransform->Update();
-
-    vtkNew<vtkTransformPolyDataFilter> notchTransformFilter;
-    notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
-    notchTransformFilter->SetTransform(notchTransform);
-    notchTransformFilter->Update();
-
-    vtkNew<vtkPolyDataMapper> notchMapper;
-    notchMapper->SetInputConnection(notchTransformFilter->GetOutputPort());
-
-    vtkNew<vtkActor> notchActor;
-    notchActor->SetMapper(notchMapper);
-    notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
-
-    vtkNew<vtkPolyDataMapper> cylinderMapper;
-    cylinderMapper->SetInputConnection(cylinderSource->GetOutputPort());
-
-    vtkNew<vtkActor> cylinderActor;
-    cylinderActor->SetMapper(cylinderMapper);
-    cylinderActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
-
-
-    vtkNew<vtkRenderer> renderer;
-    renderer->AddActor(cylinderActor);
-    renderer->AddActor(notchActor);
-    renderer->SetBackground(colors->GetColor3d("White").GetData());
-
-    vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
+    vtkSmartPointer<vtkGenericOpenGLRenderWindow> renderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
     renderWindow->AddRenderer(renderer);
+
     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
     ui->qvtkWidget_3D_MODEL->update();
 
 }
 
+/// Old code for create Cylinder
+// void MainWindow::on_pushButton_Figure_3_clicked()
+// {
+//     figure = 3;
+
+//     ui->lineEdit_size_d->hide();
+//     ui->label_size_d->hide();
+//     ui->label_size_a->setText("h");
+//     ui->label_size_b->setText("r");
+//     ui->label_aperture_height->setText("Радиус");
+//     ui->label_aperture_width->hide();
+//     ui->lineEdit_aperture_width->hide();
+
+//     ui->lineEdit_col_horizontally->hide();
+//     ui->lineEdit_col_vertically->hide();
+//     ui->lineEdit_pos_horizontally->hide();
+//     ui->lineEdit_pos_vertically->hide();
+//     ui->label_pos_x->hide();
+//     ui->label_pos_y->hide();
+//     ui->lineEdit_pos_x->hide();
+//     ui->lineEdit_pos_y->hide();
+
+//     ui->label_col->hide();
+//     ui->lineEdit_col_vertically->hide();
+//     ui->lineEdit_col_horizontally->hide();
+//     ui->label_horizontally->hide();
+//     ui->label_vertically->hide();
+//     ui->label_pos->hide();
+
+//     double radius = ui->lineEdit_size_b->text().toDouble();
+//     double height = ui->lineEdit_size_a->text().toDouble();
+
+//     double notchRadius = ui->lineEdit_aperture_height->text().toDouble();
+//     double notchHeight = height / 2 ;
+
+//     if(notchRadius >= radius)
+//     {
+//         notchRadius = radius / 4;
+//         QPalette palette;
+//         palette.setColor(QPalette::Base, Qt::red);
+//         ui->lineEdit_aperture_height->setPalette(palette);
+//         ui->lineEdit_size_b->setPalette(palette);
+//     }
+//     else
+//     {
+//         QPalette palette;
+//         palette.setColor(QPalette::Base, Qt::white);
+//         ui->lineEdit_aperture_height->setPalette(palette);
+//         ui->lineEdit_size_b->setPalette(palette);
+//     }
+
+//     cylinderSource = vtkSmartPointer<vtkCylinderSource>::New();
+//     cylinderSource->SetResolution(40);
+
+//     vtkNew<vtkPolyDataMapper> mapper;
+//     mapper->SetInputConnection(cylinderSource->GetOutputPort());
+
+//     cylinderSource->SetHeight(height);
+//     cylinderSource->SetRadius(radius);
+//     cylinderSource->Update();
+
+
+//     vtkNew<vtkCylinderSource> notchSource;
+//     notchSource->SetResolution(40);
+
+//     notchSource->SetHeight(notchHeight);
+//     notchSource->SetRadius(notchRadius);
+//     notchSource->Update();
+
+//     vtkNew<vtkTransform> notchTransform;
+//     notchTransform->Translate(0, -(height / 2 - notchHeight / 2+ 0.001), 0);
+//     notchTransform->Update();
+
+//     vtkNew<vtkTransformPolyDataFilter> notchTransformFilter;
+//     notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
+//     notchTransformFilter->SetTransform(notchTransform);
+//     notchTransformFilter->Update();
+
+//     vtkNew<vtkPolyDataMapper> notchMapper;
+//     notchMapper->SetInputConnection(notchTransformFilter->GetOutputPort());
+
+//     vtkNew<vtkActor> notchActor;
+//     notchActor->SetMapper(notchMapper);
+//     notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+
+//     vtkNew<vtkPolyDataMapper> cylinderMapper;
+//     cylinderMapper->SetInputConnection(cylinderSource->GetOutputPort());
+
+//     vtkNew<vtkActor> cylinderActor;
+//     cylinderActor->SetMapper(cylinderMapper);
+//     cylinderActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
+
+
+//     vtkNew<vtkRenderer> renderer;
+//     renderer->AddActor(cylinderActor);
+//     renderer->AddActor(notchActor);
+//     renderer->SetBackground(colors->GetColor3d("White").GetData());
+
+//     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
+//     renderWindow->AddRenderer(renderer);
+//     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
+//     ui->qvtkWidget_3D_MODEL->update();
+
+// }
 
 void MainWindow::on_lineEdit_size_a_textChanged(const QString &arg1)
 {

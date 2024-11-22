@@ -1,5 +1,4 @@
-﻿// mainwindow.h
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -19,6 +18,7 @@
 #include <vtkBooleanOperationPolyDataFilter.h>
 #include <vtkBox.h>
 #include <vtkTransform.h>
+
 //график
 #include <QVTKOpenGLNativeWidget.h>
 #include <vtkGenericOpenGLRenderWindow.h>
@@ -91,11 +91,11 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
     vtkSmartPointer<vtkCylinderSource> cylinderSource;
     vtkSmartPointer<vtkCubeSource> rectangleSource;
     vtkSmartPointer<vtkActor> cylinderActor;
 
-    void updateCylinder(double radius, double height);
     bool graph_2d_exists = false;
     QLineSeries *series;
     QChartView *chartView;

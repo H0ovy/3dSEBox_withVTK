@@ -19,17 +19,17 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        robcalculation.cpp
         robcalculation.h
+        robcalculation.cpp
+        calculationthread.h
+        calculationthread.cpp
 )
 
-set(VTK_DIR "D:/VTK-9.3.0-install-no-CASCADE/lib/cmake/vtk-9.3")
+set(VTK_DIR "C:/Users/User/Desktop/RUS_work/work_space/Work/VTK-9.3.0-install-no-CASCADE/lib/cmake/vtk-9.3")
 
 find_package(VTK COMPONENTS
   CommonColor
-  CommonComputationalGeometry
   CommonCore
-  FiltersCore
   FiltersSources
   CommonDataModel
   InteractionStyle
@@ -38,7 +38,6 @@ find_package(VTK COMPONENTS
   RenderingFreeType
   RenderingGL2PSOpenGL2
   RenderingOpenGL2
-  fmt
 )
 
 if (NOT VTK_FOUND)
@@ -49,6 +48,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(3dSEBox_withVTK
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        robcalculation.cpp robcalculation.h
+        datawindow.h datawindow.cpp
+        graphs.h graphs.cpp
+        modelsfigure.h modelsfigure.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET 3dSEBox_withVTK APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -69,9 +72,9 @@ else()
 endif()
 
 target_link_libraries(3dSEBox_withVTK PRIVATE
-    "D:/VTK-9.3.0-install-no-CASCADE/lib/vtkGUISupportQt-9.3.lib"
-    "D:/VTK-9.3.0-install-no-CASCADE/lib/vtkInteractionWidgets-9.3.lib"
-    "D:/VTK-9.3.0-install-no-CASCADE/lib/vtkRenderingAnnotation-9.3.lib"
+    "C:/Users/User/Desktop/RUS_work/work_space/Work/VTK-9.3.0-install-no-CASCADE/lib/vtkGUISupportQt-9.3.lib"
+    "C:/Users/User/Desktop/RUS_work/work_space/Work/VTK-9.3.0-install-no-CASCADE/lib/vtkInteractionWidgets-9.3.lib"
+    "C:/Users/User/Desktop/RUS_work/work_space/Work/VTK-9.3.0-install-no-CASCADE/lib/vtkRenderingAnnotation-9.3.lib"
     Qt6::Core
     Qt6::Gui
     Qt6::Charts
