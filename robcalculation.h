@@ -10,7 +10,7 @@ public:
     std::thread Opti_Calc;
 public:
     robCalculation(): Opti_Calc(){}
-    ~robCalculation() {/*Opti_Calc.join();*/}
+    ~robCalculation() {}
      double fact(double N);
        double calcSomeRob(int* iter,double freq, double t, double w, double b, double L, double a, double d, double p,double m,double n);
        double func(double x, double y, double w, double L, double m, double n, double a, double b);

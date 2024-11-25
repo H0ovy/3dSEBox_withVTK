@@ -19,8 +19,12 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        robcalculation.cpp
         robcalculation.h
+        robcalculation.cpp
+        calculationthread.h
+        calculationthread.cpp
+        modelsfigure.h
+        modelsfigure.cpp
 )
 
 set(VTK_DIR "D:/VTK-9.3.0-install-no-CASCADE/lib/cmake/vtk-9.3")
