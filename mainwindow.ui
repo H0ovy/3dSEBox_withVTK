@@ -102,7 +102,7 @@
       </widget>
      </item>
      <item row="5" column="0" colspan="3">
-      <widget class="QLineEdit" name="lineEdit">
+      <widget class="QLineEdit" name="lineEdit_figure_thickness">
        <property name="text">
         <string>0.0015</string>
        </property>
@@ -604,6 +604,19 @@
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QPushButton" name="pushButtonCalcStart">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>534</y>
+      <width>591</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>рачитать</string>
+    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>

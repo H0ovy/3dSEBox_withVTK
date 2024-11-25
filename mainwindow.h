@@ -90,6 +90,9 @@ private slots:
 
     void on_lineEdit_pos_vertically_textChanged(const QString &arg1);
 
+
+    void on_pushButtonCalcStart_clicked();
+
 private:
     Ui::MainWindow *ui;
 

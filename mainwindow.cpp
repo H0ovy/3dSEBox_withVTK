@@ -491,110 +491,6 @@ void MainWindow::on_pushButton_Figure_3_clicked()
 
 }
 
-/// Old code for create Cylinder
-// void MainWindow::on_pushButton_Figure_3_clicked()
-// {
-//     figure = 3;
-
-//     ui->lineEdit_size_d->hide();
-//     ui->label_size_d->hide();
-//     ui->label_size_a->setText("h");
-//     ui->label_size_b->setText("r");
-//     ui->label_aperture_height->setText("Радиус");
-//     ui->label_aperture_width->hide();
-//     ui->lineEdit_aperture_width->hide();
-
-//     ui->lineEdit_col_horizontally->hide();
-//     ui->lineEdit_col_vertically->hide();
-//     ui->lineEdit_pos_horizontally->hide();
-//     ui->lineEdit_pos_vertically->hide();
-//     ui->label_pos_x->hide();
-//     ui->label_pos_y->hide();
-//     ui->lineEdit_pos_x->hide();
-//     ui->lineEdit_pos_y->hide();
-
-//     ui->label_col->hide();
-//     ui->lineEdit_col_vertically->hide();
-//     ui->lineEdit_col_horizontally->hide();
-//     ui->label_horizontally->hide();
-//     ui->label_vertically->hide();
-//     ui->label_pos->hide();
-
-//     double radius = ui->lineEdit_size_b->text().toDouble();
-//     double height = ui->lineEdit_size_a->text().toDouble();
-
-//     double notchRadius = ui->lineEdit_aperture_height->text().toDouble();
-//     double notchHeight = height / 2 ;
-
-//     if(notchRadius >= radius)
-//     {
-//         notchRadius = radius / 4;
-//         QPalette palette;
-//         palette.setColor(QPalette::Base, Qt::red);
-//         ui->lineEdit_aperture_height->setPalette(palette);
-//         ui->lineEdit_size_b->setPalette(palette);
-//     }
-//     else
-//     {
-//         QPalette palette;
-//         palette.setColor(QPalette::Base, Qt::white);
-//         ui->lineEdit_aperture_height->setPalette(palette);
-//         ui->lineEdit_size_b->setPalette(palette);
-//     }
-
-//     cylinderSource = vtkSmartPointer<vtkCylinderSource>::New();
-//     cylinderSource->SetResolution(40);
-
-//     vtkNew<vtkPolyDataMapper> mapper;
-//     mapper->SetInputConnection(cylinderSource->GetOutputPort());
-
-//     cylinderSource->SetHeight(height);
-//     cylinderSource->SetRadius(radius);
-//     cylinderSource->Update();
-
-
-//     vtkNew<vtkCylinderSource> notchSource;
-//     notchSource->SetResolution(40);
-
-//     notchSource->SetHeight(notchHeight);
-//     notchSource->SetRadius(notchRadius);
-//     notchSource->Update();
-
-//     vtkNew<vtkTransform> notchTransform;
-//     notchTransform->Translate(0, -(height / 2 - notchHeight / 2+ 0.001), 0);
-//     notchTransform->Update();
-
-//     vtkNew<vtkTransformPolyDataFilter> notchTransformFilter;
-//     notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
-//     notchTransformFilter->SetTransform(notchTransform);
-//     notchTransformFilter->Update();
-
-//     vtkNew<vtkPolyDataMapper> notchMapper;
-//     notchMapper->SetInputConnection(notchTransformFilter->GetOutputPort());
-
-//     vtkNew<vtkActor> notchActor;
-//     notchActor->SetMapper(notchMapper);
-//     notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
-
-//     vtkNew<vtkPolyDataMapper> cylinderMapper;
-//     cylinderMapper->SetInputConnection(cylinderSource->GetOutputPort());
-
-//     vtkNew<vtkActor> cylinderActor;
-//     cylinderActor->SetMapper(cylinderMapper);
-//     cylinderActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
-
-
-//     vtkNew<vtkRenderer> renderer;
-//     renderer->AddActor(cylinderActor);
-//     renderer->AddActor(notchActor);
-//     renderer->SetBackground(colors->GetColor3d("White").GetData());
-
-//     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
-//     renderWindow->AddRenderer(renderer);
-//     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
-//     ui->qvtkWidget_3D_MODEL->update();
-
-// }
 
 void MainWindow::on_lineEdit_size_a_textChanged(const QString &arg1)
 {
@@ -737,3 +633,54 @@ void MainWindow::on_lineEdit_pos_vertically_textChanged(const QString &arg1)//р
 
     on_pushButton_Figure_2_clicked();
 }
+
+
+
+void MainWindow::on_pushButtonCalcStart_clicked()
+{
+    /// ВРЕМЕННЫЙ ВАРИАНТ, ПОТОМ ВСЕ ПЕРЕМЕННЫЕ БУДУТ В ОТДЕЛЬНОМ КЛАССЕ
+
+
+    double m_aVal = ui->lineEdit_size_a->text().toDouble();             // У цилиндра - h
+    double m_bVal = ui->lineEdit_size_b->text().toDouble();             // У цилиндра - r
+    double m_dVal = ui->lineEdit_size_d->text().toDouble();
+
+    double m_apVal = ui->lineEdit_aperture_height->text().toDouble();   // У цилиндра - R апертуры
+
+    double m_tVal = ui->lineEdit_figure_thickness->text().toDouble();   // Толщина
+
+    if (figure == 1)
+    {
+        double m_wVal = ui->lineEdit_aperture_width->text().toDouble();         // Ширина апертуры
+        double m_lVal = ui->lineEdit_aperture_height->text().toDouble();        // Высота апертуры
+
+        double m_xVal = ui->lineEdit_pos_x->text().toDouble();                  // Расположение X в аппертуре
+        double m_yVal = ui->lineEdit_pos_y->text().toDouble();                  // Расположение Y в аппертуре
+
+    }
+
+    if (figure == 2)
+    {
+        double m_wVal = ui->lineEdit_aperture_width->text().toDouble();         // Ширина апертуры
+        double m_lVal = ui->lineEdit_aperture_height->text().toDouble();        // Высота апертуры
+        // Расстояние между центрами аппертур для 2-ой фигуры
+        double m_dvVal = ui->lineEdit_pos_vertically->text().toDouble();    // Гор
+        double m_dhVal = ui->lineEdit_pos_horizontally->text().toDouble();  // Вер
+        // Количество аппертур для 2-ой фигуры
+        int m_napVal = ui->lineEdit_col_vertically->text().toInt();         // Гор
+        int m_mapVal = ui->lineEdit_col_horizontally->text().toInt();       // Вер
+    }
+
+
+    double m_fMinVal = ui->lineEdit_Source_Fmin->text().toDouble();         // F min
+    double m_fMaxVal = ui->lineEdit_Source_Fmax->text().toDouble();         // F max
+
+    int m_nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();       // Количество точек
+    int m_integralVal = ui->lineEdit_POV_step->text().toInt();              // Шаг интегрирования
+    int m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();            // Количество точек наблюдения
+    double m_pVal = ui->lineEdit_POV_P->text().toDouble();                  // P - точка наблюдения
+
+    int m_nVal = ui->lineEdit_Source_n->text().toInt();                     // n
+    int m_mVal = ui->lineEdit_Source_m->text().toInt();                     // m
+}
+
