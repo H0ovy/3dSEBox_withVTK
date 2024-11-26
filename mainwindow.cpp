@@ -687,7 +687,7 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     int m_integralVal = ui->lineEdit_POV_step->text().toInt();              // Шаг интегрирования
     int m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();            // Количество точек наблюдения
     double m_pVal = ui->lineEdit_POV_P->text().toDouble();                  // P - точка наблюдения
-    double m_sigmaVal = 0;
+    double m_sigmaVal = 37000000;                                           // Сигма
 
     int m_nVal = ui->lineEdit_Source_n->text().toInt();                     // n
     int m_mVal = ui->lineEdit_Source_m->text().toInt();                     // m
@@ -698,5 +698,7 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     CalculationThread calc_thread(m_fMinVal, m_fMaxVal, m_tVal, m_wVal, m_bVal, m_bVal, m_aVal, m_apVal, m_lVal, m_aVal,
                                   m_dVal, m_pVal, m_nPointsVal, m_pstepVal, m_xVal, m_yVal, m_napVal, m_mapVal, m_nVal,
                                   m_mVal, m_dvVal, m_dhVal, m_sigmaVal, m_integralVal, m_RungeVal, m_fileBool);
+
+    calc_thread.run();
 }
 

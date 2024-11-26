@@ -9,9 +9,9 @@ class CalculationThread : public QThread
 {
     Q_OBJECT
 signals:
-    //void progress(double);
-    //void time(double);
-    //void iterCount(double);
+    void progress(double);
+    void time(double);
+    void iterCount(double);
     //void GUI(QVector<surfaceModelItem>);
 
 public:
