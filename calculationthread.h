@@ -13,11 +13,21 @@ signals:
     //void time(double);
     //void iterCount(double);
     //void GUI(QVector<surfaceModelItem>);
+
 public:
-    //void run();
-public:
-    //void CalcThread(double tempValue, int K/*, ptrfc*/);
-    double GetCalculation(int i, double, double);
+    CalculationThread(double fMinVal, double fMaxVal, double tVal, double  wVal, double bVal, double rVal, double hVal, double apVal,
+                      double lVal, double aVal, double dVal, double pVal, double nPointsVal, double perc_step,
+                      double xVal, double yVal, double napVal, double mapVal, double nVal, double mVal, double dvVal,
+                      double dhVal, double sigmaVal, double integralVal, bool RungeVal, bool fileBool)
+        : m_fMinVal(fMinVal), m_fMaxVal(fMaxVal), m_tVal(tVal), m_wVal(wVal), m_bVal(bVal), m_rVal(rVal), m_hVal(hVal), m_apVal(apVal),
+        m_lVal(lVal), m_aVal(aVal), m_dVal(dVal), m_pVal(pVal), m_nPointsVal(nPointsVal), m_perc_step(perc_step),
+        m_xVal(xVal), m_yVal(yVal), m_napVal(napVal), m_mapVal(mapVal), m_nVal(nVal), m_mVal(mVal), m_dvVal(dvVal), m_dhVal(dhVal),
+        m_sigmaVal(sigmaVal), m_integralVal(integralVal), m_RungeVal(RungeVal), m_fileBool(fileBool) {}
+
+    void CalcThread(double tempValue, int K);
+    double GetCalculation(int i, double tempFreq, double pp);
+    void run();
+
 public:
     std::thread m_thread;
     //I created this variable to avoid calls on static functions
@@ -30,8 +40,9 @@ public:
     int *iterations;
     QString m_file;
     double m_fMinVal, m_fMaxVal, m_tVal, m_wVal, m_bVal, m_rVal, m_hVal, m_apVal,
-    m_lVal, m_aVal, m_dVal, m_pVal,m_nPointsVal, perc_step,
-    m_xVal, m_yVal, m_napVal, m_mapVal, m_nVal, m_mVal, m_dvVal, m_dhVal, m_sigmaVal, m_integralVal; bool m_RungeVal, m_fileBool;
+    m_lVal, m_aVal, m_dVal, m_pVal, m_nPointsVal, m_perc_step,
+    m_xVal, m_yVal, m_napVal, m_mapVal, m_nVal, m_mVal, m_dvVal, m_dhVal, m_sigmaVal, m_integralVal;
+    bool m_RungeVal, m_fileBool;
 };
 
 #endif // CALCULATIONTHREAD_H

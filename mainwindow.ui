@@ -400,7 +400,7 @@
       </widget>
      </item>
      <item row="7" column="2" colspan="2">
-      <widget class="QCheckBox" name="checkBox">
+      <widget class="QCheckBox" name="checkBox_File">
        <property name="text">
         <string>Загрузка из файла</string>
        </property>
@@ -608,14 +608,14 @@
    <widget class="QPushButton" name="pushButtonCalcStart">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>534</y>
-      <width>591</width>
-      <height>20</height>
+      <x>410</x>
+      <y>780</y>
+      <width>141</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>рачитать</string>
+     <string>Вычислить</string>
     </property>
    </widget>
   </widget>

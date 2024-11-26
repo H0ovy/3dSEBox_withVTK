@@ -16,6 +16,7 @@
 #include <cmath>
 
 #include "modelsfigure.h"
+#include "calculationthread.h"
 #include <vtkBooleanOperationPolyDataFilter.h>
 #include <vtkBox.h>
 #include <vtkTransform.h>
@@ -96,9 +97,9 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    vtkSmartPointer<vtkCylinderSource> cylinderSource;
-    vtkSmartPointer<vtkCubeSource> rectangleSource;
-    vtkSmartPointer<vtkActor> cylinderActor;
+    // vtkSmartPointer<vtkCylinderSource> cylinderSource;
+    // vtkSmartPointer<vtkCubeSource> rectangleSource;
+    // vtkSmartPointer<vtkActor> cylinderActor;
 
     bool graph_2d_exists = false;
     QLineSeries *series;

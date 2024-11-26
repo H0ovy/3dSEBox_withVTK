@@ -638,8 +638,7 @@ void MainWindow::on_lineEdit_pos_vertically_textChanged(const QString &arg1)//р
 
 void MainWindow::on_pushButtonCalcStart_clicked()
 {
-    /// ВРЕМЕННЫЙ ВАРИАНТ, ПОТОМ ВСЕ ПЕРЕМЕННЫЕ БУДУТ В ОТДЕЛЬНОМ КЛАССЕ
-
+    /// ВРЕМЕННЫЙ ВАРИАНТ
 
     double m_aVal = ui->lineEdit_size_a->text().toDouble();             // У цилиндра - h
     double m_bVal = ui->lineEdit_size_b->text().toDouble();             // У цилиндра - r
@@ -649,26 +648,35 @@ void MainWindow::on_pushButtonCalcStart_clicked()
 
     double m_tVal = ui->lineEdit_figure_thickness->text().toDouble();   // Толщина
 
+    double m_wVal = 0;
+    double m_lVal = 0;
+    double m_dvVal = 0;
+    double m_dhVal = 0;
+    int m_napVal = 0;
+    int m_mapVal = 0;
+    double m_xVal = 0;
+    double m_yVal = 0;
+
     if (figure == 1)
     {
-        double m_wVal = ui->lineEdit_aperture_width->text().toDouble();         // Ширина апертуры
-        double m_lVal = ui->lineEdit_aperture_height->text().toDouble();        // Высота апертуры
+        m_wVal = ui->lineEdit_aperture_width->text().toDouble();         // Ширина апертуры
+        m_lVal = ui->lineEdit_aperture_height->text().toDouble();        // Высота апертуры
 
-        double m_xVal = ui->lineEdit_pos_x->text().toDouble();                  // Расположение X в аппертуре
-        double m_yVal = ui->lineEdit_pos_y->text().toDouble();                  // Расположение Y в аппертуре
+        m_xVal = ui->lineEdit_pos_x->text().toDouble();                  // Расположение X в аппертуре
+        m_yVal = ui->lineEdit_pos_y->text().toDouble();                  // Расположение Y в аппертуре
 
     }
 
     if (figure == 2)
     {
-        double m_wVal = ui->lineEdit_aperture_width->text().toDouble();         // Ширина апертуры
-        double m_lVal = ui->lineEdit_aperture_height->text().toDouble();        // Высота апертуры
+        m_wVal = ui->lineEdit_aperture_width->text().toDouble();         // Ширина апертуры
+        m_lVal = ui->lineEdit_aperture_height->text().toDouble();        // Высота апертуры
         // Расстояние между центрами аппертур для 2-ой фигуры
-        double m_dvVal = ui->lineEdit_pos_vertically->text().toDouble();    // Гор
-        double m_dhVal = ui->lineEdit_pos_horizontally->text().toDouble();  // Вер
+        m_dvVal = ui->lineEdit_pos_vertically->text().toDouble();    // Гор
+        m_dhVal = ui->lineEdit_pos_horizontally->text().toDouble();  // Вер
         // Количество аппертур для 2-ой фигуры
-        int m_napVal = ui->lineEdit_col_vertically->text().toInt();         // Гор
-        int m_mapVal = ui->lineEdit_col_horizontally->text().toInt();       // Вер
+        m_napVal = ui->lineEdit_col_vertically->text().toInt();         // Гор
+        m_mapVal = ui->lineEdit_col_horizontally->text().toInt();       // Вер
     }
 
 
@@ -679,8 +687,16 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     int m_integralVal = ui->lineEdit_POV_step->text().toInt();              // Шаг интегрирования
     int m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();            // Количество точек наблюдения
     double m_pVal = ui->lineEdit_POV_P->text().toDouble();                  // P - точка наблюдения
+    double m_sigmaVal = 0;
 
     int m_nVal = ui->lineEdit_Source_n->text().toInt();                     // n
     int m_mVal = ui->lineEdit_Source_m->text().toInt();                     // m
+
+    bool m_RungeVal = ui->checkBox_Runge->isChecked();                        // Правило Рунге
+    bool m_fileBool = ui->checkBox_File->isChecked();                         // Загрузка из файла
+
+    CalculationThread calc_thread(m_fMinVal, m_fMaxVal, m_tVal, m_wVal, m_bVal, m_bVal, m_aVal, m_apVal, m_lVal, m_aVal,
+                                  m_dVal, m_pVal, m_nPointsVal, m_pstepVal, m_xVal, m_yVal, m_napVal, m_mapVal, m_nVal,
+                                  m_mVal, m_dvVal, m_dhVal, m_sigmaVal, m_integralVal, m_RungeVal, m_fileBool);
 }
 
