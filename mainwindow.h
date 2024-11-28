@@ -98,7 +98,7 @@ private slots:
     void PrintCalcProgress(double val);
     void PrintCalcTime(double val);
     void PrintCalcIter(double val);
-    void PringGUI(QVector<surfaceModelItem> gui);
+    void PrintGUI(QVector<surfaceModelItem> gui);
     void UpdateGUI(QVector<surfaceModelItem> gui);
 
 private:

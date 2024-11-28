@@ -99,13 +99,11 @@ void CalculationThread::CalcThread(double tempValue, int K)
                     ival = ival + progres_val;
                     emit progress(ival);
                     tempFreq = m_fMinVal + dfreq * i;
-                    //qDebug() << "juste avant le GetCalculation";
                     tempValue = GetCalculation(K + 1, tempFreq, pp);
                     if (isnan(tempValue))
                         tempValue=0;
 
                     mItems.append({ tempFreq, tempValue, pp});
-                    qDebug() <<"1";
                     //qDebug() << "mItems.x = " << mItems.last().x << "mItems.y = " << mItems.last().y << "mItems.z = " << mItems.last().z;
 
             }

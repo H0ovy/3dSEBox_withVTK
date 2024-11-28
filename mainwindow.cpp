@@ -13,11 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     on_pushButton_2D_clicked();
 
     //calc_thread = new CalculationThread();
-
-
 }
-
-
 
 MainWindow::~MainWindow()
 {
@@ -709,7 +705,7 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     connect(calc_thread, SIGNAL(progress(double)), this, SLOT(PrintCalcProgress(double)));
     connect(calc_thread, SIGNAL(time(double)), this, SLOT(PrintCalcTime(double)));
     connect(calc_thread, SIGNAL(iterCount(double)), this, SLOT(PrintCalcIter(double)));
-    connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(PringGUI(QVector<surfaceModelItem>)));
+    connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(PrintGUI(QVector<surfaceModelItem>)));
     connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(UpdateGUI(QVector<surfaceModelItem>)));
 
     calc_thread->start();
@@ -730,10 +726,8 @@ void MainWindow::PrintCalcIter(double val)
     qDebug() <<"Iter: " <<val <<"\n";
 }
 
-void MainWindow::PringGUI(QVector<surfaceModelItem> gui)
+void MainWindow::PrintGUI(QVector<surfaceModelItem> gui)
 {
-    qDebug()<<"GUI";
-    qDebug()<<gui.size();
     for (int i = 0; i < gui.size(); i++)
     {
         qDebug()<<"GUI" <<gui[i].x <<" " <<gui[i].y <<" " << gui[i].z;
