@@ -5,6 +5,11 @@
 //#include "surfacemodellist.h"
 #include "robcalculation.h"
 
+struct surfaceModelItem
+{
+    double x,y,z;
+};
+
 class CalculationThread : public QThread
 {
     Q_OBJECT
@@ -12,9 +17,10 @@ signals:
     void progress(double);
     void time(double);
     void iterCount(double);
-    //void GUI(QVector<surfaceModelItem>);
+    void GUI(QVector<surfaceModelItem>);
 
 public:
+    CalculationThread();
     CalculationThread(double fMinVal, double fMaxVal, double tVal, double  wVal, double bVal, double rVal, double hVal, double apVal,
                       double lVal, double aVal, double dVal, double pVal, double nPointsVal, double perc_step,
                       double xVal, double yVal, double napVal, double mapVal, double nVal, double mVal, double dvVal,
@@ -33,8 +39,8 @@ public:
     //I created this variable to avoid calls on static functions
     robCalculation rob_calcs;
     int size = 0; //sauvegarde la taille du dernier graphic créer
-    //QVector<surfaceModelItem> toShow;
-    //QVector<surfaceModelItem> mItems;
+    QVector<surfaceModelItem> toShow;
+    QVector<surfaceModelItem> mItems;
     int mod = 0;
     int modS = 0;
     int *iterations;

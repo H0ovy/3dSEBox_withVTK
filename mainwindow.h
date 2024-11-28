@@ -52,6 +52,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -94,6 +95,12 @@ private slots:
 
     void on_pushButtonCalcStart_clicked();
 
+    void PrintCalcProgress(double val);
+    void PrintCalcTime(double val);
+    void PrintCalcIter(double val);
+    void PringGUI(QVector<surfaceModelItem> gui);
+    void UpdateGUI(QVector<surfaceModelItem> gui);
+
 private:
     Ui::MainWindow *ui;
 
@@ -108,6 +115,8 @@ private:
 
     vtkNew<vtkNamedColors> colors;
     ModelsFigure modelsFigure;
+    CalculationThread* calc_thread;
+    QVector<surfaceModelItem> mItems;
 
 };
 

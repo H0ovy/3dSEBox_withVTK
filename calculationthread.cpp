@@ -8,8 +8,11 @@
 #include <cmath>
 #include <omp.h>
 #include <mutex>
+#include <QFile>
 
 using namespace std;
+
+CalculationThread::CalculationThread(){}
 
 double CalculationThread::GetCalculation(int i, double tempFreq, double pp)
 {
@@ -81,10 +84,11 @@ void CalculationThread::CalcThread(double tempValue, int K)
     size = 0;
     tempValue = GetCalculation(K, 0, 0);
     dfreq=(m_fMaxVal - m_fMinVal) / m_nPointsVal;
-        double pp = m_pVal;
+    double pp = m_pVal;
+
         for(int Z = (int)(m_pVal * 1000); Z <= (int)(m_dVal * 1000); Z += 1)
         {
-            for(int i=0; i<m_nPointsVal; ++i)
+            for(int i=0; i < m_nPointsVal; ++i)
             {
                     if (QThread::currentThread()->isInterruptionRequested())
                     {
@@ -94,18 +98,20 @@ void CalculationThread::CalcThread(double tempValue, int K)
                     }
                     ival = ival + progres_val;
                     emit progress(ival);
-                    tempFreq=m_fMinVal+dfreq*i;
+                    tempFreq = m_fMinVal + dfreq * i;
                     //qDebug() << "juste avant le GetCalculation";
                     tempValue = GetCalculation(K + 1, tempFreq, pp);
-                    if (isnan(tempValue)){
+                    if (isnan(tempValue))
                         tempValue=0;
-                        //mItems.append({ tempFreq, tempValue, pp});
-                        //qDebug() << "mItems.x = " << mItems.last().x << "mItems.y = " << mItems.last().y << "mItems.z = " << mItems.last().z;
-                    }
-           }
+
+                    mItems.append({ tempFreq, tempValue, pp});
+                    qDebug() <<"1";
+                    //qDebug() << "mItems.x = " << mItems.last().x << "mItems.y = " << mItems.last().y << "mItems.z = " << mItems.last().z;
+
+            }
             if (abort)
             {
-                //mItems.remove(mItems.size() - size, size);
+                mItems.remove(mItems.size() - size, size);
                 break;
             }
             pp += m_perc_step;
@@ -124,46 +130,50 @@ void CalculationThread::run()
     size = 0;
     iterations = &a;
     QElapsedTimer timer;
-    //mItems.clear();
+    mItems.clear();
 
-    // if (!toShow.empty())
-    // {
-    //     surfaceModelItem tmp;
-
-    //     QVector<surfaceModelItem>::const_iterator it, end(toShow.end());
-    //     for (it = toShow.begin(); it != end; ++it)
-    //     {
-    //         tmp.x = it->x;
-    //         tmp.y = it->y;
-    //         tmp.z = it->z;
-    //         mItems.append(tmp);
-    //     }
-    //     toShow.clear();
-    // }
-    // else if(m_fileBool == true){
-    //     QFile file(m_file);
-    //     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    //         return;
-    //     int multiVal;
-    //    if (modS == 0) multiVal = 1;
-    //    else if (modS == 1) multiVal = 1000000;
-    //    else if (modS == 2) multiVal = 1000000000;
-    //     for(double pp=m_pVal; pp<=m_dVal; pp=pp+perc_step){
-    //         QTextStream in(&file);
-    //         in.seek(0);
-    //         while (!in.atEnd()) {
-    //             QString line = in.readLine();
-    //             if(line.contains("#")) continue;
-    //             QStringList list1 = line.split('\t');
-    //             tempValue=rob_calcs.calcMethod2(m_aVal, m_dVal, m_bVal,pp, list1.at(0).toDouble(), multiVal, list1.at(1).toDouble(), m_mVal, m_nVal);
-    //             //mItems.append({ list1.at(0).toDouble()*multiVal, tempValue, pp});
-    //             size = size + 1;
-    //          }
-    //     }
-    // }
-    if(true)    /// TMP
+    if (!toShow.empty())
     {
-        switch (mod) {
+        surfaceModelItem tmp;
+
+        QVector<surfaceModelItem>::const_iterator it, end(toShow.end());
+        for (it = toShow.begin(); it != end; ++it)
+        {
+            tmp.x = it->x;
+            tmp.y = it->y;
+            tmp.z = it->z;
+            mItems.append(tmp);
+        }
+        toShow.clear();
+    }
+    else if(m_fileBool == true)
+    {
+        QFile file(m_file);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+            return;
+        int multiVal;
+        if (modS == 0) multiVal = 1;
+        else if (modS == 1) multiVal = 1000000;
+        else if (modS == 2) multiVal = 1000000000;
+        for(double pp = m_pVal; pp <= m_dVal; pp += m_perc_step)
+        {
+            QTextStream in(&file);
+            in.seek(0);
+            while (!in.atEnd())
+            {
+                QString line = in.readLine();
+                if(line.contains("#")) continue;
+                QStringList list1 = line.split('\t');
+                tempValue=rob_calcs.calcMethod2(m_aVal, m_dVal, m_bVal,pp, list1.at(0).toDouble(), multiVal, list1.at(1).toDouble(), m_mVal, m_nVal);
+                mItems.append({ list1.at(0).toDouble()*multiVal, tempValue, pp});
+                size = size + 1;
+             }
+        }
+    }
+    else
+    {
+        switch (mod)
+        {
         case 0:
             timer.start();
             CalcThread(tempValue, mod);
@@ -230,6 +240,6 @@ void CalculationThread::run()
             break;
         }
     }
-    //emit GUI(mItems);
+    emit GUI(mItems);
     emit progress(0);
 }

@@ -170,38 +170,38 @@ double robCalculation::calcSomeRob(int *iter, double freq, double t, double w, d
 {
     auto c0 = 299792458;
     auto lambda = c0/freq;
-    dcomp v0(1.0,0.0);
-    auto z0 = 120*M_PI;
-    dcomp Z0(z0,0.0);
+    dcomp v0(1.0, 0.0);
+    auto z0 = 120 * M_PI;
+    dcomp Z0(z0, 0.0);
     ++(*iter);
-    auto we = w - ((5*t*(1+log(4*M_PI*w/t))) / (4 *M_PI));
+    auto we = w - ((5 * t * (1 + log(4 * M_PI * w / t))) / (4 * M_PI));
     auto kc = we / b;
-    auto temp = pow((1-kc*kc),0.25);
-    auto temp2 = (2+2*temp) / (1-temp);
+    auto temp = pow((1 - kc * kc), 0.25);
+    auto temp2 = (2 + 2 * temp) / (1 - temp);
     auto temp3 = M_PI * 1.0 / log(temp2);
     auto Z0s = 120.0 * M_PI * temp3;
-    auto k0 = 2.0*M_PI / lambda;
-    auto temp8 = L*Z0s;
-    dcomp temp9(0.0,temp8);
-    dcomp temp10 = temp9*tan(k0*L/2);
-    dcomp Zap = temp10 / (2*a);
+    auto k0 = 2.0 * M_PI / lambda;
+    auto temp8 = L * Z0s;
+    dcomp temp9(0.0, temp8);
+    dcomp temp10 = temp9*tan(k0 * L / 2);
+    dcomp Zap = temp10 / (2 * a);
     dcomp Ztmp = Z0 + Zap;
     dcomp v1 = v0 * Zap/Ztmp;
-    dcomp Z1 = Z0*Zap / Ztmp;
-    auto temp1 = pow((lambda/(2*a)),2);
+    dcomp Z1 = Z0 * Zap / Ztmp;
+    auto temp1 = pow((lambda/(2 * a)), 2);
     auto tmp_zg = dcomp(1.0,0.0) - dcomp(temp1,0.0);
     dcomp Zg = dcomp(z0,0) / ( sqrt(tmp_zg));
     auto tmp_kg = dcomp(1.0,0.0) - dcomp(temp1,0.0);
-    dcomp kg = dcomp(k0,0.0)*sqrt(tmp_kg);
+    dcomp kg = dcomp(k0, 0.0) * sqrt(tmp_kg);
     dcomp temp22 = kg * p;
-    dcomp temp32 = cos(temp22) + dcomp(0.0,1.0)*Z1/Zg*sin(temp22);
+    dcomp temp32 = cos(temp22) + dcomp(0.0, 1.0) * Z1 / Zg * sin(temp22);
     dcomp v2 = v1 / temp32;
     dcomp temp4 = tan(temp22);
-    dcomp Z_temp = dcomp(0.0,1.0)*Zg*temp4;
-    dcomp Z_temp2 = dcomp(0.0,1.0)*Z1*temp4/Zg;
-    dcomp Z2 = (Z1+Z_temp) / (dcomp(1.0,0.0)+Z_temp2);
-    dcomp Z3 = dcomp(0.0,1.0)*Zg*tan(kg*(d-p));
-    dcomp vp = (v2*Z3) / (Z2+Z3);
+    dcomp Z_temp = dcomp(0.0, 1.0) *  Zg * temp4;
+    dcomp Z_temp2 = dcomp(0.0, 1.0) * Z1 * temp4/Zg;
+    dcomp Z2 = (Z1 + Z_temp) / (dcomp(1.0, 0.0) + Z_temp2);
+    dcomp Z3 = dcomp(0.0, 1.0) * Zg * tan(kg * (d - p));
+    dcomp vp = (v2 * Z3) / (Z2 + Z3);
 
 
     // Преобразование в точку A
@@ -216,17 +216,17 @@ double robCalculation::calcSomeRob(int *iter, double freq, double t, double w, d
 
             // Преобразование в точку P
             dcomp v2=v1/(cos(kg*p)+j*(Z1/zg)*sin(kg*p));
-            dcomp z2=(Z1+j*zg*tan(kg*p))/(dcomp(1,0)+j*(Z1/zg)*tan(kg*p));
+            dcomp z2=(Z1 + j * zg * tan(kg * p)) / (dcomp(1, 0) + j * (Z1 / zg) * tan(kg * p));
 
             // Нагрузка
             dcomp z3=j*zg*tan(kg*(d-p));
 
             // Напряжение в точке P
-            dcomp vp=v2*z3/(z2+z3);
+            dcomp vp= v2 * z3 / (z2+z3);
             vp1=vp+vp1;
         }
     }
-    return -20*log10(abs(dcomp(2.0,0.0)*vp1/v0));
+    return -20 * log10(abs(dcomp(2.0, 0.0) * vp1 / v0));
 }
 double robCalculation::func(double x, double y, double w, double L, double m, double n, double a, double b)
 {

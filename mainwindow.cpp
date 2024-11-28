@@ -12,8 +12,11 @@ MainWindow::MainWindow(QWidget *parent)
     on_pushButton_Figure_1_clicked();
     on_pushButton_2D_clicked();
 
+    //calc_thread = new CalculationThread();
+
 
 }
+
 
 
 MainWindow::~MainWindow()
@@ -638,8 +641,6 @@ void MainWindow::on_lineEdit_pos_vertically_textChanged(const QString &arg1)//р
 
 void MainWindow::on_pushButtonCalcStart_clicked()
 {
-    /// ВРЕМЕННЫЙ ВАРИАНТ
-
     double m_aVal = ui->lineEdit_size_a->text().toDouble();             // У цилиндра - h
     double m_bVal = ui->lineEdit_size_b->text().toDouble();             // У цилиндра - r
     double m_dVal = ui->lineEdit_size_d->text().toDouble();
@@ -664,7 +665,6 @@ void MainWindow::on_pushButtonCalcStart_clicked()
 
         m_xVal = ui->lineEdit_pos_x->text().toDouble();                  // Расположение X в аппертуре
         m_yVal = ui->lineEdit_pos_y->text().toDouble();                  // Расположение Y в аппертуре
-
     }
 
     if (figure == 2)
@@ -683,22 +683,65 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     double m_fMinVal = ui->lineEdit_Source_Fmin->text().toDouble();         // F min
     double m_fMaxVal = ui->lineEdit_Source_Fmax->text().toDouble();         // F max
 
-    int m_nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();       // Количество точек
-    int m_integralVal = ui->lineEdit_POV_step->text().toInt();              // Шаг интегрирования
-    int m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();            // Количество точек наблюдения
+    double m_nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();       // Количество точек
+    double m_integralVal = ui->lineEdit_POV_step->text().toInt();              // Шаг интегрирования
+    double m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();            // Количество точек наблюдения
     double m_pVal = ui->lineEdit_POV_P->text().toDouble();                  // P - точка наблюдения
     double m_sigmaVal = 37000000;                                           // Сигма
 
-    int m_nVal = ui->lineEdit_Source_n->text().toInt();                     // n
-    int m_mVal = ui->lineEdit_Source_m->text().toInt();                     // m
+    double m_nVal = ui->lineEdit_Source_n->text().toInt();                     // n
+    double m_mVal = ui->lineEdit_Source_m->text().toInt();                     // m
 
     bool m_RungeVal = ui->checkBox_Runge->isChecked();                        // Правило Рунге
     bool m_fileBool = ui->checkBox_File->isChecked();                         // Загрузка из файла
 
-    CalculationThread calc_thread(m_fMinVal, m_fMaxVal, m_tVal, m_wVal, m_bVal, m_bVal, m_aVal, m_apVal, m_lVal, m_aVal,
+    calc_thread = new CalculationThread(m_fMinVal, m_fMaxVal, m_tVal, m_wVal, m_bVal, m_bVal, m_aVal, m_apVal, m_lVal, m_aVal,
                                   m_dVal, m_pVal, m_nPointsVal, m_pstepVal, m_xVal, m_yVal, m_napVal, m_mapVal, m_nVal,
                                   m_mVal, m_dvVal, m_dhVal, m_sigmaVal, m_integralVal, m_RungeVal, m_fileBool);
 
-    calc_thread.run();
+    qDebug() <<m_fMinVal << m_fMaxVal<< m_tVal<< m_wVal<< m_bVal<< m_bVal<< m_aVal<< m_apVal<< m_lVal<< m_aVal<<
+        m_dVal<< m_pVal<< m_nPointsVal<< m_pstepVal<< m_xVal<< m_yVal<< m_napVal<< m_mapVal<< m_nVal<<
+        m_mVal<< m_dvVal<< m_dhVal<< m_sigmaVal<< m_integralVal<< m_RungeVal<< m_fileBool;
+
+    int m_funcVal = ui->comboBox_func->currentIndex();
+    calc_thread->mod = m_funcVal;
+
+    connect(calc_thread, SIGNAL(progress(double)), this, SLOT(PrintCalcProgress(double)));
+    connect(calc_thread, SIGNAL(time(double)), this, SLOT(PrintCalcTime(double)));
+    connect(calc_thread, SIGNAL(iterCount(double)), this, SLOT(PrintCalcIter(double)));
+    connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(PringGUI(QVector<surfaceModelItem>)));
+    connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(UpdateGUI(QVector<surfaceModelItem>)));
+
+    calc_thread->start();
+}
+
+void MainWindow::PrintCalcProgress(double val)
+{
+    //qDebug() <<"Progress: " <<val <<"\n";
+}
+
+void MainWindow::PrintCalcTime(double val)
+{
+    //qDebug() <<"Time: " <<val <<"\n";
+}
+
+void MainWindow::PrintCalcIter(double val)
+{
+    qDebug() <<"Iter: " <<val <<"\n";
+}
+
+void MainWindow::PringGUI(QVector<surfaceModelItem> gui)
+{
+    qDebug()<<"GUI";
+    qDebug()<<gui.size();
+    for (int i = 0; i < gui.size(); i++)
+    {
+        qDebug()<<"GUI" <<gui[i].x <<" " <<gui[i].y <<" " << gui[i].z;
+    }
+}
+
+void MainWindow::UpdateGUI(QVector<surfaceModelItem> gui)
+{
+    mItems = gui;
 }
 
