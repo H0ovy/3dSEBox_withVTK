@@ -593,10 +593,11 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     }
 
     calc_thread->mod = m_funcVal;
+    calc_thread->modS = ui->comboBox_herz->currentIndex();          // Для загрузки из файла
 
     connect(calc_thread, SIGNAL(progress(double)), this, SLOT(UpdateProgress(double)));
-    //connect(calc_thread, SIGNAL(time(double)), this, SLOT(PrintCalcTime(double)));
-    //connect(calc_thread, SIGNAL(iterCount(double)), this, SLOT(PrintCalcIter(double)));
+    connect(calc_thread, SIGNAL(time(double)), this, SLOT(PrintCalcTime(double)));
+    connect(calc_thread, SIGNAL(iterCount(double)), this, SLOT(PrintCalcIter(double)));
     connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(PrintGUI(QVector<surfaceModelItem>)));
     connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(UpdateGUI(QVector<surfaceModelItem>)));
 
@@ -756,11 +757,13 @@ void MainWindow::UpdateProgress(double val)
 void MainWindow::PrintCalcTime(double val)
 {
     //qDebug() <<"Time: " <<val <<"\n";
+    ui->label_Calc_time->setText(tr("Время вычислений: %1 мс").arg(val));
 }
 
 void MainWindow::PrintCalcIter(double val)
 {
     //qDebug() <<"Iter: " <<val <<"\n";
+    ui->label_Iter_amount->setText(tr("Кол-во итераций: %1").arg(val));
 }
 
 void MainWindow::PrintGUI(QVector<surfaceModelItem> gui)
