@@ -461,7 +461,7 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QLabel" name="label_calc_diff">
+      <widget class="QLabel" name="label_calc_time">
        <property name="text">
         <string>Прогресс выч.</string>
        </property>
@@ -617,6 +617,32 @@
     <property name="text">
      <string>Вычислить</string>
     </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>10</y>
+      <width>291</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="label_calc_diff">
+       <property name="text">
+        <string>Сложность выч.</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QProgressBar" name="progressBar_diff">
+       <property name="value">
+        <number>56</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>

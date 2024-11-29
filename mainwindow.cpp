@@ -16,6 +16,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     //calc_thread = new CalculationThread();
+    CalcRAM();
+    CalcTime();
+    CalcDif();
 }
 
 MainWindow::~MainWindow()
@@ -600,6 +603,146 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     calc_thread->start();
 }
 
+void MainWindow::CalcRAM()
+{
+    double m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();
+    double m_nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();
+
+    double tmp = (((((100/m_pstepVal) * m_nPointsVal)*3*8)/1024)/1024 + (((100/m_pstepVal) * m_nPointsVal)*3)/1024 + 50);
+    tmp = tmp + 0.5 - (tmp < 0);
+    RAM = (int)tmp;
+
+    ui->label_RAM_amount->setText(tr("%1 Мб.").arg(RAM));
+}
+
+void MainWindow::CalcTime()
+{
+    int m_funcVal = 0;
+
+    if(ui->comboBox_func->currentText() == "Robinson et al."){
+        m_funcVal = 0;
+    }
+    else if(ui->comboBox_func->currentText() == "Shi et al."){
+        m_funcVal = 1;
+    }
+    else if(ui->comboBox_func->currentText() == "Po`ad et al."){
+        m_funcVal = 2;
+    }
+    else if(ui->comboBox_func->currentText() == "Komnatnov M.E."){
+        m_funcVal = 3;
+    }
+    else if(ui->comboBox_func->currentText() == "Nie et al."){
+        m_funcVal = 4;
+    }
+    else if(ui->comboBox_func->currentText() == "Ren et al."){
+        m_funcVal = 5;
+    }
+    else if(ui->comboBox_func->currentText() == "Dehkhoda et al."){
+        m_funcVal = 6;
+    }
+    else if(ui->comboBox_func->currentText() == "Wamg et al."){
+        m_funcVal = 8;
+    }
+
+    double m_nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();
+    double m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();
+
+    switch (m_funcVal) {
+    case 0:
+        Time = (m_pstepVal * m_nPointsVal) / 1000000;
+        break;
+    case 1:
+        Time = (1000*(m_pstepVal) * m_nPointsVal) / 2000000;
+        break;
+    case 2:
+        Time = (2*(m_pstepVal) * m_nPointsVal) / 1000000;
+        break;
+    case 3:
+        Time = (3*(m_pstepVal) * m_nPointsVal) / 1000000;
+        break;
+    case 4:
+        Time = (3*(m_pstepVal) * m_nPointsVal) / 1000000;
+        break;
+    case 5:
+        Time = ((m_pstepVal) * m_nPointsVal) / 1000000;
+        break;
+    case 6:
+        Time = (3*(m_pstepVal) * m_nPointsVal) / 1000000;
+        break;
+    case 8:
+        Time = (14*(m_pstepVal) * m_nPointsVal) / 1000000;
+        break;
+    default:
+        break;
+    }
+
+    ui->label_TIME_amount->setText(tr("%1 сек.").arg(Time));
+}
+
+void MainWindow::CalcDif()
+{
+    int m_funcVal = 0;
+
+    if(ui->comboBox_func->currentText() == "Robinson et al."){
+        m_funcVal = 0;
+    }
+    else if(ui->comboBox_func->currentText() == "Shi et al."){
+        m_funcVal = 1;
+    }
+    else if(ui->comboBox_func->currentText() == "Po`ad et al."){
+        m_funcVal = 2;
+    }
+    else if(ui->comboBox_func->currentText() == "Komnatnov M.E."){
+        m_funcVal = 3;
+    }
+    else if(ui->comboBox_func->currentText() == "Nie et al."){
+        m_funcVal = 4;
+    }
+    else if(ui->comboBox_func->currentText() == "Ren et al."){
+        m_funcVal = 5;
+    }
+    else if(ui->comboBox_func->currentText() == "Dehkhoda et al."){
+        m_funcVal = 6;
+    }
+    else if(ui->comboBox_func->currentText() == "Wamg et al."){
+        m_funcVal = 8;
+    }
+
+    double m_nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();
+    double m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();
+
+    switch (m_funcVal) {
+    case 0:
+        Difficulty = (m_pstepVal * m_nPointsVal) / 10000000;
+        break;
+    case 1:
+        Difficulty = (1000*(m_pstepVal) * m_nPointsVal) / 20000000;
+        break;
+    case 2:
+        Difficulty = (2*(m_pstepVal) * m_nPointsVal) / 10000000;
+        break;
+    case 3:
+        Difficulty = (3*(m_pstepVal) * m_nPointsVal) / 10000000;
+        break;
+    case 4:
+        Difficulty = (3*(m_pstepVal) * m_nPointsVal) / 10000000;
+        break;
+    case 5:
+        Difficulty = ((m_pstepVal) * m_nPointsVal) / 10000000;
+        break;
+    case 6:
+        Difficulty = (3*(m_pstepVal) * m_nPointsVal) / 10000000;
+        break;
+    case 8:
+        Difficulty = (14*(m_pstepVal) * m_nPointsVal) / 10000000 ;
+        break;
+    default:
+        break;
+    }
+
+    ui->progressBar_diff->setValue(Difficulty);
+}
+
 void MainWindow::UpdateProgress(double val)
 {
     if(val == 0)
@@ -631,5 +774,27 @@ void MainWindow::PrintGUI(QVector<surfaceModelItem> gui)
 void MainWindow::UpdateGUI(QVector<surfaceModelItem> gui)
 {
     mItems = gui;
+}
+
+
+void MainWindow::on_lineEdit_POV_NofPoints_textChanged(const QString &arg1)
+{
+    CalcRAM();
+    CalcTime();
+    CalcDif();
+}
+
+
+void MainWindow::on_lineEdit_Source_NofPoints_textChanged(const QString &arg1)
+{
+    CalcRAM();
+    CalcTime();
+    CalcDif();
+}
+
+void MainWindow::on_comboBox_func_currentTextChanged(const QString &arg1)
+{
+    CalcTime();
+    CalcDif();
 }
 

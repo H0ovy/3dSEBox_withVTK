@@ -94,11 +94,21 @@ private slots:
 
     void on_pushButtonCalcStart_clicked();
 
+    void CalcRAM();
+    void CalcTime();
+    void CalcDif();
+
     void UpdateProgress(double val);
     void PrintCalcTime(double val);
     void PrintCalcIter(double val);
     void PrintGUI(QVector<surfaceModelItem> gui);
     void UpdateGUI(QVector<surfaceModelItem> gui);
+
+    void on_lineEdit_POV_NofPoints_textChanged(const QString &arg1);
+
+    void on_lineEdit_Source_NofPoints_textChanged(const QString &arg1);
+
+    void on_comboBox_func_currentTextChanged(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;
@@ -114,6 +124,10 @@ private:
     QVector<surfaceModelItem> mItems;
 
     bool error_occured = false;
+
+    int RAM;
+    int Difficulty;
+    double Time;
 
 };
 
