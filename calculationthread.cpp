@@ -210,6 +210,7 @@ void CalculationThread::run()
             timer.start();
             CalcThread(tempValue, mod + mod);
             emit time(timer.elapsed());
+            qDebug() << "The calcsomeWAMG took " << timer.elapsed() << "milliseconds";
             break;
         case 10:
             timer.start();

@@ -976,7 +976,7 @@ double robCalculation::calcsomeAKCintegral(int *iter,double freq, double t, doub
     auto xmin=temp4;
     auto xmax=temp4+l;   // пределы интегрирования по иксу
     auto ymin=temp6;
-    auto ymax=temp6+w;   // пределы интегрирования по игреку
+    auto ymax=temp6+w;   // пределы интегрирования по игрику
     double temp8 = 0,temp9 = 0;
 
     temp8 = CalcTemp(iter, RungeVal, xmax, xmin, temp8, m, a, L, intval);

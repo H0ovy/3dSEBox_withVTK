@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     on_pushButton_Figure_1_clicked();
     on_pushButton_2D_clicked();
 
+
     //calc_thread = new CalculationThread();
 }
 
@@ -83,24 +84,22 @@ void MainWindow::on_pushButton_3D_clicked()
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
     vtkSmartPointer<vtkFloatArray> scalars = vtkSmartPointer<vtkFloatArray>::New();
 
-    // int gridSizeX = 50;
-    // int gridSizeY = 50;
-    // double spacingX = 1.0;
-    // double spacingY = 1.0;
+    int gridSizeX = 50;
+    int gridSizeY = 50;
+    double spacingX = 1.0;
+    double spacingY = 1.0;
 
-    for (int i = 0; i < mItems.size(); i++)
+    for (int i = 0; i < gridSizeX; i++)
     {
-        // for (int j = 0; j < gridSizeY; j++)
-        // {
-            double x = mItems[i].x;
-            double y = mItems[i].y;
-            double z = mItems[i].z;
+        for (int j = 0; j < gridSizeY; j++)
+        {
+            double x = i * spacingX;
+            double y = j * spacingY;
+            double z = sin(sqrt(x * x + y * y * 2)) * 2;
             points->InsertNextPoint(x, y, z);
             scalars->InsertNextValue(z);
-        //}
+        }
     }
-
-    qDebug()<<mItems.size();
 
     vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
     polyData->SetPoints(points);
@@ -162,6 +161,13 @@ void MainWindow::on_pushButton_Figure_1_clicked()
 {
     figure = 1;
 
+    ui->comboBox_func->clear();
+    ui->comboBox_func->addItem("Robinson et al.");
+    ui->comboBox_func->addItem("Shi et al.");
+    ui->comboBox_func->addItem("Po`ad et al.");
+    ui->comboBox_func->addItem("Komnatnov M.E.");
+    ui->comboBox_func->addItem("Nie et al.");
+
     ui->lineEdit_size_d->show();
     ui->label_size_d->show();
     ui->label_size_a->setText("a");
@@ -206,9 +212,7 @@ void MainWindow::on_pushButton_Figure_1_clicked()
     error_occured = renderer.second;
 
     if(renderer.second)
-    {
         return;
-    }
 
     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
     renderWindow->AddRenderer(renderer.first);
@@ -219,6 +223,12 @@ void MainWindow::on_pushButton_Figure_1_clicked()
 void MainWindow::on_pushButton_Figure_2_clicked()
 {
     figure = 2;
+
+    ui->comboBox_func->clear();
+    ui->comboBox_func->addItem("Ren et al.");
+    ui->comboBox_func->addItem("Dehkhoda et al.");
+    ui->comboBox_func->addItem("Nie et al.");
+
     ui->lineEdit_size_d->show();
     ui->label_size_d->show();
     ui->label_size_a->setText("a");
@@ -274,6 +284,9 @@ void MainWindow::on_pushButton_Figure_2_clicked()
 void MainWindow::on_pushButton_Figure_3_clicked()
 {
     figure = 3;
+
+    ui->comboBox_func->clear();
+    ui->comboBox_func->addItem("Wamg et al.");
 
     ui->lineEdit_size_d->hide();
     ui->label_size_d->hide();
@@ -378,7 +391,6 @@ void MainWindow::on_lineEdit_size_d_textChanged(const QString &arg1)
     if(arg1.toDouble() <= 0)
         return;
 
-    //double width = arg1.toDouble();
     switch (figure)
     {
     case 2:
@@ -407,6 +419,7 @@ void MainWindow::on_lineEdit_aperture_height_textChanged(const QString &arg1)
 {
     if(arg1.toDouble() <= 0)
         return;
+
     switch (figure)
     {
     case 3:
@@ -549,7 +562,33 @@ void MainWindow::on_pushButtonCalcStart_clicked()
                                   m_dVal, m_pVal, m_nPointsVal, m_pstepVal, m_xVal, m_yVal, m_napVal, m_mapVal, m_nVal,
                                   m_mVal, m_dvVal, m_dhVal, m_sigmaVal, m_integralVal, m_RungeVal, m_fileBool);
 
-    int m_funcVal = ui->comboBox_func->currentIndex();
+    int m_funcVal = 0;
+
+    if(ui->comboBox_func->currentText() == "Robinson et al."){
+        m_funcVal = 0;
+    }
+    else if(ui->comboBox_func->currentText() == "Shi et al."){
+        m_funcVal = 1;
+    }
+    else if(ui->comboBox_func->currentText() == "Po`ad et al."){
+        m_funcVal = 2;
+    }
+    else if(ui->comboBox_func->currentText() == "Komnatnov M.E."){
+        m_funcVal = 3;
+    }
+    else if(ui->comboBox_func->currentText() == "Nie et al."){
+        m_funcVal = 4;
+    }
+    else if(ui->comboBox_func->currentText() == "Ren et al."){
+        m_funcVal = 5;
+    }
+    else if(ui->comboBox_func->currentText() == "Dehkhoda et al."){
+        m_funcVal = 6;
+    }
+    else if(ui->comboBox_func->currentText() == "Wamg et al."){
+        m_funcVal = 8;
+    }
+
     calc_thread->mod = m_funcVal;
 
     connect(calc_thread, SIGNAL(progress(double)), this, SLOT(UpdateProgress(double)));
@@ -585,7 +624,7 @@ void MainWindow::PrintGUI(QVector<surfaceModelItem> gui)
 {
     for (int i = 0; i < gui.size(); i++)
     {
-        qDebug()<<"GUI" <<gui[i].x <<" " <<gui[i].y <<" " << gui[i].z;
+        //qDebug()<<"GUI" <<gui[i].x <<" " <<gui[i].y <<" " << gui[i].z;
     }
 }
 
