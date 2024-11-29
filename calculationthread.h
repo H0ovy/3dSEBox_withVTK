@@ -34,11 +34,9 @@ public:
     double GetCalculation(int i, double tempFreq, double pp);
     void run();
 
-public:
     std::thread m_thread;
-    //I created this variable to avoid calls on static functions
     robCalculation rob_calcs;
-    int size = 0; //sauvegarde la taille du dernier graphic créer
+    int size = 0;
     QVector<surfaceModelItem> toShow;
     QVector<surfaceModelItem> mItems;
     int mod = 0;

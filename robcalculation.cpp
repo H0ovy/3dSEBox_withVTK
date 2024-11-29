@@ -11,9 +11,7 @@
 
 using namespace std;
 typedef complex<double> dcomp;
-//const double M_PI = 3.141592653589793238463; - можно заменить на любое, где не используется pi
 
-//  МОДЕЛЬ WAMG et al (cylindrical encl)
 double robCalculation::WAMGetal(int* iter, double freq, double R, double r, double t, double d, double p){
     dcomp j(0.0,1.0);
     auto z0=120.0*M_PI;

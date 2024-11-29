@@ -92,7 +92,6 @@ void CalculationThread::CalcThread(double tempValue, int K)
             {
                     if (QThread::currentThread()->isInterruptionRequested())
                     {
-                        //qDebug() << "we need to escape";
                         abort = true;
                         break;
                     }
@@ -104,7 +103,6 @@ void CalculationThread::CalcThread(double tempValue, int K)
                         tempValue=0;
 
                     mItems.append({ tempFreq, tempValue, pp});
-                    //qDebug() << "mItems.x = " << mItems.last().x << "mItems.y = " << mItems.last().y << "mItems.z = " << mItems.last().z;
 
             }
             if (abort)
@@ -114,10 +112,8 @@ void CalculationThread::CalcThread(double tempValue, int K)
             }
             pp += m_perc_step;
             Z = (pp * 1000);
-           // qDebug() <<Z << pp;
         }
     emit iterCount(*iterations);
-    //qDebug()<<"Number of iterations "<<*iterations;
     iterations = &a;
 }
 

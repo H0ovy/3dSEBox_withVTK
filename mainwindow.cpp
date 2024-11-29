@@ -187,7 +187,7 @@ void MainWindow::on_pushButton_Figure_1_clicked()
     double width = ui->lineEdit_size_d->text().toDouble();
     double height = ui->lineEdit_size_b->text().toDouble();
     double notchDepth = ui->lineEdit_aperture_width->text().toDouble();
-    double notchWidth = 0.002; // фиксированное значение ширины выреза
+    double notchWidth = 0.002;                                                      // фиксированное значение ширины выреза
     double notchHeight = ui->lineEdit_aperture_height->text().toDouble();
     double xShift = ui->lineEdit_pos_x->text().toDouble();
     double yShift = ui->lineEdit_pos_y->text().toDouble();
@@ -205,185 +205,6 @@ void MainWindow::on_pushButton_Figure_1_clicked()
     ui->qvtkWidget_3D_MODEL->update();
 }
 
-///old create for Figure 1
-// void MainWindow::on_pushButton_Figure_1_clicked()
-// {
-//     figure = 1;
-//     ui->lineEdit_size_d->show();
-//     ui->label_size_d->show();
-//     ui->label_size_a->setText("a");
-//     ui->label_size_b->setText("b");
-//     ui->label_pos_x->setText("X");
-//     ui->label_pos_x->show();
-//     ui->label_pos_y->setText("Y");
-//     ui->label_pos_y->show();
-//     ui->label_pos->setText("Расположение");
-//     ui->lineEdit_pos_x->show();
-//     ui->lineEdit_pos_y->show();
-//     ui->lineEdit_col_horizontally->hide();
-//     ui->lineEdit_col_vertically->hide();
-//     ui->lineEdit_pos_horizontally->hide();
-//     ui->lineEdit_pos_vertically->hide();
-//     ui->label_pos->show();
-
-//     ui->label_aperture_height->setText("Высота");
-//     ui->label_aperture_width->show();
-//     ui->lineEdit_aperture_width->show();
-
-//     ui->label_horizontally->hide();
-//     ui->label_vertically->hide();
-//     ui->label_col->hide();
-
-//     rectangleSource = vtkSmartPointer<vtkCubeSource>::New();
-//     double width = ui->lineEdit_size_d->text().toDouble();      //Y
-//     double height = ui->lineEdit_size_b->text().toDouble();     //Z
-//     double length = ui->lineEdit_size_a->text().toDouble();     //X
-
-//     rectangleSource->SetYLength(height);
-//     rectangleSource->SetXLength(length);
-//     rectangleSource->SetZLength(width);
-//     rectangleSource->Update();
-
-//     vtkNew<vtkCubeSource> notchSource;
-//     double notchWidth = 0.002;                                              //Y
-//     double notchHeight = ui->lineEdit_aperture_height->text().toDouble();   //Z - в нормальной системе координат
-//     double notchDepth = ui->lineEdit_aperture_width->text().toDouble();     //X
-
-//     double X_shift = ui->lineEdit_pos_x->text().toDouble();
-//     double Y_shift = ui->lineEdit_pos_y->text().toDouble();
-
-
-//     ///{ Если размеры выходят за рамки модели
-//     if (X_shift + notchDepth >= length && X_shift != 0)
-//     {
-//         X_shift = 0.0001;
-//         notchDepth = length / 4;
-
-//         QPalette *palette = new QPalette();
-//         palette->setColor(QPalette::Base,Qt::red);
-
-//         ui->lineEdit_pos_x->setPalette(*palette);           // X shift
-//         ui->lineEdit_aperture_width->setPalette(*palette);  // NotchDepth
-//         ui->lineEdit_size_a->setPalette(*palette);          // Length
-
-//         goto after_error;
-//     }
-//     else
-//     {
-//         QPalette *palette = new QPalette();
-//         palette->setColor(QPalette::Base,Qt::white);
-
-//         ui->lineEdit_pos_x->setPalette(*palette);
-//         ui->lineEdit_aperture_width->setPalette(*palette);
-//         ui->lineEdit_size_a->setPalette(*palette);
-//     }
-
-//     if (Y_shift + notchHeight >= height && Y_shift != 0)
-//     {
-//         Y_shift = 0.0001;
-//         notchHeight = height / 4;
-
-//         QPalette *palette = new QPalette();
-//         palette->setColor(QPalette::Base,Qt::red);
-
-//         ui->lineEdit_pos_y->setPalette(*palette);           //Y shift
-//         ui->lineEdit_aperture_height->setPalette(*palette); // NotchHeight
-//         ui->lineEdit_size_b->setPalette(*palette);          // Height
-
-//         goto after_error;
-//     }
-//     else
-//     {
-//         QPalette *palette = new QPalette();
-//         palette->setColor(QPalette::Base,Qt::white);
-
-//         ui->lineEdit_pos_y->setPalette(*palette);
-//         ui->lineEdit_aperture_height->setPalette(*palette);
-//         ui->lineEdit_size_b->setPalette(*palette);
-//     }
-
-//     if (notchHeight >= height)
-//     {
-//         notchHeight = height / 4;
-
-//         QPalette *palette = new QPalette();
-//         palette->setColor(QPalette::Base,Qt::red);
-
-//         ui->lineEdit_aperture_height->setPalette(*palette); // NotchHeight
-//         ui->lineEdit_size_b->setPalette(*palette);          // Height
-
-//         goto after_error;
-//     }
-//     else
-//     {
-//         QPalette *palette = new QPalette();
-//         palette->setColor(QPalette::Base,Qt::white);
-
-//         ui->lineEdit_aperture_height->setPalette(*palette);
-//         ui->lineEdit_size_b->setPalette(*palette);
-//     }
-
-//     if (notchDepth >= length)
-//     {
-//         notchDepth = length / 4;
-
-//         QPalette *palette = new QPalette();
-//         palette->setColor(QPalette::Base,Qt::red);
-
-//         ui->lineEdit_aperture_width->setPalette(*palette);  // NotchDepth
-//         ui->lineEdit_size_a->setPalette(*palette);          // Length
-
-//         goto after_error;
-//     }
-//     else
-//     {
-//         QPalette *palette = new QPalette();
-//         palette->setColor(QPalette::Base,Qt::white);
-
-//         ui->lineEdit_aperture_width->setPalette(*palette);
-//         ui->lineEdit_size_a->setPalette(*palette);
-//     }
-
-// after_error:
-
-//     notchSource->SetYLength(notchHeight);
-//     notchSource->SetXLength(notchDepth);
-//     notchSource->SetZLength(notchWidth);
-//     notchSource->Update();
-
-//     vtkNew<vtkTransform> notchTransform;
-//     notchTransform->Translate(-(length / 2) + (notchDepth / 2) + X_shift /*X*/, -(height / 2) + (notchHeight / 2) + Y_shift /*Z*/, (width / 2) - 0.00099 /*Y*/ );
-
-//     vtkNew<vtkTransformPolyDataFilter>notchTransformFilter;
-//     notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
-//     notchTransformFilter->SetTransform(notchTransform);
-//     notchTransformFilter->Update();
-//     vtkNew<vtkPolyDataMapper> notchMapper;
-//     notchMapper->SetInputConnection(notchTransformFilter->GetOutputPort());
-
-//     vtkNew<vtkActor> notchActor;
-//     notchActor->SetMapper(notchMapper);
-//     notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
-
-//     vtkNew<vtkPolyDataMapper> mapper;
-//     mapper->SetInputConnection(rectangleSource->GetOutputPort());
-//     vtkNew<vtkActor> rectangleActor;
-//     rectangleActor->SetMapper(mapper);
-//     rectangleActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
-
-//     vtkNew<vtkRenderer> renderer;
-//     renderer->SetBackground(colors->GetColor3d("White").GetData());
-//     renderer->AddActor(rectangleActor);
-//     renderer->AddActor(notchActor);
-
-//     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
-//     renderWindow->AddRenderer(renderer);
-
-//     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
-//     ui->qvtkWidget_3D_MODEL->update();
-// }
-
-
 void MainWindow::on_pushButton_Figure_2_clicked()
 {
     figure = 2;
@@ -394,6 +215,9 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     ui->label_pos_x->setText("Гор.");
     ui->label_pos_y->setText("Верт.");
     ui->label_pos->setText("Расстояние между центрами апертур");
+    ui->label_aperture_height->setText("Высота");
+    ui->label_aperture_width->show();
+    ui->lineEdit_aperture_width->show();
     ui->lineEdit_pos_x->hide();
     ui->lineEdit_pos_y->hide();
     ui->lineEdit_col_horizontally->show();
@@ -417,14 +241,18 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     double horizontalSpacing = ui->lineEdit_pos_horizontally->text().toDouble();
     double verticalSpacing = ui->lineEdit_pos_vertically->text().toDouble();
 
-    vtkSmartPointer<vtkRenderer> renderer = modelsFigure.createFigure2(width, height, length, notchWidth, notchHeight, notchDepth, rows, cols, horizontalSpacing, verticalSpacing,
+    auto renderer = modelsFigure.createFigure2(width, height, length, notchWidth, notchHeight, notchDepth, rows, cols, horizontalSpacing, verticalSpacing,
     ui->lineEdit_aperture_height, ui->lineEdit_pos_vertically, ui->lineEdit_aperture_width,
-    ui->lineEdit_pos_horizontally, ui->lineEdit_col_horizontally, ui->lineEdit_size_a, ui->lineEdit_col_vertically, ui->lineEdit_size_b);
+    ui->lineEdit_pos_horizontally, ui->lineEdit_col_horizontally, ui->lineEdit_size_a, ui->lineEdit_col_vertically, ui->lineEdit_size_b,
+    ui->lineEdit_aperture_width, ui->lineEdit_aperture_height,ui->lineEdit_size_a, ui->lineEdit_size_b);
 
-    renderer->SetBackground(colors->GetColor3d("White").GetData());
+    if(renderer.second)
+        return;
+
+    renderer.first->SetBackground(colors->GetColor3d("White").GetData());
 
     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
-    renderWindow->AddRenderer(renderer);
+    renderWindow->AddRenderer(renderer.first);
     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
     ui->qvtkWidget_3D_MODEL->update();
 }
@@ -667,9 +495,11 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     {
         m_wVal = ui->lineEdit_aperture_width->text().toDouble();         // Ширина апертуры
         m_lVal = ui->lineEdit_aperture_height->text().toDouble();        // Высота апертуры
+
         // Расстояние между центрами аппертур для 2-ой фигуры
-        m_dvVal = ui->lineEdit_pos_vertically->text().toDouble();    // Гор
-        m_dhVal = ui->lineEdit_pos_horizontally->text().toDouble();  // Вер
+        m_dvVal = ui->lineEdit_pos_vertically->text().toDouble();       // Гор
+        m_dhVal = ui->lineEdit_pos_horizontally->text().toDouble();     // Вер
+
         // Количество аппертур для 2-ой фигуры
         m_napVal = ui->lineEdit_col_vertically->text().toInt();         // Гор
         m_mapVal = ui->lineEdit_col_horizontally->text().toInt();       // Вер
@@ -694,10 +524,6 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     calc_thread = new CalculationThread(m_fMinVal, m_fMaxVal, m_tVal, m_wVal, m_bVal, m_bVal, m_aVal, m_apVal, m_lVal, m_aVal,
                                   m_dVal, m_pVal, m_nPointsVal, m_pstepVal, m_xVal, m_yVal, m_napVal, m_mapVal, m_nVal,
                                   m_mVal, m_dvVal, m_dhVal, m_sigmaVal, m_integralVal, m_RungeVal, m_fileBool);
-
-    qDebug() <<m_fMinVal << m_fMaxVal<< m_tVal<< m_wVal<< m_bVal<< m_bVal<< m_aVal<< m_apVal<< m_lVal<< m_aVal<<
-        m_dVal<< m_pVal<< m_nPointsVal<< m_pstepVal<< m_xVal<< m_yVal<< m_napVal<< m_mapVal<< m_nVal<<
-        m_mVal<< m_dvVal<< m_dhVal<< m_sigmaVal<< m_integralVal<< m_RungeVal<< m_fileBool;
 
     int m_funcVal = ui->comboBox_func->currentIndex();
     calc_thread->mod = m_funcVal;

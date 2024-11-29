@@ -165,87 +165,112 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure1(
     return renderer;
 }
 
-vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure2(
+std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
                                        double width, double height, double length,
                                        double notchWidth, double notchHeight, double notchDepth,
                                        int rows, int cols, double horizontalSpacing, double verticalSpacing,
                                  QLineEdit* lineEdit_aperture_height, QLineEdit* lineEdit_pos_vertically,
                                  QLineEdit* lineEdit_aperture_width, QLineEdit* lineEdit_pos_horizontally, QLineEdit* lineEdit_col_horizontally, QLineEdit* lineEdit_size_a,
-                                 QLineEdit* lineEdit_col_vertically, QLineEdit* lineEdit_size_b)
+                                 QLineEdit* lineEdit_col_vertically, QLineEdit* lineEdit_size_b,
+    QLineEdit* lineEditNotchWidth, QLineEdit* lineEditNotchHeight,
+    QLineEdit* lineEditLength, QLineEdit* lineEditHeight)
 {
 
     // Проверки на размеры сетки
     double totalGridWidth = (cols - 1) * horizontalSpacing + notchWidth;
     double totalGridHeight = (rows - 1) * verticalSpacing + notchHeight;
 
+    bool error_happened = false;
 
     /// Проверка пересечений и ошибок
-    if (notchHeight >= verticalSpacing) {
+    if (notchHeight >= height)
+    {
+        highlightError(lineEditNotchHeight, true);
+        highlightError(lineEditHeight, true);
+
+        error_happened = true;
+        goto after_basic_check;
+    }
+    else
+    {
+        highlightError(lineEditNotchHeight, false);
+        highlightError(lineEditHeight, false);
+    }
+
+    if (notchWidth >= length)
+    {
+        highlightError(lineEditNotchWidth, true);
+        highlightError(lineEditLength, true);
+
+        error_happened = true;
+    }
+    else
+    {
+        highlightError(lineEditNotchWidth, false);
+        highlightError(lineEditLength, false);
+    }
+after_basic_check:
+    if (notchHeight >= verticalSpacing)
+    {
         highlightError(lineEdit_aperture_height, true);
         highlightError(lineEdit_pos_vertically, true);
 
+        error_happened = true;
         goto after_error;
-    } else {
-        highlightError(lineEdit_aperture_height, /*false*/true);
+    }
+    else
+    {
+        highlightError(lineEdit_aperture_height, false);
         highlightError(lineEdit_pos_vertically, false);
     }
 
-    if (notchWidth >= horizontalSpacing) {
+    if (notchWidth >= horizontalSpacing)
+    {
         highlightError(lineEdit_aperture_width, true);
         highlightError(lineEdit_pos_horizontally, true);
 
+        error_happened = true;
         goto after_error;
-    } else {
-        highlightError(lineEdit_aperture_width, /*false*/true);
+    }
+    else
+    {
+        highlightError(lineEdit_aperture_width, false);
         highlightError(lineEdit_pos_horizontally, false);
     }
 
-    if (totalGridWidth > length) {
+    if (totalGridWidth > length)
+    {
         highlightError(lineEdit_col_horizontally, true);
         highlightError(lineEdit_pos_horizontally, true);
         highlightError(lineEdit_size_a, true);
 
+        error_happened = true;
         goto after_error;
-    } else {
+    }
+    else
+    {
         highlightError(lineEdit_col_horizontally, false);
         highlightError(lineEdit_pos_horizontally, false);
         highlightError(lineEdit_size_a, false);
     }
 
-    if (totalGridHeight > height) {
+    if (totalGridHeight > height)
+    {
         highlightError(lineEdit_col_vertically, true);
         highlightError(lineEdit_pos_vertically, true);
         highlightError(lineEdit_size_b, true);
 
-        goto after_error;
-    } else {
+        error_happened = true;
+    }
+    else
+    {
         highlightError(lineEdit_col_vertically, false);
         highlightError(lineEdit_pos_vertically, false);
         highlightError(lineEdit_size_b, false);
     }
 
-    if (notchWidth >= length) {
-        highlightError(lineEdit_aperture_width, true);
-
-        goto after_error;
-    } else {
-        highlightError(lineEdit_aperture_width, false);
-    }
-
-    if (notchHeight >= height) {
-        highlightError(lineEdit_aperture_height, true);
-
-        goto after_error;
-    } else {
-        highlightError(lineEdit_aperture_height, false);
-    }
 
     after_error:
-
-    // Если ошибки найдены, прерываем выполнение
-    // if (intersectionDetected) {
-    //     return;
-    // }
 
     // Создание прямоугольника
     vtkSmartPointer<vtkCubeSource> rectangleSource = createRectangle(width, height, length);
@@ -259,8 +284,6 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure2(
     vtkNew<vtkRenderer> renderer;
     renderer->AddActor(rectangleActor);
 
-
-
     // Создание вырезов (notch)
     vtkSmartPointer<vtkCubeSource> notchSource = createNotch(notchWidth, notchHeight, notchDepth);
 
@@ -268,8 +291,10 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure2(
     double gridOffsetY = -(totalGridHeight / 2.0) + (notchHeight / 2.0);
 
 
-    for (int row = 0; row < rows; ++row) {
-        for (int col = 0; col < cols; ++col) {
+    for (int row = 0; row < rows; ++row)
+    {
+        for (int col = 0; col < cols; ++col)
+        {
             double notchPosX = gridOffsetX + col * horizontalSpacing;
             double notchPosY = gridOffsetY + row * verticalSpacing;
 
@@ -291,7 +316,7 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure2(
         }
     }
 
-    return renderer;
+    return std::pair<vtkSmartPointer<vtkRenderer>, bool>(renderer, error_happened);
 }
 
 

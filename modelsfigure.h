@@ -35,13 +35,15 @@ public:
         QLineEdit* lineEditLength, QLineEdit* lineEditHeight);
 
     //
-    vtkSmartPointer<vtkRenderer> createFigure2(
+    std::pair<vtkSmartPointer<vtkRenderer>, bool> createFigure2(
         double width, double height, double length,
         double notchWidth, double notchHeight, double notchDepth,
         int rows, int cols, double horizontalSpacing, double verticalSpacing,
         QLineEdit* lineEdit_aperture_height, QLineEdit* lineEdit_pos_vertically,
         QLineEdit* lineEdit_aperture_width, QLineEdit* lineEdit_pos_horizontally, QLineEdit* lineEdit_col_horizontally,
-        QLineEdit* lineEdit_size_a, QLineEdit* lineEdit_col_vertically, QLineEdit* lineEdit_size_b);
+        QLineEdit* lineEdit_size_a, QLineEdit* lineEdit_col_vertically, QLineEdit* lineEdit_size_b,
+        QLineEdit* lineEditNotchWidth, QLineEdit* lineEditNotchHeight,
+        QLineEdit* lineEditLength, QLineEdit* lineEditHeight);
 
     // Метод для создания цилиндра с апертурой
     vtkSmartPointer<vtkRenderer> createFigure3(double height, double radius, double notchHeight, double notchRadius);
