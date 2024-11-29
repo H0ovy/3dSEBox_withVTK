@@ -62,7 +62,7 @@ public:
     ~MainWindow();
 
 private slots:
-               ///Графики
+    ///Графики
     void on_pushButton_2D_clicked();
     void on_pushButton_3D_clicked();
 
@@ -92,10 +92,9 @@ private slots:
 
     void on_lineEdit_pos_vertically_textChanged(const QString &arg1);
 
-
     void on_pushButtonCalcStart_clicked();
 
-    void PrintCalcProgress(double val);
+    void UpdateProgress(double val);
     void PrintCalcTime(double val);
     void PrintCalcIter(double val);
     void PrintGUI(QVector<surfaceModelItem> gui);
@@ -103,10 +102,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-
-    // vtkSmartPointer<vtkCylinderSource> cylinderSource;
-    // vtkSmartPointer<vtkCubeSource> rectangleSource;
-    // vtkSmartPointer<vtkActor> cylinderActor;
 
     bool graph_2d_exists = false;
     QLineSeries *series;
@@ -117,6 +112,8 @@ private:
     ModelsFigure modelsFigure;
     CalculationThread* calc_thread;
     QVector<surfaceModelItem> mItems;
+
+    bool error_occured = false;
 
 };
 

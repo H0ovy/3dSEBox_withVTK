@@ -2,8 +2,17 @@
 #define CALCULATIONTHREAD_H
 
 #include <QThread>
-//#include "surfacemodellist.h"
 #include "robcalculation.h"
+#include "QDate"
+#include <QTimer>
+#include "QThread"
+#include "QDebug"
+#include "robcalculation.h"
+#include <QElapsedTimer>
+#include <cmath>
+#include <omp.h>
+#include <mutex>
+#include <QFile>
 
 struct surfaceModelItem
 {

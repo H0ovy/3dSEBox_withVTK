@@ -1,14 +1,5 @@
 #include "calculationthread.h"
-#include "QDate"
-#include <QTimer>
-#include "QThread"
-#include "QDebug"
-#include "robcalculation.h"
-#include <QElapsedTimer>
-#include <cmath>
-#include <omp.h>
-#include <mutex>
-#include <QFile>
+
 
 using namespace std;
 

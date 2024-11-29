@@ -3,6 +3,13 @@
 
 #include <thread>
 #include <future>
+#include <complex>
+#include <math.h>
+#include <omp.h>
+#include <iostream>
+#include <QElapsedTimer>
+#include <QDebug>
+#include <QThread>
 
 class robCalculation
 {

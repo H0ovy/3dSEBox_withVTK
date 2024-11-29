@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    ui->progressBar_calc->setRange(0, 6666);
+
     ui->GRAPH_2D->hide();
     on_pushButton_Figure_1_clicked();
     on_pushButton_2D_clicked();
@@ -81,22 +83,24 @@ void MainWindow::on_pushButton_3D_clicked()
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
     vtkSmartPointer<vtkFloatArray> scalars = vtkSmartPointer<vtkFloatArray>::New();
 
-    int gridSizeX = 50;
-    int gridSizeY = 50;
-    double spacingX = 1.0;
-    double spacingY = 1.0;
+    // int gridSizeX = 50;
+    // int gridSizeY = 50;
+    // double spacingX = 1.0;
+    // double spacingY = 1.0;
 
-    for (int i = 0; i < gridSizeX; i++)
+    for (int i = 0; i < mItems.size(); i++)
     {
-        for (int j = 0; j < gridSizeY; j++)
-        {
-            double x = i * spacingX;
-            double y = j * spacingY;
-            double z = sin(sqrt(x * x + y * y * 2)) * 2;
+        // for (int j = 0; j < gridSizeY; j++)
+        // {
+            double x = mItems[i].x;
+            double y = mItems[i].y;
+            double z = mItems[i].z;
             points->InsertNextPoint(x, y, z);
             scalars->InsertNextValue(z);
-        }
+        //}
     }
+
+    qDebug()<<mItems.size();
 
     vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
     polyData->SetPoints(points);
@@ -192,15 +196,22 @@ void MainWindow::on_pushButton_Figure_1_clicked()
     double xShift = ui->lineEdit_pos_x->text().toDouble();
     double yShift = ui->lineEdit_pos_y->text().toDouble();
 
-    vtkSmartPointer<vtkRenderer> renderer = modelsFigure.createFigure1(
+    auto renderer = modelsFigure.createFigure1(
         length, width, height, notchDepth, notchWidth, notchHeight, xShift, yShift,
         ui->lineEdit_pos_x, ui->lineEdit_pos_y,
         ui->lineEdit_aperture_width, ui->lineEdit_aperture_height,
         ui->lineEdit_size_a, ui->lineEdit_size_b
         );
 
+    error_occured = renderer.second;
+
+    if(renderer.second)
+    {
+        return;
+    }
+
     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
-    renderWindow->AddRenderer(renderer);
+    renderWindow->AddRenderer(renderer.first);
     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
     ui->qvtkWidget_3D_MODEL->update();
 }
@@ -245,6 +256,8 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     ui->lineEdit_aperture_height, ui->lineEdit_pos_vertically, ui->lineEdit_aperture_width,
     ui->lineEdit_pos_horizontally, ui->lineEdit_col_horizontally, ui->lineEdit_size_a, ui->lineEdit_col_vertically, ui->lineEdit_size_b,
     ui->lineEdit_aperture_width, ui->lineEdit_aperture_height,ui->lineEdit_size_a, ui->lineEdit_size_b);
+
+    error_occured = renderer.second;
 
     if(renderer.second)
         return;
@@ -294,11 +307,12 @@ void MainWindow::on_pushButton_Figure_3_clicked()
 
     if(notchRadius >= radius)
     {
-        notchRadius = radius / 4;
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_aperture_height->setPalette(palette);
         ui->lineEdit_size_b->setPalette(palette);
+        error_occured = true;
+        return;
     }
     else
     {
@@ -306,6 +320,7 @@ void MainWindow::on_pushButton_Figure_3_clicked()
         palette.setColor(QPalette::Base, Qt::white);
         ui->lineEdit_aperture_height->setPalette(palette);
         ui->lineEdit_size_b->setPalette(palette);
+        error_occured = false;
     }
 
     vtkSmartPointer<vtkRenderer> renderer = modelsFigure.createFigure3(height, radius, notchHeight, notchRadius);
@@ -465,6 +480,15 @@ void MainWindow::on_lineEdit_pos_vertically_textChanged(const QString &arg1)//р
 
 void MainWindow::on_pushButtonCalcStart_clicked()
 {
+    if (error_occured)
+    {
+        QMessageBox box;
+        box.setText("Перед началом вычислений исправьте ошибку в параметрах");
+        box.setWindowTitle("Error");
+        box.exec();
+        return;
+    }
+
     double m_aVal = ui->lineEdit_size_a->text().toDouble();             // У цилиндра - h
     double m_bVal = ui->lineEdit_size_b->text().toDouble();             // У цилиндра - r
     double m_dVal = ui->lineEdit_size_d->text().toDouble();
@@ -528,18 +552,23 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     int m_funcVal = ui->comboBox_func->currentIndex();
     calc_thread->mod = m_funcVal;
 
-    connect(calc_thread, SIGNAL(progress(double)), this, SLOT(PrintCalcProgress(double)));
-    connect(calc_thread, SIGNAL(time(double)), this, SLOT(PrintCalcTime(double)));
-    connect(calc_thread, SIGNAL(iterCount(double)), this, SLOT(PrintCalcIter(double)));
+    connect(calc_thread, SIGNAL(progress(double)), this, SLOT(UpdateProgress(double)));
+    //connect(calc_thread, SIGNAL(time(double)), this, SLOT(PrintCalcTime(double)));
+    //connect(calc_thread, SIGNAL(iterCount(double)), this, SLOT(PrintCalcIter(double)));
     connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(PrintGUI(QVector<surfaceModelItem>)));
     connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(UpdateGUI(QVector<surfaceModelItem>)));
 
     calc_thread->start();
 }
 
-void MainWindow::PrintCalcProgress(double val)
+void MainWindow::UpdateProgress(double val)
 {
-    //qDebug() <<"Progress: " <<val <<"\n";
+    if(val == 0)
+    {
+        ui->progressBar_calc->reset();
+    }
+    ui->progressBar_calc->setValue(val);
+    //qDebug() <<val;
 }
 
 void MainWindow::PrintCalcTime(double val)
@@ -549,7 +578,7 @@ void MainWindow::PrintCalcTime(double val)
 
 void MainWindow::PrintCalcIter(double val)
 {
-    qDebug() <<"Iter: " <<val <<"\n";
+    //qDebug() <<"Iter: " <<val <<"\n";
 }
 
 void MainWindow::PrintGUI(QVector<surfaceModelItem> gui)

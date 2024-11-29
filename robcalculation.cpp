@@ -1,11 +1,5 @@
 #include "robcalculation.h"
-#include <complex>
-#include <math.h>
-#include <omp.h>
-#include <iostream>
-#include <QElapsedTimer>
-#include <QDebug>
-#include <QThread>
+
 
 #define _USE_MATH_DEFINES
 

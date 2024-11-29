@@ -1,7 +1,5 @@
 #include "modelsfigure.h"
 
-
-
 ModelsFigure::ModelsFigure()
     : colors(vtkSmartPointer<vtkNamedColors>::New())
 {
@@ -39,7 +37,7 @@ void ModelsFigure::highlightError(QLineEdit* lineEdit, bool isError)
     lineEdit->setPalette(palette);
 }
 
-vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure1(
+std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure1(
     double length, double width, double height,
     double notchDepth, double notchWidth, double notchHeight,
     double xShift, double yShift,
@@ -48,17 +46,16 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure1(
     QLineEdit* lineEditLength, QLineEdit* lineEditHeight)
 {
 
+    bool error_happened = false;
 
     // Проверки и подсветка ошибок
     if (xShift + notchDepth >= length && xShift != 0)
     {
-        xShift = 0.0001;
-        notchDepth = length / 4;
-
         highlightError(lineEditPosX, true);
         highlightError(lineEditNotchWidth, true);
         highlightError(lineEditLength, true);
 
+        error_happened = true;
         goto after_error;
     }
     else
@@ -70,13 +67,11 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure1(
 
     if (yShift + notchHeight >= height && yShift != 0)
     {
-        yShift = 0.0001;
-        notchHeight = height / 4;
-
         highlightError(lineEditPosY, true);
         highlightError(lineEditNotchHeight, true);
         highlightError(lineEditHeight, true);
 
+        error_happened = true;
         goto after_error;
     }
     else
@@ -88,10 +83,10 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure1(
 
     if (notchHeight >= height)
     {
-        notchHeight = height / 4;
         highlightError(lineEditNotchHeight, true);
         highlightError(lineEditHeight, true);
 
+        error_happened = true;
         goto after_error;
     }
     else
@@ -102,11 +97,10 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure1(
 
     if (notchDepth >= length)
     {
-        notchDepth = length / 4;
         highlightError(lineEditNotchWidth, true);
         highlightError(lineEditLength, true);
 
-        goto after_error;
+        error_happened = true;
     }
     else
     {
@@ -162,7 +156,7 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure1(
     renderer->AddActor(rectangleActor);
     renderer->AddActor(notchActor);
 
-    return renderer;
+    return std::pair<vtkSmartPointer<vtkRenderer>, bool>(renderer, error_happened);
 }
 
 std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
@@ -209,7 +203,9 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
         highlightError(lineEditNotchWidth, false);
         highlightError(lineEditLength, false);
     }
-after_basic_check:
+
+    after_basic_check:
+
     if (notchHeight >= verticalSpacing)
     {
         highlightError(lineEdit_aperture_height, true);
@@ -268,7 +264,6 @@ after_basic_check:
         highlightError(lineEdit_pos_vertically, false);
         highlightError(lineEdit_size_b, false);
     }
-
 
     after_error:
 

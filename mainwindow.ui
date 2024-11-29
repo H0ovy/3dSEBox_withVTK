@@ -453,8 +453,8 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>730</x>
-      <y>10</y>
+      <x>170</x>
+      <y>780</y>
       <width>231</width>
       <height>31</height>
      </rect>
@@ -463,7 +463,7 @@
      <item>
       <widget class="QLabel" name="label_calc_diff">
        <property name="text">
-        <string>Сложность выч.</string>
+        <string>Прогресс выч.</string>
        </property>
       </widget>
      </item>

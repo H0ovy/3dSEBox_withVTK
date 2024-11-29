@@ -26,7 +26,7 @@ public:
 
 
     //
-    vtkSmartPointer<vtkRenderer> createFigure1(
+    std::pair<vtkSmartPointer<vtkRenderer>, bool> createFigure1(
         double length, double width, double height,
         double notchDepth, double notchWidth, double notchHeight,
         double xShift, double yShift,
