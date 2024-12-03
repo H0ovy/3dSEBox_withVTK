@@ -73,20 +73,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="label_size_b">
-       <property name="text">
-        <string>b</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="4">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Корпус (в м.)</string>
-       </property>
-      </widget>
-     </item>
      <item row="12" column="0" colspan="3">
       <widget class="QLabel" name="label_col">
        <property name="text">
@@ -115,13 +101,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="3">
-      <widget class="QLabel" name="label_size_d">
-       <property name="text">
-        <string>d</string>
-       </property>
-      </widget>
-     </item>
      <item row="13" column="1" colspan="2">
       <widget class="QLabel" name="label_pos_y">
        <property name="text">
@@ -133,27 +112,6 @@
       <widget class="QLabel" name="label_pos">
        <property name="text">
         <string>Расположение</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1">
-      <widget class="QLabel" name="label_vertically">
-       <property name="text">
-        <string>Верт.</string>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="1">
-      <widget class="QLineEdit" name="lineEdit_pos_vertically">
-       <property name="text">
-        <string>0.02</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0" colspan="2">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Толщина</string>
        </property>
       </widget>
      </item>
@@ -194,6 +152,12 @@
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_size_a">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;X в декартовой системе координат&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: italic 9pt &quot;Segoe UI&quot;;</string>
+       </property>
        <property name="text">
         <string>a</string>
        </property>
@@ -213,13 +177,6 @@
        </property>
       </widget>
      </item>
-     <item row="15" column="1">
-      <widget class="QLineEdit" name="lineEdit_col_vertically">
-       <property name="text">
-        <string>3</string>
-       </property>
-      </widget>
-     </item>
      <item row="8" column="0">
       <widget class="QLineEdit" name="lineEdit_aperture_height">
        <property name="text">
@@ -227,17 +184,78 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
+     <item row="2" column="3" colspan="2">
+      <widget class="QLabel" name="label_size_d">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Y в декартовой системе координат&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: italic 9pt &quot;Segoe UI&quot;;</string>
+       </property>
+       <property name="text">
+        <string>d</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" colspan="2">
+      <widget class="QLabel" name="label_size_b">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Z в декартовой системе координат&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: italic 9pt &quot;Segoe UI&quot;;</string>
+       </property>
+       <property name="text">
+        <string>b</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" colspan="3">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Толщина</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1" colspan="2">
+      <widget class="QLabel" name="label_vertically">
+       <property name="text">
+        <string>Верт.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="1" colspan="2">
+      <widget class="QLineEdit" name="lineEdit_pos_vertically">
+       <property name="text">
+        <string>0.02</string>
+       </property>
+      </widget>
+     </item>
+     <item row="15" column="1" colspan="2">
+      <widget class="QLineEdit" name="lineEdit_col_vertically">
+       <property name="text">
+        <string>3</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0" colspan="3">
       <widget class="QLabel" name="label_aperture">
        <property name="text">
         <string>Апертура</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="0" colspan="4">
+     <item row="0" column="0" colspan="5">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Моделирование</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="5">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Корпус (в м.)</string>
        </property>
       </widget>
      </item>
@@ -246,46 +264,61 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>580</y>
-      <width>491</width>
-      <height>181</height>
+      <x>10</x>
+      <y>550</y>
+      <width>591</width>
+      <height>211</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="4" colspan="3">
-      <widget class="QLabel" name="label_POV">
+     <item row="0" column="0" colspan="3">
+      <widget class="QLabel" name="label_Source">
        <property name="text">
-        <string>Точка наблюдения</string>
+        <string>Источник</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_Source_Fmin">
+     <item row="3" column="4" colspan="2">
+      <widget class="QLabel" name="label_POV_func">
        <property name="text">
-        <string>F min</string>
+        <string>Функция</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1" colspan="2">
-      <widget class="QLabel" name="label_Source_Fmax">
+     <item row="7" column="4">
+      <widget class="QLineEdit" name="lineEdit_POV_step">
        <property name="text">
-        <string>F max</string>
+        <string>100</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="3">
-      <widget class="QLabel" name="label_Source_NofPoints">
+     <item row="3" column="6">
+      <widget class="QLabel" name="label_4">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Здес буде тексты&lt;/p&gt;&lt;p&gt;о формулах сьих&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="text">
-        <string>Кол-во точек</string>
+        <string>❔</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="4" colspan="2">
-      <widget class="QLabel" name="label_POV_P">
-       <property name="text">
-        <string>P</string>
-       </property>
+     <item row="7" column="0" colspan="2">
+      <widget class="QComboBox" name="comboBox_herz">
+       <item>
+        <property name="text">
+         <string>Гц</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>МГц</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ГГц</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item row="1" column="6">
@@ -295,10 +328,13 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QLineEdit" name="lineEdit_Source_Fmin">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_Source_Fmin">
+       <property name="toolTip">
+        <string>Минимальное значение частоты</string>
+       </property>
        <property name="text">
-        <string>1e+06</string>
+        <string>F min</string>
        </property>
       </widget>
      </item>
@@ -309,6 +345,36 @@
        </property>
       </widget>
      </item>
+     <item row="3" column="0" rowspan="2" colspan="2">
+      <widget class="QLabel" name="label_Source_n">
+       <property name="toolTip">
+        <string>Режим возбуждения n</string>
+       </property>
+       <property name="statusTip">
+        <string/>
+       </property>
+       <property name="text">
+        <string>n</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="2" colspan="2">
+      <widget class="QCheckBox" name="checkBox_File">
+       <property name="text">
+        <string>Загрузка из файла</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="2">
+      <widget class="QLabel" name="label_Source_Fmax">
+       <property name="toolTip">
+        <string>Максимальное значение частоты</string>
+       </property>
+       <property name="text">
+        <string>F max</string>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="3">
       <widget class="QLineEdit" name="lineEdit_Source_NofPoints">
        <property name="text">
@@ -316,31 +382,10 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="4">
-      <widget class="QLineEdit" name="lineEdit_POV_P">
+     <item row="2" column="0">
+      <widget class="QLineEdit" name="lineEdit_Source_Fmin">
        <property name="text">
-        <string>0.15</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="6">
-      <widget class="QLineEdit" name="lineEdit_POV_NofPoints">
-       <property name="text">
-        <string>10</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2" rowspan="2" colspan="2">
-      <widget class="QLabel" name="label_Source_m">
-       <property name="text">
-        <string>m</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="4" colspan="2">
-      <widget class="QLabel" name="label_POV_func">
-       <property name="text">
-        <string>Функция</string>
+        <string>1e+06</string>
        </property>
       </widget>
      </item>
@@ -373,43 +418,17 @@
        </item>
       </widget>
      </item>
+     <item row="5" column="0" rowspan="2" colspan="2">
+      <widget class="QLineEdit" name="lineEdit_Source_n">
+       <property name="text">
+        <string>2</string>
+       </property>
+      </widget>
+     </item>
      <item row="6" column="4" colspan="3">
       <widget class="QLabel" name="label_POV_step">
        <property name="text">
         <string>Шаг интегрирования</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0" colspan="2">
-      <widget class="QComboBox" name="comboBox_herz">
-       <item>
-        <property name="text">
-         <string>Гц</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>МГц</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>ГГц</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="7" column="2" colspan="2">
-      <widget class="QCheckBox" name="checkBox_File">
-       <property name="text">
-        <string>Загрузка из файла</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="4">
-      <widget class="QLineEdit" name="lineEdit_POV_step">
-       <property name="text">
-        <string>100</string>
        </property>
       </widget>
      </item>
@@ -420,6 +439,44 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="6">
+      <widget class="QLineEdit" name="lineEdit_POV_NofPoints">
+       <property name="text">
+        <string>10</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4" colspan="3">
+      <widget class="QLabel" name="label_POV">
+       <property name="text">
+        <string>Точка наблюдения</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLabel" name="label_Source_NofPoints">
+       <property name="text">
+        <string>Кол-во точек</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2" rowspan="2" colspan="2">
+      <widget class="QLabel" name="label_Source_m">
+       <property name="toolTip">
+        <string>Режим возбуждения m</string>
+       </property>
+       <property name="text">
+        <string>m</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4" colspan="2">
+      <widget class="QLabel" name="label_POV_P">
+       <property name="text">
+        <string>P</string>
+       </property>
+      </widget>
+     </item>
      <item row="5" column="2" rowspan="2" colspan="2">
       <widget class="QLineEdit" name="lineEdit_Source_m">
        <property name="text">
@@ -427,24 +484,10 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0" rowspan="2" colspan="2">
-      <widget class="QLineEdit" name="lineEdit_Source_n">
+     <item row="2" column="4" colspan="2">
+      <widget class="QLineEdit" name="lineEdit_POV_P">
        <property name="text">
-        <string>2</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" colspan="3">
-      <widget class="QLabel" name="label_Source">
-       <property name="text">
-        <string>Источник</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" rowspan="2" colspan="2">
-      <widget class="QLabel" name="label_Source_n">
-       <property name="text">
-        <string>n</string>
+        <string>0.15</string>
        </property>
       </widget>
      </item>
@@ -520,7 +563,7 @@
      <item>
       <widget class="QLabel" name="label_RAM_amount">
        <property name="text">
-        <string>800 Мб.</string>
+        <string>800 МБ</string>
        </property>
       </widget>
      </item>
@@ -644,13 +687,13 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>770</y>
-      <width>171</width>
-      <height>40</height>
+      <x>10</x>
+      <y>780</y>
+      <width>161</width>
+      <height>31</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">

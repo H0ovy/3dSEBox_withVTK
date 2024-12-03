@@ -71,6 +71,10 @@ private slots:
     void on_pushButton_Figure_1_clicked();
     void on_pushButton_Figure_2_clicked();
 
+    void create_figure_1();
+    void create_figure_2();
+    void create_figure_3();
+
     ///Изменение геометрии
     void on_lineEdit_size_a_textChanged(const QString &arg1);
     void on_lineEdit_size_b_textChanged(const QString &arg1);

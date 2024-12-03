@@ -14,8 +14,6 @@ MainWindow::MainWindow(QWidget *parent)
     on_pushButton_Figure_1_clicked();
     on_pushButton_2D_clicked();
 
-
-    //calc_thread = new CalculationThread();
     CalcRAM();
     CalcTime();
     CalcDif();
@@ -94,15 +92,17 @@ void MainWindow::on_pushButton_3D_clicked()
 
     for (int i = 0; i < gridSizeX; i++)
     {
-        for (int j = 0; j < gridSizeY; j++)
-        {
-            double x = i * spacingX;
-            double y = j * spacingY;
-            double z = sin(sqrt(x * x + y * y * 2)) * 2;
-            points->InsertNextPoint(x, y, z);
-            scalars->InsertNextValue(z);
-        }
+        // for (int j = 0; j < gridSizeY; j++)
+        // {
+        //     double x = mItems[i].x;
+        //     double y = mItems[i].y;
+        //     double z = mItems[i].z;
+        //     points->InsertNextPoint(x, y, z);
+        //     scalars->InsertNextValue(z);
+        // //}
     }
+
+
 
     vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
     polyData->SetPoints(points);
@@ -175,6 +175,8 @@ void MainWindow::on_pushButton_Figure_1_clicked()
     ui->label_size_d->show();
     ui->label_size_a->setText("a");
     ui->label_size_b->setText("b");
+    ui->label_size_a->setToolTip("X в декартовой системе координат");
+    ui->label_size_b->setToolTip("Z в декартовой системе координат");
     ui->label_pos_x->setText("X");
     ui->label_pos_x->show();
     ui->label_pos_y->setText("Y");
@@ -196,6 +198,83 @@ void MainWindow::on_pushButton_Figure_1_clicked()
     ui->label_vertically->hide();
     ui->label_col->hide();
 
+    create_figure_1();
+}
+
+void MainWindow::on_pushButton_Figure_2_clicked()
+{
+    figure = 2;
+
+    ui->comboBox_func->clear();
+    ui->comboBox_func->addItem("Ren et al.");
+    ui->comboBox_func->addItem("Dehkhoda et al.");
+    ui->comboBox_func->addItem("Nie et al.");
+
+    ui->lineEdit_size_d->show();
+    ui->label_size_d->show();
+    ui->label_size_a->setText("a");
+    ui->label_size_b->setText("b");
+    ui->label_size_a->setToolTip("X в декартовой системе координат");
+    ui->label_size_b->setToolTip("Z в декартовой системе координат");
+    ui->label_pos_x->setText("Гор.");
+    ui->label_pos_y->setText("Верт.");
+    ui->label_pos->setText("Расстояние между центрами апертур");
+    ui->label_aperture_height->setText("Высота");
+    ui->label_aperture_width->show();
+    ui->lineEdit_aperture_width->show();
+    ui->lineEdit_pos_x->hide();
+    ui->lineEdit_pos_y->hide();
+    ui->lineEdit_col_horizontally->show();
+    ui->lineEdit_col_vertically->show();
+    ui->lineEdit_pos_horizontally->show();
+    ui->lineEdit_pos_vertically->show();
+    ui->label_horizontally->show();
+    ui->label_vertically->show();
+    ui->label_col->show();
+
+    create_figure_2();
+}
+
+
+void MainWindow::on_pushButton_Figure_3_clicked()
+{
+    figure = 3;
+
+    ui->comboBox_func->clear();
+    ui->comboBox_func->addItem("Wamg et al.");
+
+    ui->lineEdit_size_d->hide();
+    ui->label_size_d->hide();
+    ui->label_size_a->setText("h");
+    ui->label_size_a->setToolTip("Высота цилиндра");
+    ui->label_size_b->setText("r");
+    ui->label_size_b->setToolTip("Радиус цилиндра");
+    ui->label_aperture_height->setText("Радиус");
+    ui->label_aperture_width->hide();
+    ui->lineEdit_aperture_width->hide();
+
+    ui->lineEdit_col_horizontally->hide();
+    ui->lineEdit_col_vertically->hide();
+    ui->lineEdit_pos_horizontally->hide();
+    ui->lineEdit_pos_vertically->hide();
+    ui->label_pos_x->hide();
+    ui->label_pos_y->hide();
+    ui->lineEdit_pos_x->hide();
+    ui->lineEdit_pos_y->hide();
+
+    ui->label_col->hide();
+    ui->lineEdit_col_vertically->hide();
+    ui->lineEdit_col_horizontally->hide();
+    ui->label_horizontally->hide();
+    ui->label_vertically->hide();
+    ui->label_pos->hide();
+
+    create_figure_3();
+}
+
+
+void MainWindow::create_figure_1()
+{
     double length = ui->lineEdit_size_a->text().toDouble();
     double width = ui->lineEdit_size_d->text().toDouble();
     double height = ui->lineEdit_size_b->text().toDouble();
@@ -223,34 +302,8 @@ void MainWindow::on_pushButton_Figure_1_clicked()
     ui->qvtkWidget_3D_MODEL->update();
 }
 
-void MainWindow::on_pushButton_Figure_2_clicked()
+void MainWindow::create_figure_2()
 {
-    figure = 2;
-
-    ui->comboBox_func->clear();
-    ui->comboBox_func->addItem("Ren et al.");
-    ui->comboBox_func->addItem("Dehkhoda et al.");
-    ui->comboBox_func->addItem("Nie et al.");
-
-    ui->lineEdit_size_d->show();
-    ui->label_size_d->show();
-    ui->label_size_a->setText("a");
-    ui->label_size_b->setText("b");
-    ui->label_pos_x->setText("Гор.");
-    ui->label_pos_y->setText("Верт.");
-    ui->label_pos->setText("Расстояние между центрами апертур");
-    ui->label_aperture_height->setText("Высота");
-    ui->label_aperture_width->show();
-    ui->lineEdit_aperture_width->show();
-    ui->lineEdit_pos_x->hide();
-    ui->lineEdit_pos_y->hide();
-    ui->lineEdit_col_horizontally->show();
-    ui->lineEdit_col_vertically->show();
-    ui->lineEdit_pos_horizontally->show();
-    ui->lineEdit_pos_vertically->show();
-    ui->label_horizontally->show();
-    ui->label_vertically->show();
-    ui->label_col->show();
     double width = ui->lineEdit_size_d->text().toDouble();
     double height = ui->lineEdit_size_b->text().toDouble();
     double length = ui->lineEdit_size_a->text().toDouble();
@@ -266,9 +319,9 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     double verticalSpacing = ui->lineEdit_pos_vertically->text().toDouble();
 
     auto renderer = modelsFigure.createFigure2(width, height, length, notchWidth, notchHeight, notchDepth, rows, cols, horizontalSpacing, verticalSpacing,
-    ui->lineEdit_aperture_height, ui->lineEdit_pos_vertically, ui->lineEdit_aperture_width,
-    ui->lineEdit_pos_horizontally, ui->lineEdit_col_horizontally, ui->lineEdit_size_a, ui->lineEdit_col_vertically, ui->lineEdit_size_b,
-    ui->lineEdit_aperture_width, ui->lineEdit_aperture_height,ui->lineEdit_size_a, ui->lineEdit_size_b);
+                                               ui->lineEdit_aperture_height, ui->lineEdit_pos_vertically, ui->lineEdit_aperture_width,
+                                               ui->lineEdit_pos_horizontally, ui->lineEdit_col_horizontally, ui->lineEdit_size_a, ui->lineEdit_col_vertically, ui->lineEdit_size_b,
+                                               ui->lineEdit_aperture_width, ui->lineEdit_aperture_height,ui->lineEdit_size_a, ui->lineEdit_size_b);
 
     error_occured = renderer.second;
 
@@ -283,38 +336,8 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     ui->qvtkWidget_3D_MODEL->update();
 }
 
-
-void MainWindow::on_pushButton_Figure_3_clicked()
+void MainWindow::create_figure_3()
 {
-    figure = 3;
-
-    ui->comboBox_func->clear();
-    ui->comboBox_func->addItem("Wamg et al.");
-
-    ui->lineEdit_size_d->hide();
-    ui->label_size_d->hide();
-    ui->label_size_a->setText("h");
-    ui->label_size_b->setText("r");
-    ui->label_aperture_height->setText("Радиус");
-    ui->label_aperture_width->hide();
-    ui->lineEdit_aperture_width->hide();
-
-    ui->lineEdit_col_horizontally->hide();
-    ui->lineEdit_col_vertically->hide();
-    ui->lineEdit_pos_horizontally->hide();
-    ui->lineEdit_pos_vertically->hide();
-    ui->label_pos_x->hide();
-    ui->label_pos_y->hide();
-    ui->lineEdit_pos_x->hide();
-    ui->lineEdit_pos_y->hide();
-
-    ui->label_col->hide();
-    ui->lineEdit_col_vertically->hide();
-    ui->lineEdit_col_horizontally->hide();
-    ui->label_horizontally->hide();
-    ui->label_vertically->hide();
-    ui->label_pos->hide();
-
     double radius = ui->lineEdit_size_b->text().toDouble();
     double height = ui->lineEdit_size_a->text().toDouble();
 
@@ -346,9 +369,7 @@ void MainWindow::on_pushButton_Figure_3_clicked()
 
     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
     ui->qvtkWidget_3D_MODEL->update();
-
 }
-
 
 void MainWindow::on_lineEdit_size_a_textChanged(const QString &arg1)
 {
@@ -357,13 +378,13 @@ void MainWindow::on_lineEdit_size_a_textChanged(const QString &arg1)
 
     switch (figure) {
     case 3:
-        on_pushButton_Figure_3_clicked();
+        create_figure_3();
         break;
     case 2:
-        on_pushButton_Figure_2_clicked();
+        create_figure_2();
         break;
     case 1:
-        on_pushButton_Figure_1_clicked();
+        create_figure_1();
         break;
     }
 }
@@ -376,15 +397,14 @@ void MainWindow::on_lineEdit_size_b_textChanged(const QString &arg1)
 
     switch (figure) {
     case 3:
-        on_pushButton_Figure_3_clicked();
+        create_figure_3();
         break;
     case 2:
-        on_pushButton_Figure_2_clicked();
+        create_figure_2();
         break;
     case 1:
-        on_pushButton_Figure_1_clicked();
+        create_figure_1();
         break;
-
     }
 }
 
@@ -394,13 +414,12 @@ void MainWindow::on_lineEdit_size_d_textChanged(const QString &arg1)
     if(arg1.toDouble() <= 0)
         return;
 
-    switch (figure)
-    {
+    switch (figure) {
     case 2:
-        on_pushButton_Figure_2_clicked();
+        create_figure_2();
         break;
     case 1:
-        on_pushButton_Figure_1_clicked();
+        create_figure_1();
         break;
     }
 }
@@ -408,13 +427,13 @@ void MainWindow::on_lineEdit_size_d_textChanged(const QString &arg1)
 
 void MainWindow::on_lineEdit_pos_x_textChanged(const QString &arg1)
 {
-    on_pushButton_Figure_1_clicked();
+    create_figure_1();
 }
 
 
 void MainWindow::on_lineEdit_pos_y_textChanged(const QString &arg1)
 {
-    on_pushButton_Figure_1_clicked();
+    create_figure_1();
 }
 
 
@@ -423,16 +442,15 @@ void MainWindow::on_lineEdit_aperture_height_textChanged(const QString &arg1)
     if(arg1.toDouble() <= 0)
         return;
 
-    switch (figure)
-    {
+    switch (figure) {
     case 3:
-        on_pushButton_Figure_3_clicked();
+        create_figure_3();
         break;
     case 2:
-        on_pushButton_Figure_2_clicked();
+        create_figure_2();
         break;
     case 1:
-        on_pushButton_Figure_1_clicked();
+        create_figure_1();
         break;
     }
 
@@ -444,13 +462,12 @@ void MainWindow::on_lineEdit_aperture_width_textChanged(const QString &arg1)
     if(arg1.toDouble() <= 0)
         return;
 
-    switch (figure)
-    {
+    switch (figure) {
     case 2:
-        on_pushButton_Figure_2_clicked();
+        create_figure_2();
         break;
     case 1:
-        on_pushButton_Figure_1_clicked();
+        create_figure_1();
         break;
     }
 
@@ -462,7 +479,7 @@ void MainWindow::on_lineEdit_col_horizontally_textChanged(const QString &arg1)//
     if(arg1.toDouble() <= 0)
         return;
 
-    on_pushButton_Figure_2_clicked();
+    create_figure_2();
 }
 
 
@@ -471,7 +488,7 @@ void MainWindow::on_lineEdit_col_vertically_textChanged(const QString &arg1)//к
     if(arg1.toDouble() <= 0)
         return;
 
-    on_pushButton_Figure_2_clicked();
+    create_figure_2();
 }
 
 
@@ -480,7 +497,7 @@ void MainWindow::on_lineEdit_pos_horizontally_textChanged(const QString &arg1)//
     if(arg1.toDouble() <= 0)
         return;
 
-    on_pushButton_Figure_2_clicked();
+    create_figure_2();
 }
 
 
@@ -489,7 +506,7 @@ void MainWindow::on_lineEdit_pos_vertically_textChanged(const QString &arg1)//р
     if(arg1.toDouble() <= 0)
         return;
 
-    on_pushButton_Figure_2_clicked();
+    create_figure_2();
 }
 
 
@@ -613,7 +630,7 @@ void MainWindow::CalcRAM()
     tmp = tmp + 0.5 - (tmp < 0);
     RAM = (int)tmp;
 
-    ui->label_RAM_amount->setText(tr("%1 Мб.").arg(RAM));
+    ui->label_RAM_amount->setText(tr("%1 МБ").arg(RAM));
 }
 
 void MainWindow::CalcTime()
@@ -770,7 +787,7 @@ void MainWindow::PrintGUI(QVector<surfaceModelItem> gui)
 {
     for (int i = 0; i < gui.size(); i++)
     {
-        //qDebug()<<"GUI" <<gui[i].x <<" " <<gui[i].y <<" " << gui[i].z;
+        qDebug()<<"GUI" <<gui[i].x <<" " <<gui[i].y <<" " << gui[i].z;
     }
 }
 
