@@ -85,24 +85,11 @@ void MainWindow::on_pushButton_3D_clicked()
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
     vtkSmartPointer<vtkFloatArray> scalars = vtkSmartPointer<vtkFloatArray>::New();
 
-    int gridSizeX = 50;
-    int gridSizeY = 50;
-    double spacingX = 1.0;
-    double spacingY = 1.0;
 
-    for (int i = 0; i < gridSizeX; i++)
-    {
-        // for (int j = 0; j < gridSizeY; j++)
-        // {
-            double x = mItems[i].x;
-            double y = mItems[i].y;
-            double z = mItems[i].z;
-            points->InsertNextPoint(x, y, z);
-            scalars->InsertNextValue(z);
-        //}
+    for (int i = 0; i < mItems.size(); i++) {
+            points->InsertNextPoint(mItems[i].x / 10000000000, mItems[i].y / 1000, mItems[i].z);
+            scalars->InsertNextValue(mItems[i].z);
     }
-
-
 
     vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
     polyData->SetPoints(points);
@@ -119,6 +106,7 @@ void MainWindow::on_pushButton_3D_clicked()
     vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
 
+
     vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
     renderer->AddActor(actor);
     renderer->SetBackground(1.0, 1.0, 1.0);
@@ -129,6 +117,7 @@ void MainWindow::on_pushButton_3D_clicked()
 
     vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
     renderWindow->GetInteractor()->SetInteractorStyle(style);
+
 
     vtkSmartPointer<vtkAxesActor> orientationAxes = vtkSmartPointer<vtkAxesActor>::New();
     orientationAxes->SetTotalLength(10.0, 10.0, 10.0);
@@ -146,11 +135,12 @@ void MainWindow::on_pushButton_3D_clicked()
     cubeAxes->SetFlyModeToNone();
     cubeAxes->SetCamera(renderer->GetActiveCamera());
 
-    vtkSmartPointer<vtkCamera> camera = renderer->GetActiveCamera();
-    camera->SetPosition(70, -50, 25);
-    camera->SetFocalPoint(25, 25, 0);
-    camera->SetViewUp(0, 0, 1);
-    renderer->ResetCameraClippingRange();
+    // vtkSmartPointer<vtkCamera> camera = renderer->GetActiveCamera();
+    // camera->SetPosition(70, -50, 25);
+    // camera->SetFocalPoint(25, 25, 0);
+    // camera->SetViewUp(0, 0, 1);
+    // renderer->ResetCameraClippingRange();
+
 
     vtkSmartPointer<vtkAxisActor2D> xAxis = cubeAxes->GetXAxisActor2D();
     xAxis->SetAdjustLabels(1);
@@ -648,7 +638,7 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     connect(calc_thread, SIGNAL(progress(double)), this, SLOT(UpdateProgress(double)));
     connect(calc_thread, SIGNAL(time(double)), this, SLOT(PrintCalcTime(double)));
     connect(calc_thread, SIGNAL(iterCount(double)), this, SLOT(PrintCalcIter(double)));
-    connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(PrintGUI(QVector<surfaceModelItem>)));
+    //connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(PrintGUI(QVector<surfaceModelItem>)));
     connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(UpdateGUI(QVector<surfaceModelItem>)));
 
     calc_thread->start();
@@ -820,7 +810,7 @@ void MainWindow::PrintGUI(QVector<surfaceModelItem> gui)
 {
     for (int i = 0; i < gui.size(); i++)
     {
-        qDebug()<<"GUI" <<gui[i].x <<" " <<gui[i].y <<" " << gui[i].z;
+        //qDebug()<<"GUI" <<gui[i].x <<" " <<gui[i].y <<" " << gui[i].z;
     }
 }
 
