@@ -13,7 +13,7 @@ double CalculationThread::GetCalculation(int i, double tempFreq, double pp)
         case 0:
             return rob_calcs.calcSomeRob(iterations, m_fMinVal, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, m_pVal, m_mVal, m_nVal);
         case 1:
-            return rob_calcs.calcSomeRob(iterations,tempFreq, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, pp, m_mVal, m_nVal);
+            return rob_calcs.calcSomeRob(iterations, tempFreq, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, pp, m_mVal, m_nVal);
 
 
         case 2:
@@ -70,7 +70,7 @@ void CalculationThread::CalcThread(double tempValue, int K)
     double dfreq,ival=0;
     int a = 0;
     iterations = &a;
-    double progres_val = 100 / (m_nPointsVal * (m_dVal - m_pVal) / m_perc_step);
+    double progres_val = 100 / (m_nPointsVal * (m_dVal - m_pVal) / perc_step);
     bool abort = false;
     size = 0;
     tempValue = GetCalculation(K, 0, 0);
@@ -94,14 +94,14 @@ void CalculationThread::CalcThread(double tempValue, int K)
                         tempValue=0;
 
                     mItems.append({ tempFreq, tempValue, pp});
-
+                    size = size + 1;
             }
             if (abort)
             {
                 mItems.remove(mItems.size() - size, size);
                 break;
             }
-            pp += m_perc_step;
+            pp += perc_step;
             Z = (pp * 1000);
         }
     emit iterCount(*iterations);
@@ -136,11 +136,12 @@ void CalculationThread::run()
         QFile file(m_file);
         if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
             return;
+
         int multiVal;
         if (modS == 0) multiVal = 1;
         else if (modS == 1) multiVal = 1000000;
         else if (modS == 2) multiVal = 1000000000;
-        for(double pp = m_pVal; pp <= m_dVal; pp += m_perc_step)
+        for(double pp = m_pVal; pp <= m_dVal; pp += perc_step)
         {
             QTextStream in(&file);
             in.seek(0);

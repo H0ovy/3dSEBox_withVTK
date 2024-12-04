@@ -94,12 +94,12 @@ void MainWindow::on_pushButton_3D_clicked()
     {
         // for (int j = 0; j < gridSizeY; j++)
         // {
-        //     double x = mItems[i].x;
-        //     double y = mItems[i].y;
-        //     double z = mItems[i].z;
-        //     points->InsertNextPoint(x, y, z);
-        //     scalars->InsertNextValue(z);
-        // //}
+            double x = mItems[i].x;
+            double y = mItems[i].y;
+            double z = mItems[i].z;
+            points->InsertNextPoint(x, y, z);
+            scalars->InsertNextValue(z);
+        //}
     }
 
 
@@ -578,8 +578,11 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     bool m_RungeVal = ui->checkBox_Runge->isChecked();                        // Правило Рунге
     bool m_fileBool = ui->checkBox_File->isChecked();                         // Загрузка из файла
 
+    double  perc_step;
+    perc_step = (m_dVal - m_pVal)/(m_pstepVal);
+
     calc_thread = new CalculationThread(m_fMinVal, m_fMaxVal, m_tVal, m_wVal, m_bVal, m_bVal, m_aVal, m_apVal, m_lVal, m_aVal,
-                                  m_dVal, m_pVal, m_nPointsVal, m_pstepVal, m_xVal, m_yVal, m_napVal, m_mapVal, m_nVal,
+                                  m_dVal, m_pVal, m_nPointsVal, m_xVal, m_yVal, m_napVal, m_mapVal, m_nVal,
                                   m_mVal, m_dvVal, m_dhVal, m_sigmaVal, m_integralVal, m_RungeVal, m_fileBool);
 
     int m_funcVal = 0;
@@ -610,7 +613,37 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     }
 
     calc_thread->mod = m_funcVal;
+    calc_thread->perc_step = perc_step;
     calc_thread->modS = ui->comboBox_herz->currentIndex();          // Для загрузки из файла
+
+    // qDebug()<<"F min " <<calc_thread->m_fMinVal;
+    // qDebug()<<"F max " <<calc_thread->m_fMaxVal;
+    // qDebug()<<"m_tVal " <<calc_thread->m_tVal;
+    // qDebug()<<"m_wVal " <<calc_thread->m_wVal;
+    // qDebug()<<"m_bVal " <<calc_thread->m_bVal;
+    // qDebug()<<"m_rVal " <<calc_thread->m_bVal;
+    // qDebug()<<"m_hVal " <<calc_thread->m_aVal;
+    // qDebug()<<"m_apVa " <<calc_thread->m_apVal;
+    // qDebug()<<"m_lVal " <<calc_thread->m_lVal;
+    // qDebug()<<"m_aVal " <<calc_thread->m_aVal;
+    // qDebug()<<"m_dVal " <<calc_thread->m_dVal;
+    // qDebug()<<"m_pVal " <<calc_thread->m_pVal;
+    // qDebug()<<"m_nPointsVal " <<calc_thread->m_nPointsVal;
+    // qDebug()<<"m_pstepVal " <<calc_thread->m_perc_step;
+    // qDebug()<<"m_xVal " <<calc_thread->m_xVal;
+    // qDebug()<<"m_yVal " <<calc_thread->m_yVal;
+    // qDebug()<<"m_napVal " <<calc_thread->m_napVal;
+    // qDebug()<<"m_mapVal " <<calc_thread->m_mapVal;
+    // qDebug()<<"m_nVal " <<calc_thread->m_nVal;
+    // qDebug()<<"m_mVal " <<calc_thread->m_mVal;
+    // qDebug()<<"m_dvVal " <<calc_thread->m_dvVal;
+    // qDebug()<<"m_dhVal " <<calc_thread->m_dhVal;
+    // qDebug()<<"m_sigmaVal " <<calc_thread->m_sigmaVal;
+    // qDebug()<<"m_integralVal " <<calc_thread->m_integralVal;
+    // qDebug()<<"m_RungeVal " <<calc_thread->m_RungeVal;
+    // qDebug()<<"m_fileBool " <<calc_thread->m_fileBool;
+    // qDebug()<<"mod " <<calc_thread->mod;
+    // qDebug()<<"modS " <<calc_thread->modS;
 
     connect(calc_thread, SIGNAL(progress(double)), this, SLOT(UpdateProgress(double)));
     connect(calc_thread, SIGNAL(time(double)), this, SLOT(PrintCalcTime(double)));

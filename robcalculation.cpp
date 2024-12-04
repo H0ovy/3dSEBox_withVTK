@@ -158,7 +158,7 @@ double robCalculation::calcNIEetal(int* iter,double freq, double w, double l, do
     }
     return -20*log10(abs(dcomp(2.0,0.0)*vp1/v0));
 }
-double robCalculation::calcSomeRob(int *iter, double freq, double t, double w, double b, double L, double a, double d, double p, double m,double n)
+double robCalculation::calcSomeRob(int *iter, double freq, double t, double w, double b, double L, double a, double d, double p, double m, double n)
 {
     auto c0 = 299792458;
     auto lambda = c0/freq;
