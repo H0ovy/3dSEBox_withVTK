@@ -19,6 +19,11 @@ MainWindow::MainWindow(QWidget *parent)
     CalcDif();
 
     surface = new Q3DSurface();
+    surface->axisX()->setAutoAdjustRange(true);
+    surface->axisY()->setAutoAdjustRange(true);
+    surface->axisZ()->setAutoAdjustRange(true);
+    surface->setShadowQuality(QAbstract3DGraph::ShadowQualityNone); // Не работает :/ , должно отключать тени
+
     container = QWidget::createWindowContainer(surface, this);
     container->setMinimumSize(QSize(631, 400));
     QHBoxLayout *layout = new QHBoxLayout();
@@ -89,7 +94,7 @@ void MainWindow::Create2DGraph(int num)
 
 void MainWindow::Create3DGraph()
 {
-    // Прокси и данные
+
     QSurfaceDataProxy *dataProxy = new QSurfaceDataProxy();
     series1 = new QSurface3DSeries(dataProxy);
 
@@ -129,15 +134,13 @@ void MainWindow::Create3DGraph()
     surface->seriesList().at(0)->setBaseGradient(gr);
     surface->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyleRangeGradient);
 
-    // surface->axisX()->setRange(-0.1, 2);
-    // surface->axisY()->setRange(-0.1, 2);
-    // surface->axisZ()->setRange(-0.1, 2);
+    //surface->axisX()->setRange((float)mItems[0].x + 0.5, (float)mItems[ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()].x + 0.5);
+    //surface->axisY()->setRange((float)mItems[0].y + 0.5, (float)mItems[ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()].y + 0.5);
+    //surface->axisZ()->setRange((float)mItems[0].z + 0.5, (float)mItems[ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()].z + 0.5);
 
     surface->axisX()->setTitle("X Axis");
     surface->axisY()->setTitle("Z Axis");
     surface->axisZ()->setTitle("Y Axis");
-
-    surface->setShadowQuality(QAbstract3DGraph::ShadowQualityNone); // Не работает :/ , должно отключать тени
 
     connect(series1, SIGNAL(selectedPointChanged(const QPoint)), this, SLOT(PointSelected(const QPoint)));
 }
@@ -185,7 +188,7 @@ void MainWindow::on_pushButton_Figure_1_clicked()
     ui->comboBox_func->addItem("Shi et al.");
     ui->comboBox_func->addItem("Po`ad et al.");
     ui->comboBox_func->addItem("Komnatnov M.E.");
-    ui->comboBox_func->addItem("Nie et al.");
+    ui->comboBox_func->addItem("Nie et al. (waveguide diagrams)");
 
     ui->lineEdit_size_d->show();
     ui->label_size_d->show();
@@ -615,7 +618,7 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     else if(ui->comboBox_func->currentText() == "Komnatnov M.E."){
         m_funcVal = 3;
     }
-    else if(ui->comboBox_func->currentText() == "Nie et al."){
+    else if(ui->comboBox_func->currentText() == "Nie et al. (waveguide diagrams)"){
         m_funcVal = 4;
     }
     else if(ui->comboBox_func->currentText() == "Ren et al."){
@@ -623,6 +626,9 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     }
     else if(ui->comboBox_func->currentText() == "Dehkhoda et al."){
         m_funcVal = 6;
+    }
+    else if(ui->comboBox_func->currentText() == "Nie et al."){
+        m_funcVal = 7;
     }
     else if(ui->comboBox_func->currentText() == "Wamg et al."){
         m_funcVal = 8;
@@ -699,7 +705,7 @@ void MainWindow::CalcTime()
     else if(ui->comboBox_func->currentText() == "Komnatnov M.E."){
         m_funcVal = 3;
     }
-    else if(ui->comboBox_func->currentText() == "Nie et al."){
+    else if(ui->comboBox_func->currentText() == "Nie et al. (waveguide diagrams)"){
         m_funcVal = 4;
     }
     else if(ui->comboBox_func->currentText() == "Ren et al."){
@@ -707,6 +713,9 @@ void MainWindow::CalcTime()
     }
     else if(ui->comboBox_func->currentText() == "Dehkhoda et al."){
         m_funcVal = 6;
+    }
+    else if(ui->comboBox_func->currentText() == "Nie et al."){
+        m_funcVal = 7;
     }
     else if(ui->comboBox_func->currentText() == "Wamg et al."){
         m_funcVal = 8;
@@ -737,8 +746,14 @@ void MainWindow::CalcTime()
     case 6:
         Time = (3*(m_pstepVal) * m_nPointsVal) / 1000000;
         break;
+    case 7:
+        Time = (10*(m_pstepVal) * m_nPointsVal) / 1000000;
+        break;
     case 8:
         Time = (14*(m_pstepVal) * m_nPointsVal) / 1000000;
+        break;
+    case 9:
+        Time = (10*(m_pstepVal) * m_nPointsVal) / 1000000;
         break;
     default:
         break;
@@ -763,7 +778,7 @@ void MainWindow::CalcDif()
     else if(ui->comboBox_func->currentText() == "Komnatnov M.E."){
         m_funcVal = 3;
     }
-    else if(ui->comboBox_func->currentText() == "Nie et al."){
+    else if(ui->comboBox_func->currentText() == "Nie et al. (waveguide diagrams)"){
         m_funcVal = 4;
     }
     else if(ui->comboBox_func->currentText() == "Ren et al."){
@@ -771,6 +786,9 @@ void MainWindow::CalcDif()
     }
     else if(ui->comboBox_func->currentText() == "Dehkhoda et al."){
         m_funcVal = 6;
+    }
+    else if(ui->comboBox_func->currentText() == "Nie et al."){
+        m_funcVal = 7;
     }
     else if(ui->comboBox_func->currentText() == "Wamg et al."){
         m_funcVal = 8;
@@ -800,6 +818,9 @@ void MainWindow::CalcDif()
         break;
     case 6:
         Difficulty = (3*(m_pstepVal) * m_nPointsVal) / 10000000;
+        break;
+    case 7:
+        Difficulty = (10*(m_pstepVal) * m_nPointsVal) / 10000000;
         break;
     case 8:
         Difficulty = (14*(m_pstepVal) * m_nPointsVal) / 10000000 ;
