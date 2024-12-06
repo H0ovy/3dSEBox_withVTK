@@ -18,6 +18,12 @@ MainWindow::MainWindow(QWidget *parent)
     CalcTime();
     CalcDif();
 
+    surface = new Q3DSurface();
+    container = QWidget::createWindowContainer(surface, this);
+    container->setMinimumSize(QSize(631, 400));
+    QHBoxLayout *layout = new QHBoxLayout();
+    ui->GRAPH_3D->setLayout(layout);
+    layout->addWidget(container);
 }
 
 
@@ -48,8 +54,8 @@ void MainWindow::Create2DGraph(int num)
 
     for (int i = 0; i < ui->lineEdit_Source_NofPoints->text().toInt(); ++i)
     {
-        double x = mItems[k + i].x / 1000000000;
-        double y = mItems[k + i].y / 1000;
+        double x = mItems[k + i].x /*/ 1000000000*/;
+        double y = mItems[k + i].y /*/ 1000*/;
         series->append(x, y);
     }
 
@@ -81,53 +87,8 @@ void MainWindow::Create2DGraph(int num)
     chart->legend()->hide();
 }
 
-void MainWindow::on_pushButton_2D_clicked()
+void MainWindow::Create3DGraph()
 {
-    if(mItems.size() == 0){
-        QMessageBox box;
-        box.setText("Перед построением графика необходимо\nвыполнить вычисления");
-        box.setWindowTitle("Error");
-        box.exec();
-        return;
-    }
-
-    ui->GRAPH_3D->hide();
-    ui->GRAPH_2D->show();
-    // if (graph_2d_exists)
-    // {
-    //     ui->GRAPH_2D->show();
-    // }
-    // else
-    // {
-
-
-        //graph_2d_exists = true;
-    //}
-}
-
-void MainWindow::on_pushButton_3D_clicked()
-{
-    if(mItems.size() == 0){
-        QMessageBox box;
-        box.setText("Перед построением графика необходимо\nвыполнить вычисления");
-        box.setWindowTitle("Error");
-        box.exec();
-        return;
-    }
-    ui->GRAPH_3D->show();
-    ui->GRAPH_2D->hide();
-
-    // Создаем Q3DSurface
-    Q3DSurface *surface = new Q3DSurface();
-
-    QWidget *container = QWidget::createWindowContainer(surface, this);
-    container->setMinimumSize(QSize(631, 400));
-    //container->setFocusPolicy(Qt::StrongFocus);
-
-    QHBoxLayout *layout = new QHBoxLayout();
-    ui->GRAPH_3D->setLayout(layout);
-    layout->addWidget(container);
-
     // Прокси и данные
     QSurfaceDataProxy *dataProxy = new QSurfaceDataProxy();
     series1 = new QSurface3DSeries(dataProxy);
@@ -179,6 +140,39 @@ void MainWindow::on_pushButton_3D_clicked()
     surface->setShadowQuality(QAbstract3DGraph::ShadowQualityNone); // Не работает :/ , должно отключать тени
 
     connect(series1, SIGNAL(selectedPointChanged(const QPoint)), this, SLOT(PointSelected(const QPoint)));
+}
+
+void MainWindow::on_pushButton_2D_clicked()
+{
+    if(mItems.size() == 0){
+        QMessageBox box;
+        box.setText("Перед построением графика необходимо\nвыполнить вычисления");
+        box.setWindowTitle("Error");
+        box.exec();
+        return;
+    }
+
+    ui->GRAPH_3D->hide();
+    ui->GRAPH_2D->show();
+}
+
+void MainWindow::on_pushButton_3D_clicked()
+{
+    if(mItems.size() == 0){
+        QMessageBox box;
+        box.setText("Перед построением графика необходимо\nвыполнить вычисления");
+        box.setWindowTitle("Error");
+        box.exec();
+        return;
+    }
+    ui->GRAPH_3D->show();
+    ui->GRAPH_2D->hide();
+
+    // Создаем Q3DSurface
+
+
+    //container->setFocusPolicy(Qt::StrongFocus);
+    //Create3DGraph();
 }
 
 
@@ -674,6 +668,7 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(UpdateGUI(QVector<surfaceModelItem>)));
 
     calc_thread->start();
+
 }
 
 void MainWindow::CalcRAM()
@@ -849,6 +844,7 @@ void MainWindow::PrintGUI(QVector<surfaceModelItem> gui)
 void MainWindow::UpdateGUI(QVector<surfaceModelItem> gui)
 {
     mItems = gui;
+    Create3DGraph();
 }
 
 

@@ -72,6 +72,7 @@ public:
     ~MainWindow();
 
     void Create2DGraph(int num);
+    void Create3DGraph();
 
 private slots:
     ///Графики
@@ -143,6 +144,8 @@ private:
 
     QSurface3DSeries *series1;
     QChart *chart;
+    Q3DSurface *surface;
+    QWidget *container;
 
     bool error_occured = false;
 
