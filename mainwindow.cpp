@@ -12,69 +12,97 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->GRAPH_2D->hide();
     on_pushButton_Figure_1_clicked();
-    on_pushButton_2D_clicked();
+    //on_pushButton_2D_clicked();
 
     CalcRAM();
     CalcTime();
     CalcDif();
+
 }
+
+
+void MainWindow::PointSelected(const QPoint &position)
+{
+    //qDebug() <<position.x() <<" " <<position.y();
+    if (position.x() < 0){
+        return;
+    }
+    Create2DGraph(position.x());
+    //on_pushButton_2D_clicked();
+}
+
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+void MainWindow::Create2DGraph(int num)
+{
+
+    series = new QLineSeries();
+
+    QChart *chart = new QChart();
+
+    int k = num * calc_thread->m_nPointsVal;
+
+    for (int i = 0; i < ui->lineEdit_Source_NofPoints->text().toInt(); ++i)
+    {
+        double x = mItems[k + i].x / 1000000000;
+        double y = mItems[k + i].y / 1000;
+        series->append(x, y);
+    }
+
+    series->setPen(QPen(Qt::blue, 2, Qt::SolidLine));
+    chart->addSeries(series);
+    chart->setAnimationOptions(QChart::AllAnimations);
+
+    QValueAxis *axisX = new QValueAxis;
+    axisX->setTitleText("Частота, Гц");
+    axisX->setTitleFont(QFont("Times New Roman", 12, QFont::Bold));
+    axisX->setLabelsFont(QFont("Arial", 10));
+    axisX->setLabelFormat("%d");
+    axisX->setTickCount(10);
+    chart->addAxis(axisX, Qt::AlignBottom);
+
+    QValueAxis *axisY = new QValueAxis;
+    axisY->setTitleText("ЭЭ, дБ");
+    axisY->setTitleFont(QFont("Times New Roman", 12, QFont::Bold));
+    axisY->setLabelsFont(QFont("Arial", 10));
+    axisY->setLabelFormat("%.2f");
+    axisY->setTickCount(10);
+    chart->addAxis(axisY, Qt::AlignLeft);
+
+    series->attachAxis(axisX);
+    series->attachAxis(axisY);
+
+    ui->GRAPH_2D->setChart(chart);
+    ui->GRAPH_2D->setRenderHint(QPainter::Antialiasing);
+    chart->legend()->hide();
+}
+
 void MainWindow::on_pushButton_2D_clicked()
 {
+    if(mItems.size() == 0){
+        QMessageBox box;
+        box.setText("Перед построением графика необходимо\nвыполнить вычисления");
+        box.setWindowTitle("Error");
+        box.exec();
+        return;
+    }
+
     ui->GRAPH_3D->hide();
-    if (graph_2d_exists)
-    {
-        ui->GRAPH_2D->show();
-    }
-    else
-    {
-        series = new QLineSeries();
-        QChart *chart = new QChart();
+    ui->GRAPH_2D->show();
+    // if (graph_2d_exists)
+    // {
+    //     ui->GRAPH_2D->show();
+    // }
+    // else
+    // {
 
 
-        int numPoints = 100;
-        for (int i = 0; i < numPoints; ++i)
-        {
-            double x = i;
-            double y = 10 * std::sin(0.1 * i);
-            series->append(x, y);
-        }
-
-        series->setPen(QPen(Qt::blue, 2, Qt::SolidLine));
-        chart->addSeries(series);
-        chart->setAnimationOptions(QChart::AllAnimations);
-
-        QValueAxis *axisX = new QValueAxis;
-        axisX->setTitleText("Частота, Гц");
-        axisX->setTitleFont(QFont("Times New Roman", 12, QFont::Bold));
-        axisX->setLabelsFont(QFont("Arial", 10));
-        axisX->setLabelFormat("%d");
-        axisX->setTickCount(10);
-        chart->addAxis(axisX, Qt::AlignBottom);
-
-        QValueAxis *axisY = new QValueAxis;
-        axisY->setTitleText("ЭЭ, дБ");
-        axisY->setTitleFont(QFont("Times New Roman", 12, QFont::Bold));
-        axisY->setLabelsFont(QFont("Arial", 10));
-        axisY->setLabelFormat("%.2f");
-        axisY->setTickCount(10);
-        chart->addAxis(axisY, Qt::AlignLeft);
-
-        series->attachAxis(axisX);
-        series->attachAxis(axisY);
-
-        ui->GRAPH_2D->setChart(chart);
-        ui->GRAPH_2D->setRenderHint(QPainter::Antialiasing);
-        chart->legend()->hide();
-        ui->GRAPH_2D->show();
-
-        graph_2d_exists = true;
-    }
+        //graph_2d_exists = true;
+    //}
 }
 
 void MainWindow::on_pushButton_3D_clicked()
@@ -102,18 +130,19 @@ void MainWindow::on_pushButton_3D_clicked()
 
     // Прокси и данные
     QSurfaceDataProxy *dataProxy = new QSurfaceDataProxy();
-    QSurface3DSeries *series = new QSurface3DSeries(dataProxy);
+    series1 = new QSurface3DSeries(dataProxy);
 
     QSurfaceDataArray *dataArray = new QSurfaceDataArray();
     const int gridSize = mItems.size(); // Размер сетки
+    dataArray->reserve(ui->lineEdit_POV_NofPoints->text().toInt());
 
     int k = 0;
     for (int i = 0; i < ui->lineEdit_POV_NofPoints->text().toInt(); ++i) {
         QSurfaceDataRow *newRow = new QSurfaceDataRow(gridSize);
         for (int j = 0; j < ui->lineEdit_Source_NofPoints->text().toInt(); ++j) {
             //qDebug()<< j<<"x " <<mItems[j].x  / 10000000000 <<"y " << mItems[j].y  / 1000<<"z " << mItems[j].z;
-            double x = mItems[k].x  / 1000000000;
-            double y = mItems[k].y /1000 ;
+            double x = mItems[k].x / 1000000000;
+            double y = mItems[k].y / 1000 ;
             double z = mItems[k].z;
             //qDebug()<< j<<"x " << x <<"y " << y<<"z " << z;
             k++;
@@ -134,7 +163,7 @@ void MainWindow::on_pushButton_3D_clicked()
     gr.setColorAt(0.67, Qt::red);
     gr.setColorAt(1.0, Qt::yellow);
 
-    surface->addSeries(series);
+    surface->addSeries(series1);
 
     surface->seriesList().at(0)->setBaseGradient(gr);
     surface->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyleRangeGradient);
@@ -148,6 +177,8 @@ void MainWindow::on_pushButton_3D_clicked()
     surface->axisZ()->setTitle("Y Axis");
 
     surface->setShadowQuality(QAbstract3DGraph::ShadowQualityNone); // Не работает :/ , должно отключать тени
+
+    connect(series1, SIGNAL(selectedPointChanged(const QPoint)), this, SLOT(PointSelected(const QPoint)));
 }
 
 

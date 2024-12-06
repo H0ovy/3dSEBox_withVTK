@@ -71,6 +71,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void Create2DGraph(int num);
+
 private slots:
     ///Графики
     void on_pushButton_2D_clicked();
@@ -118,6 +120,8 @@ private slots:
     void PrintGUI(QVector<surfaceModelItem> gui);
     void UpdateGUI(QVector<surfaceModelItem> gui);
 
+    void PointSelected(const QPoint &position);
+
     void on_lineEdit_POV_NofPoints_textChanged(const QString &arg1);
 
     void on_lineEdit_Source_NofPoints_textChanged(const QString &arg1);
@@ -136,6 +140,9 @@ private:
     ModelsFigure modelsFigure;
     CalculationThread* calc_thread;
     QVector<surfaceModelItem> mItems;
+
+    QSurface3DSeries *series1;
+    QChart *chart;
 
     bool error_occured = false;
 
