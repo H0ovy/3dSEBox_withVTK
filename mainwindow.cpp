@@ -26,7 +26,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_2D_clicked()
 {
-    ui->qvtkWidget_GRAPH->hide();
+    ui->GRAPH_3D->hide();
     if (graph_2d_exists)
     {
         ui->GRAPH_2D->show();
@@ -79,76 +79,77 @@ void MainWindow::on_pushButton_2D_clicked()
 
 void MainWindow::on_pushButton_3D_clicked()
 {
-    ui->qvtkWidget_GRAPH->show();
+    if(mItems.size() == 0){
+        QMessageBox box;
+        box.setText("Перед построением графика необходимо\nвыполнить вычисления");
+        box.setWindowTitle("Error");
+        box.exec();
+        return;
+    }
+    ui->GRAPH_3D->show();
     ui->GRAPH_2D->hide();
 
-    vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
-    vtkSmartPointer<vtkFloatArray> scalars = vtkSmartPointer<vtkFloatArray>::New();
+    // Создаем Q3DSurface
+    Q3DSurface *surface = new Q3DSurface();
 
+    QWidget *container = QWidget::createWindowContainer(surface, this);
+    container->setMinimumSize(QSize(631, 400));
+    //container->setFocusPolicy(Qt::StrongFocus);
 
-    for (int i = 0; i < mItems.size(); i++) {
-            points->InsertNextPoint(mItems[i].x / 10000000000, mItems[i].y / 1000, mItems[i].z);
-            scalars->InsertNextValue(mItems[i].z);
+    QHBoxLayout *layout = new QHBoxLayout();
+    ui->GRAPH_3D->setLayout(layout);
+    layout->addWidget(container);
+
+    // Прокси и данные
+    QSurfaceDataProxy *dataProxy = new QSurfaceDataProxy();
+    QSurface3DSeries *series = new QSurface3DSeries(dataProxy);
+
+    QSurfaceDataArray *dataArray = new QSurfaceDataArray();
+    const int gridSize = mItems.size(); // Размер сетки
+
+    int k = 0;
+    for (int i = 0; i < ui->lineEdit_POV_NofPoints->text().toInt(); ++i) {
+        QSurfaceDataRow *newRow = new QSurfaceDataRow(gridSize);
+        for (int j = 0; j < ui->lineEdit_Source_NofPoints->text().toInt(); ++j) {
+            //qDebug()<< j<<"x " <<mItems[j].x  / 10000000000 <<"y " << mItems[j].y  / 1000<<"z " << mItems[j].z;
+            double x = mItems[k].x  / 1000000000;
+            double y = mItems[k].y /1000 ;
+            double z = mItems[k].z;
+            //qDebug()<< j<<"x " << x <<"y " << y<<"z " << z;
+            k++;
+
+            (*newRow)[j].setPosition(QVector3D(x, y, z));
+        }
+        dataArray->append(newRow);
     }
+    dataProxy->resetArray(dataArray);
 
-    vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
-    polyData->SetPoints(points);
-    polyData->GetPointData()->SetScalars(scalars);
+    // Настраиваем серию и оси
+    //series->setDrawMode(QSurface3DSeries::DrawSurfaceAndWireframe);
+    //surface->activeTheme()->setType(Q3DTheme::Theme(1));
 
-    vtkSmartPointer<vtkDelaunay2D> delaunay = vtkSmartPointer<vtkDelaunay2D>::New();
-    delaunay->SetInputData(polyData);
-    delaunay->Update();
+    QLinearGradient gr;
+    gr.setColorAt(0.0, Qt::black);
+    gr.setColorAt(0.33, Qt::blue);
+    gr.setColorAt(0.67, Qt::red);
+    gr.setColorAt(1.0, Qt::yellow);
 
-    vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    mapper->SetInputConnection(delaunay->GetOutputPort());
-    mapper->SetScalarRange(polyData->GetPointData()->GetScalars()->GetRange());
+    surface->addSeries(series);
 
-    vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
-    actor->SetMapper(mapper);
+    surface->seriesList().at(0)->setBaseGradient(gr);
+    surface->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyleRangeGradient);
 
+    // surface->axisX()->setRange(-0.1, 2);
+    // surface->axisY()->setRange(-0.1, 2);
+    // surface->axisZ()->setRange(-0.1, 2);
 
-    vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
-    renderer->AddActor(actor);
-    renderer->SetBackground(1.0, 1.0, 1.0);
+    surface->axisX()->setTitle("X Axis");
+    surface->axisY()->setTitle("Z Axis");
+    surface->axisZ()->setTitle("Y Axis");
 
-    vtkSmartPointer<vtkGenericOpenGLRenderWindow> renderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
-    ui->qvtkWidget_GRAPH->setRenderWindow(renderWindow);
-    renderWindow->AddRenderer(renderer);
-
-    vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
-    renderWindow->GetInteractor()->SetInteractorStyle(style);
-
-
-    vtkSmartPointer<vtkAxesActor> orientationAxes = vtkSmartPointer<vtkAxesActor>::New();
-    orientationAxes->SetTotalLength(10.0, 10.0, 10.0);
-
-    vtkSmartPointer<vtkOrientationMarkerWidget> widget = vtkSmartPointer<vtkOrientationMarkerWidget>::New();
-    widget->SetOrientationMarker(orientationAxes);
-    widget->SetInteractor(renderWindow->GetInteractor());
-    widget->SetViewport(0.0, 0.0, 0.2, 0.2);
-    widget->SetEnabled(1);
-    widget->InteractiveOn();
-
-    vtkSmartPointer<vtkCubeAxesActor2D> cubeAxes = vtkSmartPointer<vtkCubeAxesActor2D>::New();
-    cubeAxes->SetInputData(delaunay->GetOutput());
-    cubeAxes->SetFontFactor(3.0);
-    cubeAxes->SetFlyModeToNone();
-    cubeAxes->SetCamera(renderer->GetActiveCamera());
-
-    // vtkSmartPointer<vtkCamera> camera = renderer->GetActiveCamera();
-    // camera->SetPosition(70, -50, 25);
-    // camera->SetFocalPoint(25, 25, 0);
-    // camera->SetViewUp(0, 0, 1);
-    // renderer->ResetCameraClippingRange();
-
-
-    vtkSmartPointer<vtkAxisActor2D> xAxis = cubeAxes->GetXAxisActor2D();
-    xAxis->SetAdjustLabels(1);
-
-    renderer->AddViewProp(cubeAxes);
-    renderWindow->Render();
-
+    surface->setShadowQuality(QAbstract3DGraph::ShadowQualityNone); // Не работает :/ , должно отключать тени
 }
+
 
 void MainWindow::on_pushButton_Figure_1_clicked()
 {

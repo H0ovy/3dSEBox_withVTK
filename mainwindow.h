@@ -47,6 +47,16 @@
 #include <vtkAxisActor2D.h>
 #include <vtkCubeAxesActor2D.h>
 
+#include <QtDataVisualization/Q3DSurface>
+#include <QtDataVisualization/QSurfaceDataArray>
+#include <QtDataVisualization/QSurfaceDataRow>
+#include <QtDataVisualization/QSurfaceDataItem>
+#include <QHBoxLayout>
+#include <QWidget>
+#include <QVector3D>
+#include <QVector>
+#include <QSize>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
