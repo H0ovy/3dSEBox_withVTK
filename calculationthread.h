@@ -50,6 +50,7 @@ public:
     QVector<surfaceModelItem> mItems;
     int mod = 0;
     int modS = 0;
+    int m_pstepVal = 0;
     int *iterations;
     QString m_file;
     double m_fMinVal, m_fMaxVal, m_tVal, m_wVal, m_bVal, m_rVal, m_hVal, m_apVal,

@@ -18,11 +18,13 @@ MainWindow::MainWindow(QWidget *parent)
     CalcTime();
     CalcDif();
 
+    hzf = new HerzFormatter();
+
     surface = new Q3DSurface();
-    surface->axisX()->setAutoAdjustRange(true);
-    surface->axisY()->setAutoAdjustRange(true);
-    surface->axisZ()->setAutoAdjustRange(true);
-    surface->setShadowQuality(QAbstract3DGraph::ShadowQualityNone); // Не работает :/ , должно отключать тени
+    surface->axisX()->setFormatter(hzf);
+    // surface->axisX()->setAutoAdjustRange(true);
+    // surface->axisY()->setAutoAdjustRange(true);
+    // surface->axisZ()->setAutoAdjustRange(true);
 
     container = QWidget::createWindowContainer(surface, this);
     container->setMinimumSize(QSize(631, 400));
@@ -100,17 +102,21 @@ void MainWindow::Create3DGraph()
 
     QSurfaceDataArray *dataArray = new QSurfaceDataArray();
     const int gridSize = mItems.size(); // Размер сетки
-    dataArray->reserve(ui->lineEdit_POV_NofPoints->text().toInt());
+    dataArray->reserve(gridSize);
 
     int k = 0;
-    for (int i = 0; i < ui->lineEdit_POV_NofPoints->text().toInt(); ++i) {
-        QSurfaceDataRow *newRow = new QSurfaceDataRow(gridSize);
-        for (int j = 0; j < ui->lineEdit_Source_NofPoints->text().toInt(); ++j) {
+    // qDebug() <<calc_thread->m_nPointsVal <<" " <<calc_thread->m_pstepVal;
+    // qDebug() <<gridSize;
+    for (int i = 0; i < calc_thread->m_pstepVal; ++i)
+    {
+        QSurfaceDataRow *newRow = new QSurfaceDataRow(calc_thread->m_nPointsVal);
+        for (int j = 0; j < calc_thread->m_nPointsVal; ++j)
+        {
             //qDebug()<< j<<"x " <<mItems[j].x  / 10000000000 <<"y " << mItems[j].y  / 1000<<"z " << mItems[j].z;
-            double x = mItems[k].x / 1000000000;
-            double y = mItems[k].y / 1000 ;
-            double z = mItems[k].z;
-            //qDebug()<< j<<"x " << x <<"y " << y<<"z " << z;
+            double x = mItems[k].x / 10000000000;
+            double y = mItems[k].y /*/ 100*/ ;
+            double z = mItems[k].z /** 100*/;
+            //qDebug()<<"x " << x <<"y " << y<<"z " << z;
             k++;
 
             (*newRow)[j].setPosition(QVector3D(x, y, z));
@@ -120,14 +126,12 @@ void MainWindow::Create3DGraph()
     dataProxy->resetArray(dataArray);
 
     // Настраиваем серию и оси
-    //series->setDrawMode(QSurface3DSeries::DrawSurfaceAndWireframe);
+    series1->setDrawMode(QSurface3DSeries::DrawSurface);
     //surface->activeTheme()->setType(Q3DTheme::Theme(1));
 
     QLinearGradient gr;
-    gr.setColorAt(0.0, Qt::black);
-    gr.setColorAt(0.33, Qt::blue);
-    gr.setColorAt(0.67, Qt::red);
-    gr.setColorAt(1.0, Qt::yellow);
+    gr.setColorAt(0.0, Qt::blue);
+    gr.setColorAt(0.5, Qt::red);
 
     surface->addSeries(series1);
 
@@ -136,11 +140,21 @@ void MainWindow::Create3DGraph()
 
     //surface->axisX()->setRange((float)mItems[0].x + 0.5, (float)mItems[ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()].x + 0.5);
     //surface->axisY()->setRange((float)mItems[0].y + 0.5, (float)mItems[ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()].y + 0.5);
-    //surface->axisZ()->setRange((float)mItems[0].z + 0.5, (float)mItems[ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()].z + 0.5);
+    //surface->axisZ()->setRange(mItems[0].z - 0.5, 3);
 
-    surface->axisX()->setTitle("X Axis");
-    surface->axisY()->setTitle("Z Axis");
-    surface->axisZ()->setTitle("Y Axis");
+    surface->axisX()->setTitle("Частота, Гц");
+    surface->axisY()->setTitle("ЭЭ, дБ");
+    surface->axisZ()->setTitle("Точка наблюдения, м");
+
+    surface->axisZ()->setSubSegmentCount(10);
+
+    surface->axisX()->setTitleVisible(true);
+    surface->axisY()->setTitleVisible(true);
+    surface->axisZ()->setTitleVisible(true);
+
+    // surface->axisZ()->setLabelFormat("%.5f");
+    // surface->axisY()->setLabelFormat("%d");
+
 
     connect(series1, SIGNAL(selectedPointChanged(const QPoint)), this, SLOT(PointSelected(const QPoint)));
 }
@@ -605,6 +619,8 @@ void MainWindow::on_pushButtonCalcStart_clicked()
                                   m_mVal, m_dvVal, m_dhVal, m_sigmaVal, m_integralVal, m_RungeVal, m_fileBool);
 
     int m_funcVal = 0;
+
+    calc_thread->m_pstepVal = m_pstepVal;
 
     if(ui->comboBox_func->currentText() == "Robinson et al."){
         m_funcVal = 0;

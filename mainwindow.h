@@ -17,6 +17,7 @@
 
 #include "modelsfigure.h"
 #include "calculationthread.h"
+#include "herzformatter.h"
 #include <vtkBooleanOperationPolyDataFilter.h>
 #include <vtkBox.h>
 #include <vtkTransform.h>
@@ -146,6 +147,8 @@ private:
     QChart *chart;
     Q3DSurface *surface;
     QWidget *container;
+
+    HerzFormatter *hzf;
 
     bool error_occured = false;
 
