@@ -24,6 +24,7 @@ QString HerzFormatter::stringForValue(qreal value, const QString &format) const
 {
     Q_UNUSED(format);
     QString result = QString::number(value)+ QObject::tr("");
+
     if(value >= 1000){
         result = QString::number(value/1000) + QObject::tr("×10³");
     }
@@ -34,7 +35,6 @@ QString HerzFormatter::stringForValue(qreal value, const QString &format) const
         result = QString::number(value/1000000000) + QObject::tr("×10⁹");
     }
     if(m_selectedLocale != "en_US") result.replace(".",",");
-    qDebug() <<result;
 
     return result;
 }

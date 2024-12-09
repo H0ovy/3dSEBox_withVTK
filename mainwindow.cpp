@@ -24,7 +24,14 @@ MainWindow::MainWindow(QWidget *parent)
     surface->axisX()->setFormatter(hzf);
     // surface->axisX()->setAutoAdjustRange(true);
     // surface->axisY()->setAutoAdjustRange(true);
-    // surface->axisZ()->setAutoAdjustRange(true);
+    //surface->axisX()->setAutoAdjustRange(false);
+    //surface->axisZ()->setRange(0, 0.5);
+
+    surface->axisZ()->setLabelFormat("%.5f");
+    surface->axisY()->setLabelFormat("%d");
+    surface->axisX()->setLabelFormat("%f");
+
+    surface->setHorizontalAspectRatio(0.8);
 
     container = QWidget::createWindowContainer(surface, this);
     container->setMinimumSize(QSize(631, 400));
@@ -101,8 +108,8 @@ void MainWindow::Create3DGraph()
     series1 = new QSurface3DSeries(dataProxy);
 
     QSurfaceDataArray *dataArray = new QSurfaceDataArray();
-    const int gridSize = mItems.size(); // Размер сетки
-    dataArray->reserve(gridSize);
+    //const int gridSize = mItems.size(); // Размер сетки
+    dataArray->reserve(calc_thread->m_pstepVal);
 
     int k = 0;
     // qDebug() <<calc_thread->m_nPointsVal <<" " <<calc_thread->m_pstepVal;
@@ -113,9 +120,10 @@ void MainWindow::Create3DGraph()
         for (int j = 0; j < calc_thread->m_nPointsVal; ++j)
         {
             //qDebug()<< j<<"x " <<mItems[j].x  / 10000000000 <<"y " << mItems[j].y  / 1000<<"z " << mItems[j].z;
-            double x = mItems[k].x / 10000000000;
+            double x = mItems[k].x /*/ 10000000000*/;
             double y = mItems[k].y /*/ 100*/ ;
-            double z = mItems[k].z /** 100*/;
+            double z = mItems[k].z /** 10000000000*/;
+
             //qDebug()<<"x " << x <<"y " << y<<"z " << z;
             k++;
 
@@ -138,9 +146,12 @@ void MainWindow::Create3DGraph()
     surface->seriesList().at(0)->setBaseGradient(gr);
     surface->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyleRangeGradient);
 
-    //surface->axisX()->setRange((float)mItems[0].x + 0.5, (float)mItems[ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()].x + 0.5);
+    double x1 = mItems[0].x - 0.5;
+    double x2 = mItems[(ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()) - 1].x + 0.5;
+
+    //surface->axisX()->setRange(x1, x2);
     //surface->axisY()->setRange((float)mItems[0].y + 0.5, (float)mItems[ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()].y + 0.5);
-    //surface->axisZ()->setRange(mItems[0].z - 0.5, 3);
+    //surface->axisZ()->setRange(mItems[0].z - 0.5, mItems[(ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()) - 1].z + 0.5);
 
     surface->axisX()->setTitle("Частота, Гц");
     surface->axisY()->setTitle("ЭЭ, дБ");
@@ -154,7 +165,6 @@ void MainWindow::Create3DGraph()
 
     // surface->axisZ()->setLabelFormat("%.5f");
     // surface->axisY()->setLabelFormat("%d");
-
 
     connect(series1, SIGNAL(selectedPointChanged(const QPoint)), this, SLOT(PointSelected(const QPoint)));
 }
