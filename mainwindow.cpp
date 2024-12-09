@@ -22,14 +22,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     surface = new Q3DSurface();
     surface->axisX()->setFormatter(hzf);
-    // surface->axisX()->setAutoAdjustRange(true);
-    // surface->axisY()->setAutoAdjustRange(true);
-    //surface->axisX()->setAutoAdjustRange(false);
-    //surface->axisZ()->setRange(0, 0.5);
 
     surface->axisZ()->setLabelFormat("%.5f");
     surface->axisY()->setLabelFormat("%d");
     surface->axisX()->setLabelFormat("%f");
+
+    surface->axisX()->setTitle("Частота, Гц");
+    surface->axisY()->setTitle("ЭЭ, дБ");
+    surface->axisZ()->setTitle("Точка наблюдения, м");
+
+    surface->axisX()->setTitleVisible(true);
+    surface->axisY()->setTitleVisible(true);
+    surface->axisZ()->setTitleVisible(true);
 
     surface->setHorizontalAspectRatio(0.8);
 
@@ -43,12 +47,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::PointSelected(const QPoint &position)
 {
-    //qDebug() <<position.x() <<" " <<position.y();
     if (position.x() < 0){
         return;
     }
     Create2DGraph(position.x());
-    //on_pushButton_2D_clicked();
 }
 
 
@@ -68,8 +70,8 @@ void MainWindow::Create2DGraph(int num)
 
     for (int i = 0; i < ui->lineEdit_Source_NofPoints->text().toInt(); ++i)
     {
-        double x = mItems[k + i].x /*/ 1000000000*/;
-        double y = mItems[k + i].y /*/ 1000*/;
+        double x = mItems[k + i].x;
+        double y = mItems[k + i].y;
         series->append(x, y);
     }
 
@@ -112,18 +114,15 @@ void MainWindow::Create3DGraph()
     dataArray->reserve(calc_thread->m_pstepVal);
 
     int k = 0;
-    // qDebug() <<calc_thread->m_nPointsVal <<" " <<calc_thread->m_pstepVal;
-    // qDebug() <<gridSize;
+
     for (int i = 0; i < calc_thread->m_pstepVal; ++i)
     {
         QSurfaceDataRow *newRow = new QSurfaceDataRow(calc_thread->m_nPointsVal);
         for (int j = 0; j < calc_thread->m_nPointsVal; ++j)
         {
-            //qDebug()<< j<<"x " <<mItems[j].x  / 10000000000 <<"y " << mItems[j].y  / 1000<<"z " << mItems[j].z;
-            double x = mItems[k].x /*/ 10000000000*/;
-            double y = mItems[k].y /*/ 100*/ ;
-            double z = mItems[k].z /** 10000000000*/;
-
+            double x = mItems[k].x;
+            double y = mItems[k].y;
+            double z = mItems[k].z;
             //qDebug()<<"x " << x <<"y " << y<<"z " << z;
             k++;
 
@@ -133,9 +132,7 @@ void MainWindow::Create3DGraph()
     }
     dataProxy->resetArray(dataArray);
 
-    // Настраиваем серию и оси
     series1->setDrawMode(QSurface3DSeries::DrawSurface);
-    //surface->activeTheme()->setType(Q3DTheme::Theme(1));
 
     QLinearGradient gr;
     gr.setColorAt(0.0, Qt::blue);
@@ -146,25 +143,12 @@ void MainWindow::Create3DGraph()
     surface->seriesList().at(0)->setBaseGradient(gr);
     surface->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyleRangeGradient);
 
-    double x1 = mItems[0].x - 0.5;
-    double x2 = mItems[(ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()) - 1].x + 0.5;
+    //double x1 = mItems[0].x - 0.5;
+    //double x2 = mItems[(ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()) - 1].x + 0.5;
 
     //surface->axisX()->setRange(x1, x2);
     //surface->axisY()->setRange((float)mItems[0].y + 0.5, (float)mItems[ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()].y + 0.5);
     //surface->axisZ()->setRange(mItems[0].z - 0.5, mItems[(ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()) - 1].z + 0.5);
-
-    surface->axisX()->setTitle("Частота, Гц");
-    surface->axisY()->setTitle("ЭЭ, дБ");
-    surface->axisZ()->setTitle("Точка наблюдения, м");
-
-    surface->axisZ()->setSubSegmentCount(10);
-
-    surface->axisX()->setTitleVisible(true);
-    surface->axisY()->setTitleVisible(true);
-    surface->axisZ()->setTitleVisible(true);
-
-    // surface->axisZ()->setLabelFormat("%.5f");
-    // surface->axisY()->setLabelFormat("%d");
 
     connect(series1, SIGNAL(selectedPointChanged(const QPoint)), this, SLOT(PointSelected(const QPoint)));
 }
@@ -194,12 +178,6 @@ void MainWindow::on_pushButton_3D_clicked()
     }
     ui->GRAPH_3D->show();
     ui->GRAPH_2D->hide();
-
-    // Создаем Q3DSurface
-
-
-    //container->setFocusPolicy(Qt::StrongFocus);
-    //Create3DGraph();
 }
 
 
