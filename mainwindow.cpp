@@ -647,23 +647,23 @@ void MainWindow::on_pushButtonCalcStart_clicked()
         m_lVal = ui->lineEdit_aperture_height->text().toDouble();        // Высота апертуры
 
         // Расстояние между центрами аппертур для 2-ой фигуры
-        m_dvVal = ui->lineEdit_pos_vertically->text().toDouble();       // Гор
-        m_dhVal = ui->lineEdit_pos_horizontally->text().toDouble();     // Вер
+        m_dvVal = ui->lineEdit_pos_vertically->text().toDouble();        // Гор
+        m_dhVal = ui->lineEdit_pos_horizontally->text().toDouble();      // Вер
 
         // Количество аппертур для 2-ой фигуры
-        m_napVal = ui->lineEdit_col_vertically->text().toInt();         // Гор
-        m_mapVal = ui->lineEdit_col_horizontally->text().toInt();       // Вер
+        m_napVal = ui->lineEdit_col_vertically->text().toInt();          // Гор
+        m_mapVal = ui->lineEdit_col_horizontally->text().toInt();        // Вер
     }
 
 
     double m_fMinVal = ui->lineEdit_Source_Fmin->text().toDouble();         // F min
     double m_fMaxVal = ui->lineEdit_Source_Fmax->text().toDouble();         // F max
 
-    double m_nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();       // Количество точек
-    double m_integralVal = ui->lineEdit_POV_step->text().toInt();              // Шаг интегрирования
-    double m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();            // Количество точек наблюдения
-    double m_pVal = ui->lineEdit_POV_P->text().toDouble();                  // P - точка наблюдения
-    double m_sigmaVal = 37000000;                                           // Сигма
+    double m_nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();        // Количество точек
+    double m_integralVal = ui->lineEdit_POV_step->text().toInt();               // Шаг интегрирования
+    double m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();             // Количество точек наблюдения
+    double m_pVal = ui->lineEdit_POV_P->text().toDouble();                      // P - точка наблюдения
+    double m_sigmaVal = 37000000;                                               // Сигма
 
     double m_nVal = ui->lineEdit_Source_n->text().toInt();                     // n
     double m_mVal = ui->lineEdit_Source_m->text().toInt();                     // m
@@ -714,39 +714,9 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     calc_thread->perc_step = perc_step;
     calc_thread->modS = ui->comboBox_herz->currentIndex();          // Для загрузки из файла
 
-    // qDebug()<<"F min " <<calc_thread->m_fMinVal;
-    // qDebug()<<"F max " <<calc_thread->m_fMaxVal;
-    // qDebug()<<"m_tVal " <<calc_thread->m_tVal;
-    // qDebug()<<"m_wVal " <<calc_thread->m_wVal;
-    // qDebug()<<"m_bVal " <<calc_thread->m_bVal;
-    // qDebug()<<"m_rVal " <<calc_thread->m_bVal;
-    // qDebug()<<"m_hVal " <<calc_thread->m_aVal;
-    // qDebug()<<"m_apVa " <<calc_thread->m_apVal;
-    // qDebug()<<"m_lVal " <<calc_thread->m_lVal;
-    // qDebug()<<"m_aVal " <<calc_thread->m_aVal;
-    // qDebug()<<"m_dVal " <<calc_thread->m_dVal;
-    // qDebug()<<"m_pVal " <<calc_thread->m_pVal;
-    // qDebug()<<"m_nPointsVal " <<calc_thread->m_nPointsVal;
-    // qDebug()<<"m_pstepVal " <<calc_thread->m_perc_step;
-    // qDebug()<<"m_xVal " <<calc_thread->m_xVal;
-    // qDebug()<<"m_yVal " <<calc_thread->m_yVal;
-    // qDebug()<<"m_napVal " <<calc_thread->m_napVal;
-    // qDebug()<<"m_mapVal " <<calc_thread->m_mapVal;
-    // qDebug()<<"m_nVal " <<calc_thread->m_nVal;
-    // qDebug()<<"m_mVal " <<calc_thread->m_mVal;
-    // qDebug()<<"m_dvVal " <<calc_thread->m_dvVal;
-    // qDebug()<<"m_dhVal " <<calc_thread->m_dhVal;
-    // qDebug()<<"m_sigmaVal " <<calc_thread->m_sigmaVal;
-    // qDebug()<<"m_integralVal " <<calc_thread->m_integralVal;
-    // qDebug()<<"m_RungeVal " <<calc_thread->m_RungeVal;
-    // qDebug()<<"m_fileBool " <<calc_thread->m_fileBool;
-    // qDebug()<<"mod " <<calc_thread->mod;
-    // qDebug()<<"modS " <<calc_thread->modS;
-
     connect(calc_thread, SIGNAL(progress(double)), this, SLOT(UpdateProgress(double)));
     connect(calc_thread, SIGNAL(time(double)), this, SLOT(PrintCalcTime(double)));
     connect(calc_thread, SIGNAL(iterCount(double)), this, SLOT(PrintCalcIter(double)));
-    //connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(PrintGUI(QVector<surfaceModelItem>)));
     connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(UpdateGUI(QVector<surfaceModelItem>)));
 
     calc_thread->start();
@@ -930,14 +900,6 @@ void MainWindow::PrintCalcIter(double val)
     ui->label_Iter_amount->setText(tr("Кол-во итераций: %1").arg(val));
 }
 
-void MainWindow::PrintGUI(QVector<surfaceModelItem> gui)
-{
-    for (int i = 0; i < gui.size(); i++)
-    {
-        //qDebug()<<"GUI" <<gui[i].x <<" " <<gui[i].y <<" " << gui[i].z;
-    }
-}
-
 void MainWindow::UpdateGUI(QVector<surfaceModelItem> gui)
 {
     mItems = gui;
@@ -947,6 +909,9 @@ void MainWindow::UpdateGUI(QVector<surfaceModelItem> gui)
 
 void MainWindow::on_lineEdit_POV_NofPoints_textChanged(const QString &arg1)
 {
+    if(arg1.toDouble() <= 0)
+        return;
+
     CalcRAM();
     CalcTime();
     CalcDif();
@@ -955,13 +920,16 @@ void MainWindow::on_lineEdit_POV_NofPoints_textChanged(const QString &arg1)
 
 void MainWindow::on_lineEdit_Source_NofPoints_textChanged(const QString &arg1)
 {
+    if(arg1.toDouble() <= 0)
+        return;
+
     CalcRAM();
     CalcTime();
     CalcDif();
 }
 
 void MainWindow::on_comboBox_func_currentTextChanged(const QString &arg1)
-{
+{  
     CalcTime();
     CalcDif();
 }

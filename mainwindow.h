@@ -119,7 +119,6 @@ private slots:
     void UpdateProgress(double val);
     void PrintCalcTime(double val);
     void PrintCalcIter(double val);
-    void PrintGUI(QVector<surfaceModelItem> gui);
     void UpdateGUI(QVector<surfaceModelItem> gui);
 
     void PointSelected(const QPoint &position);
