@@ -37,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     surface->setHorizontalAspectRatio(0.8);
 
+    surface->setShadowQuality(QAbstract3DGraph::ShadowQualityNone);
+
     container = QWidget::createWindowContainer(surface, this);
     container->setMinimumSize(QSize(631, 400));
     QHBoxLayout *layout = new QHBoxLayout();
@@ -105,6 +107,10 @@ void MainWindow::Create2DGraph(int num)
 
 void MainWindow::Create3DGraph()
 {
+    if (!surface->seriesList().isEmpty()) {
+        surface->removeSeries(series1);
+        delete series1;
+    }
 
     QSurfaceDataProxy *dataProxy = new QSurfaceDataProxy();
     series1 = new QSurface3DSeries(dataProxy);
@@ -192,32 +198,57 @@ void MainWindow::on_pushButton_Figure_1_clicked()
     ui->comboBox_func->addItem("Komnatnov M.E.");
     ui->comboBox_func->addItem("Nie et al. (waveguide diagrams)");
 
-    ui->lineEdit_size_d->show();
-    ui->label_size_d->show();
     ui->label_size_a->setText("a");
     ui->label_size_b->setText("b");
     ui->label_size_a->setToolTip("X в декартовой системе координат");
     ui->label_size_b->setToolTip("Z в декартовой системе координат");
-    ui->label_pos_x->setText("X");
-    ui->label_pos_x->show();
+    ui->label_pos_x->setText("X"); 
     ui->label_pos_y->setText("Y");
-    ui->label_pos_y->show();
     ui->label_pos->setText("Расположение");
-    ui->lineEdit_pos_x->show();
-    ui->lineEdit_pos_y->show();
-    ui->lineEdit_col_horizontally->hide();
-    ui->lineEdit_col_vertically->hide();
-    ui->lineEdit_pos_horizontally->hide();
-    ui->lineEdit_pos_vertically->hide();
-    ui->label_pos->show();
-
     ui->label_aperture_height->setText("Высота");
-    ui->label_aperture_width->show();
-    ui->lineEdit_aperture_width->show();
 
-    ui->label_horizontally->hide();
-    ui->label_vertically->hide();
-    ui->label_col->hide();
+    // ui->lineEdit_size_d->show();
+    // ui->label_size_d->show();
+    // ui->label_pos_x->show();
+    // ui->label_pos_y->show();
+    // ui->lineEdit_pos_x->show();
+    // ui->lineEdit_pos_y->show();
+    // ui->label_pos->show();
+    // ui->label_aperture_width->show();
+    // ui->lineEdit_aperture_width->show();
+
+    ui->lineEdit_size_d->setEnabled(true);
+    ui->label_size_d->setEnabled(true);
+    ui->label_pos_x->setEnabled(true);
+    ui->label_pos_y->setEnabled(true);
+    ui->lineEdit_pos_x->setEnabled(true);
+    ui->lineEdit_pos_y->setEnabled(true);
+    ui->label_pos->setEnabled(true);
+    ui->label_aperture_width->setEnabled(true);
+    ui->lineEdit_aperture_width->setEnabled(true);
+
+    // ui->lineEdit_col_horizontally->hide();
+    // ui->lineEdit_col_vertically->hide();
+    // ui->lineEdit_pos_horizontally->hide();
+    // ui->lineEdit_pos_vertically->hide();
+
+    /// ui->lineEdit_col_horizontally->setDisabled(true);
+    /// ui->lineEdit_col_vertically->setDisabled(true);
+    /// ui->lineEdit_pos_horizontally->setDisabled(true);
+    /// ui->lineEdit_pos_vertically->setDisabled(true);
+
+    /// ui->label_horizontally->setDisabled(true);
+    /// ui->label_vertically->setDisabled(true);
+    /// ui->label_col->setDisabled(true);
+
+    ui->lineEdit_col_horizontally->setEnabled(false);
+    ui->lineEdit_col_vertically->setEnabled(false);
+    ui->lineEdit_pos_horizontally->setEnabled(false);
+    ui->lineEdit_pos_vertically->setEnabled(false);
+
+    ui->label_horizontally->setEnabled(false);
+    ui->label_vertically->setEnabled(false);
+    ui->label_col->setEnabled(false);
 
     create_figure_1();
 }
@@ -231,8 +262,6 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     ui->comboBox_func->addItem("Dehkhoda et al.");
     ui->comboBox_func->addItem("Nie et al.");
 
-    ui->lineEdit_size_d->show();
-    ui->label_size_d->show();
     ui->label_size_a->setText("a");
     ui->label_size_b->setText("b");
     ui->label_size_a->setToolTip("X в декартовой системе координат");
@@ -241,17 +270,39 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     ui->label_pos_y->setText("Верт.");
     ui->label_pos->setText("Расстояние между центрами апертур");
     ui->label_aperture_height->setText("Высота");
-    ui->label_aperture_width->show();
-    ui->lineEdit_aperture_width->show();
-    ui->lineEdit_pos_x->hide();
-    ui->lineEdit_pos_y->hide();
-    ui->lineEdit_col_horizontally->show();
-    ui->lineEdit_col_vertically->show();
-    ui->lineEdit_pos_horizontally->show();
-    ui->lineEdit_pos_vertically->show();
-    ui->label_horizontally->show();
-    ui->label_vertically->show();
-    ui->label_col->show();
+
+    // ui->lineEdit_pos_x->hide();
+    // ui->lineEdit_pos_y->hide();
+
+    // ui->lineEdit_col_horizontally->show();
+    // ui->lineEdit_col_vertically->show();
+    // ui->lineEdit_pos_horizontally->show();
+    // ui->lineEdit_pos_vertically->show();
+    // ui->lineEdit_aperture_width->show();
+    // ui->lineEdit_size_d->show();
+
+    // ui->label_horizontally->show();
+    // ui->label_vertically->show();
+    // ui->label_col->show();
+    // ui->label_aperture_width->show();
+    // ui->label_size_d->show();
+
+    ui->lineEdit_pos_x->setEnabled(false);
+    ui->lineEdit_pos_y->setEnabled(false);
+
+    ui->lineEdit_col_horizontally->setEnabled(true);
+    ui->lineEdit_col_vertically->setEnabled(true);
+    ui->lineEdit_pos_horizontally->setEnabled(true);
+    ui->lineEdit_pos_vertically->setEnabled(true);
+    ui->lineEdit_aperture_width->setEnabled(true);
+    ui->lineEdit_size_d->setEnabled(true);
+
+    ui->label_horizontally->setEnabled(true);
+    ui->label_vertically->setEnabled(true);
+    ui->label_col->setEnabled(true);
+    ui->label_aperture_width->setEnabled(true);
+    ui->label_size_d->setEnabled(true);
+
 
     create_figure_2();
 }
@@ -264,31 +315,52 @@ void MainWindow::on_pushButton_Figure_3_clicked()
     ui->comboBox_func->clear();
     ui->comboBox_func->addItem("Wamg et al.");
 
-    ui->lineEdit_size_d->hide();
-    ui->label_size_d->hide();
     ui->label_size_a->setText("h");
     ui->label_size_a->setToolTip("Высота цилиндра");
     ui->label_size_b->setText("r");
     ui->label_size_b->setToolTip("Радиус цилиндра");
     ui->label_aperture_height->setText("Радиус");
-    ui->label_aperture_width->hide();
-    ui->lineEdit_aperture_width->hide();
 
-    ui->lineEdit_col_horizontally->hide();
-    ui->lineEdit_col_vertically->hide();
-    ui->lineEdit_pos_horizontally->hide();
-    ui->lineEdit_pos_vertically->hide();
-    ui->label_pos_x->hide();
-    ui->label_pos_y->hide();
-    ui->lineEdit_pos_x->hide();
-    ui->lineEdit_pos_y->hide();
 
-    ui->label_col->hide();
-    ui->lineEdit_col_vertically->hide();
-    ui->lineEdit_col_horizontally->hide();
-    ui->label_horizontally->hide();
-    ui->label_vertically->hide();
-    ui->label_pos->hide();
+    // ui->lineEdit_col_horizontally->hide();
+    // ui->lineEdit_col_vertically->hide();
+    // ui->lineEdit_pos_horizontally->hide();
+    // ui->lineEdit_pos_vertically->hide();
+    // ui->lineEdit_col_vertically->hide();
+    // ui->lineEdit_col_horizontally->hide();
+    // ui->lineEdit_pos_x->hide();
+    // ui->lineEdit_pos_y->hide();
+    // ui->lineEdit_size_d->hide();
+    // ui->lineEdit_aperture_width->hide();
+
+    // ui->label_col->hide();
+    // ui->label_pos_x->hide();
+    // ui->label_pos_y->hide();
+    // ui->label_horizontally->hide();
+    // ui->label_vertically->hide();
+    // ui->label_pos->hide();
+    // ui->label_aperture_width->hide();
+    // ui->label_size_d->hide();
+
+    ui->lineEdit_col_horizontally->setEnabled(false);
+    ui->lineEdit_col_vertically->setEnabled(false);
+    ui->lineEdit_pos_horizontally->setEnabled(false);
+    ui->lineEdit_pos_vertically->setEnabled(false);
+    ui->lineEdit_col_vertically->setEnabled(false);
+    ui->lineEdit_col_horizontally->setEnabled(false);
+    ui->lineEdit_pos_x->setEnabled(false);
+    ui->lineEdit_pos_y->setEnabled(false);
+    ui->lineEdit_size_d->setEnabled(false);
+    ui->lineEdit_aperture_width->setEnabled(false);
+
+    ui->label_col->setEnabled(false);
+    ui->label_pos_x->setEnabled(false);
+    ui->label_pos_y->setEnabled(false);
+    ui->label_horizontally->setEnabled(false);
+    ui->label_vertically->setEnabled(false);
+    ui->label_pos->setEnabled(false);
+    ui->label_aperture_width->setEnabled(false);
+    ui->label_size_d->setEnabled(false);
 
     create_figure_3();
 }
