@@ -43,7 +43,7 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure1(
     double xShift, double yShift,
     QLineEdit* lineEditPosX, QLineEdit* lineEditPosY,
     QLineEdit* lineEditNotchWidth, QLineEdit* lineEditNotchHeight,
-    QLineEdit* lineEditLength, QLineEdit* lineEditHeight)
+    QLineEdit* lineEditLength, QLineEdit* lineEditHeight, double POV_P)
 {
 
     bool error_happened = false;
@@ -150,11 +150,23 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure1(
     notchActor->SetMapper(notchMapper);
     notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
 
+    vtkNew<vtkPolyDataMapper> POVmapper;
+
+    vtkNew<vtkSphereSource> POVsource;
+    POVmapper->SetInputConnection(POVsource->GetOutputPort());
+    POVsource->SetCenter(-(length / 2), -(height / 2), (width / 2) - POV_P);
+    POVsource->SetRadius(0.005);
+
+    vtkNew<vtkActor> POVactor;
+    POVactor->SetMapper(POVmapper);
+    POVactor->GetProperty()->SetColor(colors->GetColor3d("Blue").GetData());
+
     // Настройка рендера
     vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
     renderer->SetBackground(colors->GetColor3d("White").GetData());
     renderer->AddActor(rectangleActor);
     renderer->AddActor(notchActor);
+    renderer->AddActor(POVactor);
 
     return std::pair<vtkSmartPointer<vtkRenderer>, bool>(renderer, error_happened);
 }
@@ -166,8 +178,7 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
                                  QLineEdit* lineEdit_aperture_height, QLineEdit* lineEdit_pos_vertically,
                                  QLineEdit* lineEdit_aperture_width, QLineEdit* lineEdit_pos_horizontally, QLineEdit* lineEdit_col_horizontally, QLineEdit* lineEdit_size_a,
                                  QLineEdit* lineEdit_col_vertically, QLineEdit* lineEdit_size_b,
-    QLineEdit* lineEditNotchWidth, QLineEdit* lineEditNotchHeight,
-    QLineEdit* lineEditLength, QLineEdit* lineEditHeight)
+    QLineEdit* lineEditNotchWidth, QLineEdit* lineEditNotchHeight,    QLineEdit* lineEditLength, QLineEdit* lineEditHeight, double POV_P)
 {
 
     // Проверки на размеры сетки
@@ -276,8 +287,20 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
     rectangleActor->SetMapper(rectangleMapper);
     rectangleActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
 
+    vtkNew<vtkPolyDataMapper> POVmapper;
+
+    vtkNew<vtkSphereSource> POVsource;
+    POVmapper->SetInputConnection(POVsource->GetOutputPort());
+    POVsource->SetCenter(-(length / 2), -(height / 2), (width / 2) - POV_P);
+    POVsource->SetRadius(0.005);
+
+    vtkNew<vtkActor> POVactor;
+    POVactor->SetMapper(POVmapper);
+    POVactor->GetProperty()->SetColor(colors->GetColor3d("Blue").GetData());
+
     vtkNew<vtkRenderer> renderer;
     renderer->AddActor(rectangleActor);
+    renderer->AddActor(POVactor);
 
     // Создание вырезов (notch)
     vtkSmartPointer<vtkCubeSource> notchSource = createNotch(notchWidth, notchHeight, notchDepth);
@@ -316,7 +339,7 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
 
 
 // Метод для создания цилиндра с апертурой
-vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure3(double height, double radius, double notchHeight, double notchRadius)
+vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure3(double height, double radius, double notchHeight, double notchRadius, double POV_P)
 {
     // Проверка и корректировка параметров
     if (notchRadius >= radius)
@@ -355,10 +378,22 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure3(double height, double r
     notchActor->SetMapper(notchMapper);
     notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
 
+    vtkNew<vtkPolyDataMapper> POVmapper;
+
+    vtkNew<vtkSphereSource> POVsource;
+    POVmapper->SetInputConnection(POVsource->GetOutputPort());
+    POVsource->SetCenter(0, POV_P-(height / 2)/*-(height / 2)*/, /*(width / 2)*/ -(radius));
+    POVsource->SetRadius(0.005);
+
+    vtkNew<vtkActor> POVactor;
+    POVactor->SetMapper(POVmapper);
+    POVactor->GetProperty()->SetColor(colors->GetColor3d("Blue").GetData());
+
     // Создание рендера
     vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
     renderer->AddActor(cylinderActor);
     renderer->AddActor(notchActor);
+    renderer->AddActor(POVactor);
     renderer->SetBackground(colors->GetColor3d("White").GetData());
 
     return renderer;

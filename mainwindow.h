@@ -130,6 +130,8 @@ private slots:
 
     void on_comboBox_func_currentTextChanged(const QString &arg1);
 
+    void on_lineEdit_POV_P_textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
 

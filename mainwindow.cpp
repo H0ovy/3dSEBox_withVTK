@@ -381,7 +381,7 @@ void MainWindow::create_figure_1()
         length, width, height, notchDepth, notchWidth, notchHeight, xShift, yShift,
         ui->lineEdit_pos_x, ui->lineEdit_pos_y,
         ui->lineEdit_aperture_width, ui->lineEdit_aperture_height,
-        ui->lineEdit_size_a, ui->lineEdit_size_b
+        ui->lineEdit_size_a, ui->lineEdit_size_b, ui->lineEdit_POV_P->text().toDouble()
         );
 
     error_occured = renderer.second;
@@ -414,7 +414,7 @@ void MainWindow::create_figure_2()
     auto renderer = modelsFigure.createFigure2(width, height, length, notchWidth, notchHeight, notchDepth, rows, cols, horizontalSpacing, verticalSpacing,
                                                ui->lineEdit_aperture_height, ui->lineEdit_pos_vertically, ui->lineEdit_aperture_width,
                                                ui->lineEdit_pos_horizontally, ui->lineEdit_col_horizontally, ui->lineEdit_size_a, ui->lineEdit_col_vertically, ui->lineEdit_size_b,
-                                               ui->lineEdit_aperture_width, ui->lineEdit_aperture_height,ui->lineEdit_size_a, ui->lineEdit_size_b);
+                                               ui->lineEdit_aperture_width, ui->lineEdit_aperture_height,ui->lineEdit_size_a, ui->lineEdit_size_b, ui->lineEdit_POV_P->text().toDouble());
 
     error_occured = renderer.second;
 
@@ -455,7 +455,7 @@ void MainWindow::create_figure_3()
         error_occured = false;
     }
 
-    vtkSmartPointer<vtkRenderer> renderer = modelsFigure.createFigure3(height, radius, notchHeight, notchRadius);
+    vtkSmartPointer<vtkRenderer> renderer = modelsFigure.createFigure3(height, radius, notchHeight, notchRadius, ui->lineEdit_POV_P->text().toDouble());
 
     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
     renderWindow->AddRenderer(renderer);
@@ -964,5 +964,24 @@ void MainWindow::on_comboBox_func_currentTextChanged(const QString &arg1)
 {
     CalcTime();
     CalcDif();
+}
+
+
+void MainWindow::on_lineEdit_POV_P_textChanged(const QString &arg1)
+{
+    if(arg1.toDouble() <= 0)
+        return;
+
+    switch (figure) {
+    case 3:
+        create_figure_3();
+        break;
+    case 2:
+        create_figure_2();
+        break;
+    case 1:
+        create_figure_1();
+        break;
+    }
 }
 

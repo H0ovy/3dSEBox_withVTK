@@ -32,7 +32,7 @@ public:
         double xShift, double yShift,
         QLineEdit* lineEditPosX, QLineEdit* lineEditPosY,
         QLineEdit* lineEditNotchWidth, QLineEdit* lineEditNotchHeight,
-        QLineEdit* lineEditLength, QLineEdit* lineEditHeight);
+        QLineEdit* lineEditLength, QLineEdit* lineEditHeight, double POV_P);
 
     //
     std::pair<vtkSmartPointer<vtkRenderer>, bool> createFigure2(
@@ -43,10 +43,10 @@ public:
         QLineEdit* lineEdit_aperture_width, QLineEdit* lineEdit_pos_horizontally, QLineEdit* lineEdit_col_horizontally,
         QLineEdit* lineEdit_size_a, QLineEdit* lineEdit_col_vertically, QLineEdit* lineEdit_size_b,
         QLineEdit* lineEditNotchWidth, QLineEdit* lineEditNotchHeight,
-        QLineEdit* lineEditLength, QLineEdit* lineEditHeight);
+        QLineEdit* lineEditLength, QLineEdit* lineEditHeight, double POV_P);
 
     // Метод для создания цилиндра с апертурой
-    vtkSmartPointer<vtkRenderer> createFigure3(double height, double radius, double notchHeight, double notchRadius);
+    vtkSmartPointer<vtkRenderer> createFigure3(double height, double radius, double notchHeight, double notchRadius, double POV_P);
 
 private:
     vtkSmartPointer<vtkNamedColors> colors; // Для задания цветов
