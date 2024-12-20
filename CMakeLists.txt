@@ -26,6 +26,7 @@ set(PROJECT_SOURCES
         calculationthread.cpp
         modelsfigure.h
         modelsfigure.cpp
+	resources.qrc
 )
 
 set(VTK_DIR "D:/VTK-9.3.0-install-no-CASCADE/lib/cmake/vtk-9.3")

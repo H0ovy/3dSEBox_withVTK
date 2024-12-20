@@ -38,6 +38,7 @@ void ModelsFigure::highlightError(QLineEdit* lineEdit, bool isError)
 }
 
 std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure1(
+
     double length, double width, double height,
     double notchDepth, double notchWidth, double notchHeight,
     double xShift, double yShift,
@@ -122,7 +123,7 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure1(
 
     vtkSmartPointer<vtkActor> rectangleActor = vtkSmartPointer<vtkActor>::New();
     rectangleActor->SetMapper(rectangleMapper);
-    rectangleActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
+    rectangleActor->GetProperty()->SetColor(0.498,0.337,0.851);
 
     // Вырез (апертура)
     vtkSmartPointer<vtkCubeSource> notchSource = vtkSmartPointer<vtkCubeSource>::New();
@@ -159,14 +160,16 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure1(
 
     vtkNew<vtkActor> POVactor;
     POVactor->SetMapper(POVmapper);
-    POVactor->GetProperty()->SetColor(colors->GetColor3d("Blue").GetData());
+    POVactor->GetProperty()->SetColor(0.18,0.565,0.98);
 
     // Настройка рендера
     vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
-    renderer->SetBackground(colors->GetColor3d("White").GetData());
+
     renderer->AddActor(rectangleActor);
     renderer->AddActor(notchActor);
     renderer->AddActor(POVactor);
+    renderer->SetBackground(colors->GetColor3d("White").GetData());
+
 
     return std::pair<vtkSmartPointer<vtkRenderer>, bool>(renderer, error_happened);
 }
@@ -285,7 +288,7 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
 
     vtkNew<vtkActor> rectangleActor;
     rectangleActor->SetMapper(rectangleMapper);
-    rectangleActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
+    rectangleActor->GetProperty()->SetColor(0.498,0.337,0.851);
 
     vtkNew<vtkPolyDataMapper> POVmapper;
 
@@ -296,12 +299,12 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
 
     vtkNew<vtkActor> POVactor;
     POVactor->SetMapper(POVmapper);
-    POVactor->GetProperty()->SetColor(colors->GetColor3d("Blue").GetData());
+    POVactor->GetProperty()->SetColor(0.18,0.565,0.98);
 
     vtkNew<vtkRenderer> renderer;
     renderer->AddActor(rectangleActor);
     renderer->AddActor(POVactor);
-
+    renderer->SetBackground(colors->GetColor3d("White").GetData());
     // Создание вырезов (notch)
     vtkSmartPointer<vtkCubeSource> notchSource = createNotch(notchWidth, notchHeight, notchDepth);
 
@@ -356,7 +359,7 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure3(double height, double r
 
     vtkSmartPointer<vtkActor> cylinderActor = vtkSmartPointer<vtkActor>::New();
     cylinderActor->SetMapper(cylinderMapper);
-    cylinderActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
+    cylinderActor->GetProperty()->SetColor(0.498,0.337,0.851);
 
     // Создание апертуры
     vtkSmartPointer<vtkCylinderSource> notchSource = vtkSmartPointer<vtkCylinderSource>::New();
@@ -387,7 +390,7 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure3(double height, double r
 
     vtkNew<vtkActor> POVactor;
     POVactor->SetMapper(POVmapper);
-    POVactor->GetProperty()->SetColor(colors->GetColor3d("Blue").GetData());
+    POVactor->GetProperty()->SetColor(0.18,0.565,0.98);
 
     // Создание рендера
     vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();

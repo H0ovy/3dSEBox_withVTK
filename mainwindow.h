@@ -11,6 +11,7 @@
 #include <QtCharts/QValueAxis>
 #include <QMessageBox>
 #include <vtkTransformPolyDataFilter.h>
+#include <QFileDialog>
 
 #include <QDebug>
 #include <cmath>
@@ -131,6 +132,8 @@ private slots:
 
     void on_lineEdit_POV_P_textChanged(const QString &arg1);
 
+    void on_pushButton_Save_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -153,9 +156,13 @@ private:
 
     bool error_occured = false;
 
+    double m_nPointsVal;
+
     int RAM;
     int Difficulty;
     double Time;
+
+    int SelectedPoint;
 
 };
 

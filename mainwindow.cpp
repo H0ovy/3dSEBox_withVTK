@@ -7,12 +7,22 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     ui->progressBar_calc->setRange(0, 6666);
-
+    for (int i = 0; i < ui->gridLayout_4->count(); ++i) {
+        QLayoutItem *item = ui->gridLayout_4->itemAt(i);
+        if (item && item->widget()) {
+            ui->gridLayout_4->setAlignment(item->widget(), Qt::AlignLeft);
+        }
+    }
+    for (int i = 0; i < ui->gridLayout_2->count(); ++i) {
+        QLayoutItem *item = ui->gridLayout_2->itemAt(i);
+        if (item && item->widget()) {
+            ui->gridLayout_2->setAlignment(item->widget(), Qt::AlignLeft);
+        }
+    }
     ui->GRAPH_2D->hide();
+    ui->pushButton_Save->hide();
     on_pushButton_Figure_1_clicked();
-    //on_pushButton_2D_clicked();
 
     CalcRAM();
     CalcTime();
@@ -63,36 +73,35 @@ MainWindow::~MainWindow()
 
 void MainWindow::Create2DGraph(int num)
 {
-
     series = new QLineSeries();
 
     QChart *chart = new QChart();
 
-    int k = num * calc_thread->m_nPointsVal;
+    SelectedPoint = num * calc_thread->m_nPointsVal;
 
-    for (int i = 0; i < ui->lineEdit_Source_NofPoints->text().toInt(); ++i)
+    for (int i = 0; i < m_nPointsVal; ++i)
     {
-        double x = mItems[k + i].x;
-        double y = mItems[k + i].y;
+        double x = mItems[SelectedPoint + i].x;
+        double y = mItems[SelectedPoint + i].y;
         series->append(x, y);
     }
 
-    series->setPen(QPen(Qt::blue, 2, Qt::SolidLine));
+    series->setPen(QPen(QColor(46,144,250), 2, Qt::SolidLine));
     chart->addSeries(series);
     chart->setAnimationOptions(QChart::AllAnimations);
 
     QValueAxis *axisX = new QValueAxis;
     axisX->setTitleText("Частота, Гц");
-    axisX->setTitleFont(QFont("Times New Roman", 12, QFont::Bold));
-    axisX->setLabelsFont(QFont("Arial", 10));
+    axisX->setTitleFont(QFont("OpenSans", 12, QFont::Bold));
+    axisX->setLabelsFont(QFont("OpenSans", 10));
     axisX->setLabelFormat("%d");
     axisX->setTickCount(10);
     chart->addAxis(axisX, Qt::AlignBottom);
 
     QValueAxis *axisY = new QValueAxis;
     axisY->setTitleText("ЭЭ, дБ");
-    axisY->setTitleFont(QFont("Times New Roman", 12, QFont::Bold));
-    axisY->setLabelsFont(QFont("Arial", 10));
+    axisY->setTitleFont(QFont("OpenSans", 12, QFont::Bold));
+    axisY->setLabelsFont(QFont("OpenSans", 10));
     axisY->setLabelFormat("%.2f");
     axisY->setTickCount(10);
     chart->addAxis(axisY, Qt::AlignLeft);
@@ -139,7 +148,6 @@ void MainWindow::Create3DGraph()
     dataProxy->resetArray(dataArray);
 
     series1->setDrawMode(QSurface3DSeries::DrawSurface);
-
     QLinearGradient gr;
     gr.setColorAt(0.0, Qt::blue);
     gr.setColorAt(0.5, Qt::red);
@@ -157,11 +165,13 @@ void MainWindow::Create3DGraph()
     //surface->axisZ()->setRange(mItems[0].z - 0.5, mItems[(ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()) - 1].z + 0.5);
 
     connect(series1, SIGNAL(selectedPointChanged(const QPoint)), this, SLOT(PointSelected(const QPoint)));
+
 }
 
 void MainWindow::on_pushButton_2D_clicked()
 {
-    if(mItems.size() == 0){
+    if(mItems.size() == 0)
+    {
         QMessageBox box;
         box.setText("Перед построением графика необходимо\nвыполнить вычисления");
         box.setWindowTitle("Error");
@@ -169,19 +179,24 @@ void MainWindow::on_pushButton_2D_clicked()
         return;
     }
 
+    ui->pushButton_Save->show();
     ui->GRAPH_3D->hide();
     ui->GRAPH_2D->show();
 }
 
 void MainWindow::on_pushButton_3D_clicked()
 {
-    if(mItems.size() == 0){
+
+    if(mItems.size() == 0)
+    {
         QMessageBox box;
         box.setText("Перед построением графика необходимо\nвыполнить вычисления");
         box.setWindowTitle("Error");
         box.exec();
         return;
     }
+
+    ui->pushButton_Save->hide();
     ui->GRAPH_3D->show();
     ui->GRAPH_2D->hide();
 }
@@ -391,7 +406,10 @@ void MainWindow::create_figure_1()
 
     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
     renderWindow->AddRenderer(renderer.first);
+    renderWindow->SetAlphaBitPlanes(1);
+    renderWindow->SetMultiSamples(0);
     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
+
     ui->qvtkWidget_3D_MODEL->update();
 }
 
@@ -421,9 +439,11 @@ void MainWindow::create_figure_2()
     if(renderer.second)
         return;
 
-    renderer.first->SetBackground(colors->GetColor3d("White").GetData());
+
 
     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
+    renderWindow->SetAlphaBitPlanes(1);
+    renderWindow->SetMultiSamples(0);
     renderWindow->AddRenderer(renderer.first);
     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
     ui->qvtkWidget_3D_MODEL->update();
@@ -469,7 +489,8 @@ void MainWindow::on_lineEdit_size_a_textChanged(const QString &arg1)
     if(arg1.toDouble() <= 0)
         return;
 
-    switch (figure) {
+    switch (figure)
+    {
     case 3:
         create_figure_3();
         break;
@@ -488,7 +509,8 @@ void MainWindow::on_lineEdit_size_b_textChanged(const QString &arg1)
     if(arg1.toDouble() <= 0)
         return;
 
-    switch (figure) {
+    switch (figure)
+    {
     case 3:
         create_figure_3();
         break;
@@ -507,7 +529,8 @@ void MainWindow::on_lineEdit_size_d_textChanged(const QString &arg1)
     if(arg1.toDouble() <= 0)
         return;
 
-    switch (figure) {
+    switch (figure)
+    {
     case 2:
         create_figure_2();
         break;
@@ -535,7 +558,8 @@ void MainWindow::on_lineEdit_aperture_height_textChanged(const QString &arg1)
     if(arg1.toDouble() <= 0)
         return;
 
-    switch (figure) {
+    switch (figure)
+    {
     case 3:
         create_figure_3();
         break;
@@ -555,7 +579,8 @@ void MainWindow::on_lineEdit_aperture_width_textChanged(const QString &arg1)
     if(arg1.toDouble() <= 0)
         return;
 
-    switch (figure) {
+    switch (figure)
+    {
     case 2:
         create_figure_2();
         break;
@@ -659,7 +684,7 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     double m_fMinVal = ui->lineEdit_Source_Fmin->text().toDouble();         // F min
     double m_fMaxVal = ui->lineEdit_Source_Fmax->text().toDouble();         // F max
 
-    double m_nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();        // Количество точек
+    m_nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();        // Количество точек
     double m_integralVal = ui->lineEdit_POV_step->text().toInt();               // Шаг интегрирования
     double m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();             // Количество точек наблюдения
     double m_pVal = ui->lineEdit_POV_P->text().toDouble();                      // P - точка наблюдения
@@ -671,8 +696,7 @@ void MainWindow::on_pushButtonCalcStart_clicked()
     bool m_RungeVal = ui->checkBox_Runge->isChecked();                        // Правило Рунге
     bool m_fileBool = ui->checkBox_File->isChecked();                         // Загрузка из файла
 
-    double  perc_step;
-    perc_step = (m_dVal - m_pVal)/(m_pstepVal);
+    double  perc_step = (m_dVal - m_pVal)/(m_pstepVal);
 
     calc_thread = new CalculationThread(m_fMinVal, m_fMaxVal, m_tVal, m_wVal, m_bVal, m_bVal, m_aVal, m_apVal, m_lVal, m_aVal,
                                   m_dVal, m_pVal, m_nPointsVal, m_xVal, m_yVal, m_napVal, m_mapVal, m_nVal,
@@ -726,9 +750,9 @@ void MainWindow::on_pushButtonCalcStart_clicked()
 void MainWindow::CalcRAM()
 {
     double m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();
-    double m_nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();
+    double nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();
 
-    double tmp = (((((100/m_pstepVal) * m_nPointsVal)*3*8)/1024)/1024 + (((100/m_pstepVal) * m_nPointsVal)*3)/1024 + 50);
+    double tmp = (((((m_pstepVal / 100) * nPointsVal)*3*8)/1024)/1024 + (((m_pstepVal / 100) * nPointsVal)*3)/1024 + 50);
     tmp = tmp + 0.5 - (tmp < 0);
     RAM = (int)tmp;
 
@@ -767,39 +791,40 @@ void MainWindow::CalcTime()
         m_funcVal = 8;
     }
 
-    double m_nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();
+    double nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();
     double m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();
 
-    switch (m_funcVal) {
+    switch (m_funcVal)
+    {
     case 0:
-        Time = (m_pstepVal * m_nPointsVal) / 1000000;
+        Time = (m_pstepVal * nPointsVal) / 1000000 * 3;
         break;
     case 1:
-        Time = (1000*(m_pstepVal) * m_nPointsVal) / 2000000;
+        Time = (1000*(m_pstepVal) * nPointsVal) / 2000000;
         break;
     case 2:
-        Time = (2*(m_pstepVal) * m_nPointsVal) / 1000000;
+        Time = (2*(m_pstepVal) * nPointsVal) / 1000000;
         break;
     case 3:
-        Time = (3*(m_pstepVal) * m_nPointsVal) / 1000000;
+        Time = (3*(m_pstepVal) * nPointsVal) / 1000000;
         break;
     case 4:
-        Time = (3*(m_pstepVal) * m_nPointsVal) / 1000000;
+        Time = (3*(m_pstepVal) * nPointsVal) / 1000000;
         break;
     case 5:
-        Time = ((m_pstepVal) * m_nPointsVal) / 1000000;
+        Time = ((m_pstepVal) * nPointsVal) / 1000000;
         break;
     case 6:
-        Time = (3*(m_pstepVal) * m_nPointsVal) / 1000000;
+        Time = (3*(m_pstepVal) * nPointsVal) / 1000000;
         break;
     case 7:
-        Time = (10*(m_pstepVal) * m_nPointsVal) / 1000000;
+        Time = (10*(m_pstepVal) * nPointsVal) / 1000000;
         break;
     case 8:
-        Time = (14*(m_pstepVal) * m_nPointsVal) / 1000000;
+        Time = (14*(m_pstepVal) * nPointsVal) / 1000000;
         break;
     case 9:
-        Time = (10*(m_pstepVal) * m_nPointsVal) / 1000000;
+        Time = (10*(m_pstepVal) * nPointsVal) / 1000000;
         break;
     default:
         break;
@@ -840,36 +865,36 @@ void MainWindow::CalcDif()
         m_funcVal = 8;
     }
 
-    double m_nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();
+    double nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();
     double m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();
 
     switch (m_funcVal) {
     case 0:
-        Difficulty = (m_pstepVal * m_nPointsVal) / 10000000;
+        Difficulty = (m_pstepVal * nPointsVal) / 10000000;
         break;
     case 1:
-        Difficulty = (1000*(m_pstepVal) * m_nPointsVal) / 20000000;
+        Difficulty = (1000*(m_pstepVal) * nPointsVal) / 20000000;
         break;
     case 2:
-        Difficulty = (2*(m_pstepVal) * m_nPointsVal) / 10000000;
+        Difficulty = (2*(m_pstepVal) * nPointsVal) / 10000000;
         break;
     case 3:
-        Difficulty = (3*(m_pstepVal) * m_nPointsVal) / 10000000;
+        Difficulty = (3*(m_pstepVal) * nPointsVal) / 10000000;
         break;
     case 4:
-        Difficulty = (3*(m_pstepVal) * m_nPointsVal) / 10000000;
+        Difficulty = (3*(m_pstepVal) * nPointsVal) / 10000000;
         break;
     case 5:
-        Difficulty = ((m_pstepVal) * m_nPointsVal) / 10000000;
+        Difficulty = ((m_pstepVal) * nPointsVal) / 10000000;
         break;
     case 6:
-        Difficulty = (3*(m_pstepVal) * m_nPointsVal) / 10000000;
+        Difficulty = (3*(m_pstepVal) * nPointsVal) / 10000000;
         break;
     case 7:
-        Difficulty = (10*(m_pstepVal) * m_nPointsVal) / 10000000;
+        Difficulty = (10*(m_pstepVal) * nPointsVal) / 10000000;
         break;
     case 8:
-        Difficulty = (14*(m_pstepVal) * m_nPointsVal) / 10000000 ;
+        Difficulty = (14*(m_pstepVal) * nPointsVal) / 10000000 ;
         break;
     default:
         break;
@@ -891,13 +916,13 @@ void MainWindow::UpdateProgress(double val)
 void MainWindow::PrintCalcTime(double val)
 {
     //qDebug() <<"Time: " <<val <<"\n";
-    ui->label_Calc_time->setText(tr("Время вычислений: %1 мс").arg(val));
+    ui->label_Calc_time_2->setText(tr("Время вычислений: %1 мс").arg(val));
 }
 
 void MainWindow::PrintCalcIter(double val)
 {
     //qDebug() <<"Iter: " <<val <<"\n";
-    ui->label_Iter_amount->setText(tr("Кол-во итераций: %1").arg(val));
+    ui->label_Iter_amount_2->setText(tr("Кол-во итераций: %1").arg(val));
 }
 
 void MainWindow::UpdateGUI(QVector<surfaceModelItem> gui)
@@ -950,6 +975,47 @@ void MainWindow::on_lineEdit_POV_P_textChanged(const QString &arg1)
     case 1:
         create_figure_1();
         break;
+    }
+}
+
+
+void MainWindow::on_pushButton_Save_clicked()
+{
+    QString filePath = QFileDialog::getSaveFileName(nullptr, "Save Data File", "", "Text Files (*.txt);;All Files (*)");
+
+    if (!filePath.isEmpty())
+    {
+        QFile file(filePath);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QTextStream out(&file);
+
+            out << "Частота, Гц\tЭЭ, дБ\n";
+            out << mItems[SelectedPoint].x << "\t\t" << mItems[SelectedPoint].y << "\n";
+            for (int i = 1; i < m_nPointsVal; ++i)
+            {
+                double x = mItems[SelectedPoint + i].x;
+                double y = mItems[SelectedPoint + i].y;
+                out << x << "\t" << y << "\n";
+            }
+            file.close();
+
+            QMessageBox box;
+            box.setText("Файл создан: " + filePath);
+            box.exec();
+        }
+        else
+        {
+            QMessageBox box;
+            box.setText("Не удалось открыть файл для записи");
+            box.exec();
+        }
+    }
+    else
+    {
+        QMessageBox box;
+        box.setText("Файл не выбран");
+        box.exec();
     }
 }
 
