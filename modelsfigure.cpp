@@ -162,13 +162,50 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure1(
     POVactor->SetMapper(POVmapper);
     POVactor->GetProperty()->SetColor(0.18,0.565,0.98);
 
-    // Настройка рендера
-    vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
+    vtkNew<vtkVectorText> text_a;
+    text_a->SetText("a");
+    vtkNew<vtkActor> TextActor_A;
+    vtkNew<vtkPolyDataMapper> TextMapper_A;
+    TextMapper_A->SetInputConnection(text_a->GetOutputPort());
+    TextActor_A->SetMapper(TextMapper_A);
+    TextActor_A->SetScale(0.05, 0.05, 0.05);
+    //TextActor_A->RotateX(270);
+    TextActor_A->SetPosition(-0.025, -(height/2) - 0.06, width/2);
+    TextActor_A->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
 
+    vtkNew<vtkVectorText> text_b;
+    text_b->SetText("b");
+    vtkNew<vtkActor> TextActor_B;
+    vtkNew<vtkPolyDataMapper> TextMapper_B;
+    TextMapper_B->SetInputConnection(text_b->GetOutputPort());
+    TextActor_B->SetMapper(TextMapper_B);
+    TextActor_B->SetScale(0.05, 0.05, 0.05);
+    //TextActor_B->RotateX(270);
+    TextActor_B->SetPosition(-(length/2) - 0.06 , -0.025, width/2);
+    TextActor_B->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+
+    vtkNew<vtkVectorText> text_d;
+    text_d->SetText("d");
+    vtkNew<vtkActor> TextActor_D;
+    vtkNew<vtkPolyDataMapper> TextMapper_D;
+    TextMapper_D->SetInputConnection(text_d->GetOutputPort());
+    TextActor_D->SetMapper(TextMapper_D);
+    TextActor_D->SetScale(0.05, 0.05, 0.05);
+    TextActor_D->RotateY(270);
+    TextActor_D->SetPosition(-(length/2), -(height/2) - 0.06, -0.025);
+    TextActor_D->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+
+
+    // Настройка рендера
+    vtkNew<vtkRenderer> renderer;
     renderer->AddActor(rectangleActor);
     renderer->AddActor(notchActor);
     renderer->AddActor(POVactor);
+    renderer->AddActor(TextActor_A);
+    renderer->AddActor(TextActor_B);
+    renderer->AddActor(TextActor_D);
     renderer->SetBackground(colors->GetColor3d("White").GetData());
+
 
 
     return std::pair<vtkSmartPointer<vtkRenderer>, bool>(renderer, error_happened);
@@ -301,9 +338,45 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
     POVactor->SetMapper(POVmapper);
     POVactor->GetProperty()->SetColor(0.18,0.565,0.98);
 
+    vtkNew<vtkVectorText> text_a;
+    text_a->SetText("a");
+    vtkNew<vtkActor> TextActor_A;
+    vtkNew<vtkPolyDataMapper> TextMapper_A;
+    TextMapper_A->SetInputConnection(text_a->GetOutputPort());
+    TextActor_A->SetMapper(TextMapper_A);
+    TextActor_A->SetScale(0.05, 0.05, 0.05);
+    //TextActor_A->RotateX(270);
+    TextActor_A->SetPosition(-0.025, -(height/2) - 0.06, width/2);
+    TextActor_A->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+
+    vtkNew<vtkVectorText> text_b;
+    text_b->SetText("b");
+    vtkNew<vtkActor> TextActor_B;
+    vtkNew<vtkPolyDataMapper> TextMapper_B;
+    TextMapper_B->SetInputConnection(text_b->GetOutputPort());
+    TextActor_B->SetMapper(TextMapper_B);
+    TextActor_B->SetScale(0.05, 0.05, 0.05);
+    //TextActor_B->RotateX(270);
+    TextActor_B->SetPosition(-(length/2) - 0.06 , -0.025, width/2);
+    TextActor_B->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+
+    vtkNew<vtkVectorText> text_d;
+    text_d->SetText("d");
+    vtkNew<vtkActor> TextActor_D;
+    vtkNew<vtkPolyDataMapper> TextMapper_D;
+    TextMapper_D->SetInputConnection(text_d->GetOutputPort());
+    TextActor_D->SetMapper(TextMapper_D);
+    TextActor_D->SetScale(0.05, 0.05, 0.05);
+    TextActor_D->RotateY(270);
+    TextActor_D->SetPosition(-(length/2), -(height/2) - 0.06, -0.025);
+    TextActor_D->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+
     vtkNew<vtkRenderer> renderer;
     renderer->AddActor(rectangleActor);
     renderer->AddActor(POVactor);
+    renderer->AddActor(TextActor_A);
+    renderer->AddActor(TextActor_B);
+    renderer->AddActor(TextActor_D);
     renderer->SetBackground(colors->GetColor3d("White").GetData());
     // Создание вырезов (notch)
     vtkSmartPointer<vtkCubeSource> notchSource = createNotch(notchWidth, notchHeight, notchDepth);
@@ -392,11 +465,36 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure3(double height, double r
     POVactor->SetMapper(POVmapper);
     POVactor->GetProperty()->SetColor(0.18,0.565,0.98);
 
+    vtkNew<vtkVectorText> text_h;
+    text_h->SetText("h");
+    vtkNew<vtkActor> TextActor_H;
+    vtkNew<vtkPolyDataMapper> TextMapper_H;
+    TextMapper_H->SetInputConnection(text_h->GetOutputPort());
+    TextActor_H->SetMapper(TextMapper_H);
+    TextActor_H->SetScale(0.05, 0.05, 0.05);
+    //TextActor_A->RotateX(270);
+    TextActor_H->SetPosition(-0.025, -(height) - 0.05, radius);
+    TextActor_H->SetPosition(-(radius), -0.025, radius);
+    TextActor_H->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+
+    vtkNew<vtkVectorText> text_r;
+    text_r->SetText("r");
+    vtkNew<vtkActor> TextActor_R;
+    vtkNew<vtkPolyDataMapper> TextMapper_R;
+    TextMapper_R->SetInputConnection(text_r->GetOutputPort());
+    TextActor_R->SetMapper(TextMapper_R);
+    TextActor_R->SetScale(0.05, 0.05, 0.05);
+    TextActor_R->RotateX(90);
+    TextActor_R->SetPosition(-0.025, -(height/2), -(radius) - 0.05);
+    TextActor_R->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+
     // Создание рендера
     vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
     renderer->AddActor(cylinderActor);
     renderer->AddActor(notchActor);
     renderer->AddActor(POVactor);
+    renderer->AddActor(TextActor_H);
+    renderer->AddActor(TextActor_R);
     renderer->SetBackground(colors->GetColor3d("White").GetData());
 
     return renderer;

@@ -14,9 +14,12 @@
 #include <vtkNamedColors.h>
 #include <vtkSphereSource.h>
 #include <vtkCubeSource.h>
+#include <vtkTextActor3D.h>
+#include <vtkTextProperty.h>
 #include <QLineEdit>
 #include <QPalette>
 
+#include <vtkVectorText.h>
 
 class ModelsFigure
 {
