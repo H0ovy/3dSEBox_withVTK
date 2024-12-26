@@ -6,7 +6,7 @@ ModelsFigure::ModelsFigure()
 }
 
 vtkSmartPointer<vtkCubeSource> ModelsFigure::createRectangle(double width, double height, double length) {
-    vtkSmartPointer<vtkCubeSource> rectangleSource = vtkSmartPointer<vtkCubeSource>::New();
+    vtkNew<vtkCubeSource> rectangleSource;
     rectangleSource->SetYLength(height);
     rectangleSource->SetXLength(length);
     rectangleSource->SetZLength(width);
@@ -14,8 +14,9 @@ vtkSmartPointer<vtkCubeSource> ModelsFigure::createRectangle(double width, doubl
     return rectangleSource;
 }
 
+/// Создание выреза
 vtkSmartPointer<vtkCubeSource> ModelsFigure::createNotch(double notchWidth, double notchHeight, double notchDepth) {
-    vtkSmartPointer<vtkCubeSource> notchSource = vtkSmartPointer<vtkCubeSource>::New();
+    vtkNew<vtkCubeSource> notchSource;
     notchSource->SetYLength(notchHeight);
     notchSource->SetXLength(notchWidth);
     notchSource->SetZLength(notchDepth);
@@ -23,6 +24,7 @@ vtkSmartPointer<vtkCubeSource> ModelsFigure::createNotch(double notchWidth, doub
     return notchSource;
 }
 
+/// Функция для подсветки ошибок
 void ModelsFigure::highlightError(QLineEdit* lineEdit, bool isError)
 {
     QPalette palette;
@@ -49,7 +51,8 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure1(
 
     bool error_happened = false;
 
-    // Проверки и подсветка ошибок
+    ///{
+    /// Проверки и подсветка ошибок
     if (xShift + notchDepth >= length && xShift != 0)
     {
         highlightError(lineEditPosX, true);
@@ -110,47 +113,54 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure1(
     }
 
     after_error:
+    ///}
 
-    // Основной прямоугольный параллелепипед
-    vtkSmartPointer<vtkCubeSource> rectangleSource = vtkSmartPointer<vtkCubeSource>::New();
+    ///{
+    /// Основной прямоугольный параллелепипед
+    vtkNew<vtkCubeSource> rectangleSource ;
     rectangleSource->SetXLength(length); // Длина
     rectangleSource->SetYLength(height); // Высота
     rectangleSource->SetZLength(width);  // Ширина
     rectangleSource->Update();
 
-    vtkSmartPointer<vtkPolyDataMapper> rectangleMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    vtkNew<vtkPolyDataMapper> rectangleMapper;
     rectangleMapper->SetInputConnection(rectangleSource->GetOutputPort());
 
-    vtkSmartPointer<vtkActor> rectangleActor = vtkSmartPointer<vtkActor>::New();
+    vtkNew<vtkActor> rectangleActor;
     rectangleActor->SetMapper(rectangleMapper);
-    rectangleActor->GetProperty()->SetColor(0.498,0.337,0.851);
+    rectangleActor->GetProperty()->SetColor(0.498, 0.337, 0.851);
+    ///}
 
-    // Вырез (апертура)
-    vtkSmartPointer<vtkCubeSource> notchSource = vtkSmartPointer<vtkCubeSource>::New();
+    ///{
+    /// Вырез (апертура)
+    vtkNew<vtkCubeSource> notchSource;
     notchSource->SetXLength(notchDepth);  // Глубина выреза
     notchSource->SetYLength(notchHeight); // Высота выреза
     notchSource->SetZLength(notchWidth);  // Ширина выреза
     notchSource->Update();
 
-    vtkSmartPointer<vtkTransform> notchTransform = vtkSmartPointer<vtkTransform>::New();
+    vtkNew<vtkTransform> notchTransform;
     notchTransform->Translate(
         -(length / 2) + (notchDepth / 2) + xShift,  // Смещение по X
         -(height / 2) + (notchHeight / 2) + yShift, // Смещение по Y
         (width / 2) - 0.00099                       // Смещение по Z
         );
 
-    vtkSmartPointer<vtkTransformPolyDataFilter> notchTransformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+    vtkNew<vtkTransformPolyDataFilter> notchTransformFilter;
     notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
     notchTransformFilter->SetTransform(notchTransform);
     notchTransformFilter->Update();
 
-    vtkSmartPointer<vtkPolyDataMapper> notchMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    vtkNew<vtkPolyDataMapper> notchMapper;
     notchMapper->SetInputConnection(notchTransformFilter->GetOutputPort());
 
-    vtkSmartPointer<vtkActor> notchActor = vtkSmartPointer<vtkActor>::New();
+    vtkNew<vtkActor> notchActor;
     notchActor->SetMapper(notchMapper);
     notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+    ///}
 
+    ///{
+    /// Визуализация точки наблюдения
     vtkNew<vtkPolyDataMapper> POVmapper;
 
     vtkNew<vtkSphereSource> POVsource;
@@ -160,8 +170,11 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure1(
 
     vtkNew<vtkActor> POVactor;
     POVactor->SetMapper(POVmapper);
-    POVactor->GetProperty()->SetColor(0.18,0.565,0.98);
+    POVactor->GetProperty()->SetColor(0.18, 0.565, 0.98);
+    ///}
 
+    ///{
+    /// Текст - буква a
     vtkNew<vtkVectorText> text_a;
     text_a->SetText("a");
     vtkNew<vtkActor> TextActor_A;
@@ -169,10 +182,12 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure1(
     TextMapper_A->SetInputConnection(text_a->GetOutputPort());
     TextActor_A->SetMapper(TextMapper_A);
     TextActor_A->SetScale(0.05, 0.05, 0.05);
-    //TextActor_A->RotateX(270);
     TextActor_A->SetPosition(-0.025, -(height/2) - 0.06, width/2);
     TextActor_A->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+    ///}
 
+    ///{
+    /// Текст - буква b
     vtkNew<vtkVectorText> text_b;
     text_b->SetText("b");
     vtkNew<vtkActor> TextActor_B;
@@ -180,10 +195,12 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure1(
     TextMapper_B->SetInputConnection(text_b->GetOutputPort());
     TextActor_B->SetMapper(TextMapper_B);
     TextActor_B->SetScale(0.05, 0.05, 0.05);
-    //TextActor_B->RotateX(270);
     TextActor_B->SetPosition(-(length/2) - 0.06 , -0.025, width/2);
     TextActor_B->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+    ///}
 
+    ///{
+    /// Текст - буква d
     vtkNew<vtkVectorText> text_d;
     text_d->SetText("d");
     vtkNew<vtkActor> TextActor_D;
@@ -194,9 +211,11 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure1(
     TextActor_D->RotateY(270);
     TextActor_D->SetPosition(-(length/2), -(height/2) - 0.06, -0.025);
     TextActor_D->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+    ///}
 
 
-    // Настройка рендера
+    ///{
+    /// Настройка рендера
     vtkNew<vtkRenderer> renderer;
     renderer->AddActor(rectangleActor);
     renderer->AddActor(notchActor);
@@ -205,8 +224,7 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure1(
     renderer->AddActor(TextActor_B);
     renderer->AddActor(TextActor_D);
     renderer->SetBackground(colors->GetColor3d("White").GetData());
-
-
+    ///}
 
     return std::pair<vtkSmartPointer<vtkRenderer>, bool>(renderer, error_happened);
 }
@@ -227,6 +245,7 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
 
     bool error_happened = false;
 
+    ///{
     /// Проверка пересечений и ошибок
     if (notchHeight >= height)
     {
@@ -317,8 +336,10 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
     }
 
     after_error:
+    ///}
 
-    // Создание прямоугольника
+    ///{
+    /// Создание прямоугольника
     vtkSmartPointer<vtkCubeSource> rectangleSource = createRectangle(width, height, length);
     vtkNew<vtkPolyDataMapper> rectangleMapper;
     rectangleMapper->SetInputConnection(rectangleSource->GetOutputPort());
@@ -326,7 +347,10 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
     vtkNew<vtkActor> rectangleActor;
     rectangleActor->SetMapper(rectangleMapper);
     rectangleActor->GetProperty()->SetColor(0.498,0.337,0.851);
+    ///}
 
+    ///{
+    /// Визуализация точки наблюдения
     vtkNew<vtkPolyDataMapper> POVmapper;
 
     vtkNew<vtkSphereSource> POVsource;
@@ -337,7 +361,10 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
     vtkNew<vtkActor> POVactor;
     POVactor->SetMapper(POVmapper);
     POVactor->GetProperty()->SetColor(0.18,0.565,0.98);
+    ///}
 
+    ///{
+    /// Текст - буква a
     vtkNew<vtkVectorText> text_a;
     text_a->SetText("a");
     vtkNew<vtkActor> TextActor_A;
@@ -345,10 +372,12 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
     TextMapper_A->SetInputConnection(text_a->GetOutputPort());
     TextActor_A->SetMapper(TextMapper_A);
     TextActor_A->SetScale(0.05, 0.05, 0.05);
-    //TextActor_A->RotateX(270);
     TextActor_A->SetPosition(-0.025, -(height/2) - 0.06, width/2);
     TextActor_A->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+    ///}
 
+    ///{
+    /// Текст - буква b
     vtkNew<vtkVectorText> text_b;
     text_b->SetText("b");
     vtkNew<vtkActor> TextActor_B;
@@ -356,10 +385,12 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
     TextMapper_B->SetInputConnection(text_b->GetOutputPort());
     TextActor_B->SetMapper(TextMapper_B);
     TextActor_B->SetScale(0.05, 0.05, 0.05);
-    //TextActor_B->RotateX(270);
     TextActor_B->SetPosition(-(length/2) - 0.06 , -0.025, width/2);
     TextActor_B->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+    ///}
 
+    ///{
+    /// Текст - буква d
     vtkNew<vtkVectorText> text_d;
     text_d->SetText("d");
     vtkNew<vtkActor> TextActor_D;
@@ -370,7 +401,10 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
     TextActor_D->RotateY(270);
     TextActor_D->SetPosition(-(length/2), -(height/2) - 0.06, -0.025);
     TextActor_D->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+    ///}
 
+    ///{
+    /// Создание рендера
     vtkNew<vtkRenderer> renderer;
     renderer->AddActor(rectangleActor);
     renderer->AddActor(POVactor);
@@ -378,7 +412,10 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
     renderer->AddActor(TextActor_B);
     renderer->AddActor(TextActor_D);
     renderer->SetBackground(colors->GetColor3d("White").GetData());
-    // Создание вырезов (notch)
+    ///}
+
+    ///{
+    /// Создание вырезов (notch)
     vtkSmartPointer<vtkCubeSource> notchSource = createNotch(notchWidth, notchHeight, notchDepth);
 
     double gridOffsetX = -(totalGridWidth / 2.0) + (notchWidth / 2.0);
@@ -392,10 +429,10 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
             double notchPosX = gridOffsetX + col * horizontalSpacing;
             double notchPosY = gridOffsetY + row * verticalSpacing;
 
-            vtkSmartPointer<vtkTransform> notchTransform = vtkSmartPointer<vtkTransform>::New();
+            vtkNew<vtkTransform> notchTransform;
             notchTransform->Translate(notchPosX, notchPosY, (width / 2.0) - 0.001);
 
-            vtkSmartPointer<vtkTransformPolyDataFilter> notchTransformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+            vtkNew<vtkTransformPolyDataFilter> notchTransformFilter;
             notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
             notchTransformFilter->SetTransform(notchTransform);
             notchTransformFilter->Update();
@@ -409,6 +446,7 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
             renderer->AddActor(notchActor);
         }
     }
+    ///}
 
     return std::pair<vtkSmartPointer<vtkRenderer>, bool>(renderer, error_happened);
 }
@@ -417,43 +455,48 @@ std::pair<vtkSmartPointer<vtkRenderer>, bool> ModelsFigure::createFigure2(
 // Метод для создания цилиндра с апертурой
 vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure3(double height, double radius, double notchHeight, double notchRadius, double POV_P)
 {
-    // Проверка и корректировка параметров
     if (notchRadius >= radius)
         notchRadius = radius / 4;
 
-    // Создание цилиндра
-    vtkSmartPointer<vtkCylinderSource> cylinderSource = vtkSmartPointer<vtkCylinderSource>::New();
+    ///{
+    /// Создание цилиндра
+    vtkNew<vtkCylinderSource> cylinderSource;
     cylinderSource->SetHeight(height);
     cylinderSource->SetRadius(radius);
     cylinderSource->SetResolution(40);
 
-    vtkSmartPointer<vtkPolyDataMapper> cylinderMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    vtkNew<vtkPolyDataMapper> cylinderMapper;
     cylinderMapper->SetInputConnection(cylinderSource->GetOutputPort());
 
-    vtkSmartPointer<vtkActor> cylinderActor = vtkSmartPointer<vtkActor>::New();
+    vtkNew<vtkActor> cylinderActor;
     cylinderActor->SetMapper(cylinderMapper);
     cylinderActor->GetProperty()->SetColor(0.498,0.337,0.851);
+    ///}
 
-    // Создание апертуры
-    vtkSmartPointer<vtkCylinderSource> notchSource = vtkSmartPointer<vtkCylinderSource>::New();
+    ///{
+    /// Создание апертуры
+    vtkNew<vtkCylinderSource> notchSource;
     notchSource->SetHeight(notchHeight);
     notchSource->SetRadius(notchRadius);
     notchSource->SetResolution(40);
 
-    vtkSmartPointer<vtkTransform> notchTransform = vtkSmartPointer<vtkTransform>::New();
+    vtkNew<vtkTransform> notchTransform;
     notchTransform->Translate(0, -(height / 2 - notchHeight / 2 + 0.001), 0);
 
-    vtkSmartPointer<vtkTransformPolyDataFilter> notchTransformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+    vtkNew<vtkTransformPolyDataFilter> notchTransformFilter;
     notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
     notchTransformFilter->SetTransform(notchTransform);
 
-    vtkSmartPointer<vtkPolyDataMapper> notchMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    vtkNew<vtkPolyDataMapper> notchMapper;
     notchMapper->SetInputConnection(notchTransformFilter->GetOutputPort());
 
-    vtkSmartPointer<vtkActor> notchActor = vtkSmartPointer<vtkActor>::New();
+    vtkNew<vtkActor> notchActor;
     notchActor->SetMapper(notchMapper);
     notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+    ///}
 
+    ///{
+    /// Визуализация точки наблюдения
     vtkNew<vtkPolyDataMapper> POVmapper;
 
     vtkNew<vtkSphereSource> POVsource;
@@ -464,7 +507,10 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure3(double height, double r
     vtkNew<vtkActor> POVactor;
     POVactor->SetMapper(POVmapper);
     POVactor->GetProperty()->SetColor(0.18,0.565,0.98);
+    ///}
 
+    ///{
+    /// Текст - буква h
     vtkNew<vtkVectorText> text_h;
     text_h->SetText("h");
     vtkNew<vtkActor> TextActor_H;
@@ -472,11 +518,14 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure3(double height, double r
     TextMapper_H->SetInputConnection(text_h->GetOutputPort());
     TextActor_H->SetMapper(TextMapper_H);
     TextActor_H->SetScale(0.05, 0.05, 0.05);
-    //TextActor_A->RotateX(270);
     TextActor_H->SetPosition(-0.025, -(height) - 0.05, radius);
     TextActor_H->SetPosition(-(radius), -0.025, radius);
     TextActor_H->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+    ///}
 
+
+    ///{
+    /// Текст - буква r
     vtkNew<vtkVectorText> text_r;
     text_r->SetText("r");
     vtkNew<vtkActor> TextActor_R;
@@ -487,15 +536,18 @@ vtkSmartPointer<vtkRenderer> ModelsFigure::createFigure3(double height, double r
     TextActor_R->RotateX(90);
     TextActor_R->SetPosition(-0.025, -(height/2), -(radius) - 0.05);
     TextActor_R->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
+    ///}
 
-    // Создание рендера
-    vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
+    ///{
+    /// Создание рендера
+    vtkNew<vtkRenderer> renderer;
     renderer->AddActor(cylinderActor);
     renderer->AddActor(notchActor);
     renderer->AddActor(POVactor);
     renderer->AddActor(TextActor_H);
     renderer->AddActor(TextActor_R);
     renderer->SetBackground(colors->GetColor3d("White").GetData());
+    ///}
 
     return renderer;
 }
