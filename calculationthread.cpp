@@ -9,57 +9,61 @@ double CalculationThread::GetCalculation(int i, double tempFreq, double pp)
 {
     switch (i)
     {
-    // для 1 аппертуры
+        ///{
+        // 1 аппертура
         case 0:
-            return rob_calcs.calcSomeRob(iterations, m_fMinVal, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, m_pVal, m_mVal, m_nVal);
+            return func_calcs.calcSomeRob(iterations, m_fMinVal, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, m_pVal, m_mVal, m_nVal);
         case 1:
-            return rob_calcs.calcSomeRob(iterations, tempFreq, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, pp, m_mVal, m_nVal);
+            return func_calcs.calcSomeRob(iterations, tempFreq, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, pp, m_mVal, m_nVal);
 
 
         case 2:
-            return rob_calcs.calcsomeYongshi(iterations,m_fMinVal, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, m_pVal, m_xVal, m_yVal, m_nVal, m_mVal, m_sigmaVal, m_integralVal, m_RungeVal);
+            return func_calcs.calcsomeYongshi(iterations,m_fMinVal, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, m_pVal, m_xVal, m_yVal, m_nVal, m_mVal, m_sigmaVal, m_integralVal, m_RungeVal);
         case 3:
-            return rob_calcs.calcsomeYongshi(iterations,tempFreq, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, pp, m_xVal, m_yVal, m_nVal, m_mVal, m_sigmaVal, m_integralVal, m_RungeVal);
+            return func_calcs.calcsomeYongshi(iterations,tempFreq, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, pp, m_xVal, m_yVal, m_nVal, m_mVal, m_sigmaVal, m_integralVal, m_RungeVal);
+        ///}
 
 
         case 4:
-            return rob_calcs.calcsomePoad(iterations, m_fMinVal, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, m_pVal, m_xVal, m_nVal, m_mVal, m_sigmaVal, m_integralVal, m_RungeVal);
+            return func_calcs.calcsomePoad(iterations, m_fMinVal, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, m_pVal, m_xVal, m_nVal, m_mVal, m_sigmaVal, m_integralVal, m_RungeVal);
         case 5:
-            return rob_calcs.calcsomePoad(iterations, tempFreq, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, pp, m_xVal, m_nVal, m_mVal, m_sigmaVal, m_integralVal, m_RungeVal);
+            return func_calcs.calcsomePoad(iterations, tempFreq, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, pp, m_xVal, m_nVal, m_mVal, m_sigmaVal, m_integralVal, m_RungeVal);
 
         case 6:
-            return rob_calcs.calcsomeAKC(iterations, m_fMinVal, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, m_pVal, m_xVal, m_yVal,  m_sigmaVal, m_mVal, m_nVal);
+            return func_calcs.calcsomeAKC(iterations, m_fMinVal, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, m_pVal, m_xVal, m_yVal,  m_sigmaVal, m_mVal, m_nVal);
         case 7:
-            return rob_calcs.calcsomeAKC(iterations, tempFreq, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, pp, m_xVal, m_yVal, m_sigmaVal, m_mVal, m_nVal);
+            return func_calcs.calcsomeAKC(iterations, tempFreq, m_tVal, m_wVal, m_bVal, m_lVal, m_aVal, m_dVal, pp, m_xVal, m_yVal, m_sigmaVal, m_mVal, m_nVal);
 
         case 8:
-            return rob_calcs.calcNIEetal(iterations, m_fMinVal, m_wVal, m_lVal, m_xVal, m_yVal, m_pVal, m_dVal, m_bVal, m_aVal, m_tVal, m_mVal, m_nVal);
+            return func_calcs.calcNIEetal(iterations, m_fMinVal, m_wVal, m_lVal, m_xVal, m_yVal, m_pVal, m_dVal, m_bVal, m_aVal, m_tVal, m_mVal, m_nVal);
         case 9:
-            return rob_calcs.calcNIEetal(iterations, tempFreq, m_wVal, m_lVal, m_xVal, m_yVal, pp, m_dVal, m_bVal, m_aVal, m_tVal, m_mVal, m_nVal);
+            return func_calcs.calcNIEetal(iterations, tempFreq, m_wVal, m_lVal, m_xVal, m_yVal, pp, m_dVal, m_bVal, m_aVal, m_tVal, m_mVal, m_nVal);
 
-
-        // для массива
+        ///{
+        // Массив
         case 10:
-            return rob_calcs.ren(iterations, m_fMinVal, m_aVal, m_bVal, m_pVal, m_dVal, m_tVal, m_wVal, m_lVal, m_napVal, m_mapVal, m_mVal, m_nVal);
+            return func_calcs.ren(iterations, m_fMinVal, m_aVal, m_bVal, m_pVal, m_dVal, m_tVal, m_wVal, m_lVal, m_napVal, m_mapVal, m_mVal, m_nVal);
         case 11:
-            return rob_calcs.ren(iterations, tempFreq, m_aVal, m_bVal, pp, m_dVal, m_tVal, m_wVal, m_lVal, m_napVal, m_mapVal, m_mVal, m_nVal);
+            return func_calcs.ren(iterations, tempFreq, m_aVal, m_bVal, pp, m_dVal, m_tVal, m_wVal, m_lVal, m_napVal, m_mapVal, m_mVal, m_nVal);
 
         case 12:
-            return rob_calcs.Dehkhoda_2007(iterations, m_fMinVal, m_aVal, m_bVal, m_pVal, m_dVal, m_wVal, m_napVal, m_mapVal, m_mVal, m_nVal, m_dhVal, m_dvVal);
+            return func_calcs.Dehkhoda_2007(iterations, m_fMinVal, m_aVal, m_bVal, m_pVal, m_dVal, m_wVal, m_napVal, m_mapVal, m_mVal, m_nVal, m_dhVal, m_dvVal);
         case 13:
-            return rob_calcs.Dehkhoda_2007(iterations, tempFreq, m_aVal, m_bVal, pp, m_dVal, m_wVal, m_napVal, m_mapVal, m_mVal, m_nVal, m_dhVal, m_dvVal);
+            return func_calcs.Dehkhoda_2007(iterations, tempFreq, m_aVal, m_bVal, pp, m_dVal, m_wVal, m_napVal, m_mapVal, m_mVal, m_nVal, m_dhVal, m_dvVal);
 
         case 14:
-            return rob_calcs.Nie_2017(iterations, m_fMinVal, m_aVal, m_bVal, m_pVal, m_dVal, m_tVal, m_wVal, m_napVal, m_mapVal, m_mVal, m_nVal, m_dhVal, m_dvVal);
+            return func_calcs.Nie_2017(iterations, m_fMinVal, m_aVal, m_bVal, m_pVal, m_dVal, m_tVal, m_wVal, m_napVal, m_mapVal, m_mVal, m_nVal, m_dhVal, m_dvVal);
         case 15:
-            return rob_calcs.Nie_2017(iterations, tempFreq, m_aVal, m_bVal, pp, m_dVal, m_tVal, m_wVal, m_napVal, m_mapVal, m_mVal, m_nVal, m_dhVal, m_dvVal);
+            return func_calcs.Nie_2017(iterations, tempFreq, m_aVal, m_bVal, pp, m_dVal, m_tVal, m_wVal, m_napVal, m_mapVal, m_mVal, m_nVal, m_dhVal, m_dvVal);
+        ///}
 
-
-        //  для цилиндра
+        ///{
+        //  Цилиндр
         case 16:
-            return rob_calcs.WAMGetal(iterations, m_fMinVal, m_apVal, m_rVal, m_tVal, m_dVal, m_pVal);
+            return func_calcs.WAMGetal(iterations, m_fMinVal, m_apVal, m_rVal, m_tVal, m_dVal, m_pVal);
         case 17:
-            return rob_calcs.WAMGetal(iterations, tempFreq, m_apVal, m_rVal, m_tVal, m_dVal, pp);
+            return func_calcs.WAMGetal(iterations, tempFreq, m_apVal, m_rVal, m_tVal, m_dVal, pp);
+        ///}
     }
     return 0;
 }
@@ -73,7 +77,7 @@ void CalculationThread::CalcThread(double tempValue, int K)
     double progres_val = 100 / (m_nPointsVal * (m_dVal - m_pVal) / perc_step);
     bool abort = false;
     size = 0;
-    tempValue = GetCalculation(K, 0, 0);
+    // tempValue = GetCalculation(K, 0, 0);
     dfreq=(m_fMaxVal - m_fMinVal) / m_nPointsVal;
     double pp = m_pVal;
 
@@ -150,7 +154,7 @@ void CalculationThread::run()
                 QString line = in.readLine();
                 if(line.contains("#")) continue;
                 QStringList list1 = line.split('\t');
-                tempValue=rob_calcs.calcMethod2(m_aVal, m_dVal, m_bVal,pp, list1.at(0).toDouble(), multiVal, list1.at(1).toDouble(), m_mVal, m_nVal);
+                tempValue = func_calcs.calcMethod2(m_aVal, m_dVal, m_bVal,pp, list1.at(0).toDouble(), multiVal, list1.at(1).toDouble(), m_mVal, m_nVal);
                 mItems.append({ list1.at(0).toDouble()*multiVal, tempValue, pp});
                 size = size + 1;
              }

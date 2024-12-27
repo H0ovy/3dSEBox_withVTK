@@ -1,5 +1,5 @@
-#ifndef ROBCALCULATION_H
-#define ROBCALCULATION_H
+#ifndef CALCULATION_FUNCS_H
+#define CALCULATION_FUNCS_H
 
 #include <thread>
 #include <future>
@@ -11,13 +11,13 @@
 #include <QDebug>
 #include <QThread>
 
-class robCalculation
+class Calculation_Funcs
 {
 public:
     std::thread Opti_Calc;
 public:
-    robCalculation(): Opti_Calc(){}
-    ~robCalculation() {}
+    Calculation_Funcs(): Opti_Calc(){}
+    ~Calculation_Funcs() {}
      double fact(double N);
        double calcSomeRob(int* iter,double freq, double t, double w, double b, double L, double a, double d, double p,double m,double n);
        double func(double x, double y, double w, double L, double m, double n, double a, double b);
@@ -41,4 +41,4 @@ public:
        double WAMGetal(int* iter, double freq, double R, double r, double t, double d, double p);
 };
 
-#endif // ROBCALCULATION_H
+#endif // CALCULATION_FUNCS_H

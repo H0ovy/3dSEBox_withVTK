@@ -2,12 +2,12 @@
 #define CALCULATIONTHREAD_H
 
 #include <QThread>
-#include "robcalculation.h"
+#include "calculation_funcs.h"
 #include "QDate"
 #include <QTimer>
 #include "QThread"
 #include "QDebug"
-#include "robcalculation.h"
+#include "calculation_funcs.h"
 #include <QElapsedTimer>
 #include <cmath>
 #include <omp.h>
@@ -44,7 +44,7 @@ public:
     void run();
 
     std::thread m_thread;
-    robCalculation rob_calcs;
+    Calculation_Funcs func_calcs;
     int size = 0;
     QVector<surfaceModelItem> toShow;
     QVector<surfaceModelItem> mItems;

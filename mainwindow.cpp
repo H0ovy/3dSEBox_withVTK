@@ -1024,7 +1024,9 @@ void MainWindow::on_pushButton_Save_clicked()
 
 void MainWindow::on_pushButton_Reset_clicked()
 {
-    if (!surface->seriesList().isEmpty()) {
+    if (!surface->seriesList().isEmpty())
+    {
+        on_pushButton_3D_clicked();
         surface->removeSeries(series1);
         delete series1;
         mItems.clear();

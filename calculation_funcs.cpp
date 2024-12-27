@@ -1,4 +1,4 @@
-#include "robcalculation.h"
+#include "calculation_funcs.h"
 
 
 #define _USE_MATH_DEFINES
@@ -6,7 +6,7 @@
 using namespace std;
 typedef complex<double> dcomp;
 
-double robCalculation::WAMGetal(int* iter, double freq, double R, double r, double t, double d, double p){
+double Calculation_Funcs::WAMGetal(int* iter, double freq, double R, double r, double t, double d, double p){
     dcomp j(0.0,1.0);
     auto z0=120.0*M_PI;
     dcomp v0(1.0,0.0);
@@ -24,31 +24,31 @@ double robCalculation::WAMGetal(int* iter, double freq, double R, double r, doub
     ++(*iter);
     auto f=freq;
     auto lambda=c/f;
-    auto k0=2.0*M_PI/lambda;
+    // auto k0=2.0*M_PI/lambda;
 
     // Сопротивление стенки с апертурой
     dcomp zap=j*z0s*(r*sqpi/(4*R))*tan(f*r*sqpi*3.14/c);
 
-    auto lamc=2.0*M_PI*R/1.841; // для основного типа волн
+    // auto lamc=2.0*M_PI*R/1.841; // для основного типа волн
 
     // Преобразование в точку A
     dcomp v1=v0*zap/(z0+zap);
     dcomp z1=z0*zap/(z0+zap);
-    dcomp temp = 1.0-pow((lambda/lamc),2);
+    // dcomp temp = 1.0-pow((lambda/lamc),2);
 
     // Характеристический импеданс и постоянная распространения в корпусе
-    auto zg=z0/sqrt(temp);
-    auto kg=k0*sqrt(temp);
+    // auto zg=z0/sqrt(temp);
+    // auto kg=k0*sqrt(temp);
 
     // Преобразование в точку P
-    auto v2=v1/(cos(kg*p)+j*(z1/zg)*sin(kg*p));
-    auto z2=(z1+j*zg*tan(kg*p))/(1.0+j*(z1/zg)*tan(kg*p));
+    // auto v2=v1/(cos(kg*p)+j*(z1/zg)*sin(kg*p));
+    // auto z2=(z1+j*zg*tan(kg*p))/(1.0+j*(z1/zg)*tan(kg*p));
 
-    // Нагрузка
-    auto z3=j*zg*tan(kg*(d-p));
+    // // Нагрузка
+    // auto z3=j*zg*tan(kg*(d-p));
 
-    // Напряжение в точке P
-    auto vp=v2*z3/(z2+z3);
+    // // Напряжение в точке P
+    // auto vp=v2*z3/(z2+z3);
     QVector<double> bfr = {1.841,
                            2.405,
                            3.054,
@@ -89,7 +89,7 @@ double robCalculation::WAMGetal(int* iter, double freq, double R, double r, doub
 }
 
 
-double robCalculation::calcNIEetal(int* iter,double freq, double w, double l, double xbol, double ybol, double p, double d, double b, double a, double t, double m1, double n1){
+double Calculation_Funcs::calcNIEetal(int* iter,double freq, double w, double l, double xbol, double ybol, double p, double d, double b, double a, double t, double m1, double n1){
     auto mu0=4.0*3.14*pow(10,(-7));
     auto eps0=8.85*pow(10,(-12));
     auto m=1.0;
@@ -158,7 +158,7 @@ double robCalculation::calcNIEetal(int* iter,double freq, double w, double l, do
     }
     return -20*log10(abs(dcomp(2.0,0.0)*vp1/v0));
 }
-double robCalculation::calcSomeRob(int *iter, double freq, double t, double w, double b, double L, double a, double d, double p, double m, double n)
+double Calculation_Funcs::calcSomeRob(int *iter, double freq, double t, double w, double b, double L, double a, double d, double p, double m, double n)
 {
     auto c0 = 299792458;
     auto lambda = c0/freq;
@@ -180,20 +180,20 @@ double robCalculation::calcSomeRob(int *iter, double freq, double t, double w, d
     dcomp Ztmp = Z0 + Zap;
     dcomp v1 = v0 * Zap/Ztmp;
     dcomp Z1 = Z0 * Zap / Ztmp;
-    auto temp1 = pow((lambda/(2 * a)), 2);
-    auto tmp_zg = dcomp(1.0,0.0) - dcomp(temp1,0.0);
-    dcomp Zg = dcomp(z0,0) / ( sqrt(tmp_zg));
-    auto tmp_kg = dcomp(1.0,0.0) - dcomp(temp1,0.0);
-    dcomp kg = dcomp(k0, 0.0) * sqrt(tmp_kg);
-    dcomp temp22 = kg * p;
-    dcomp temp32 = cos(temp22) + dcomp(0.0, 1.0) * Z1 / Zg * sin(temp22);
-    dcomp v2 = v1 / temp32;
-    dcomp temp4 = tan(temp22);
-    dcomp Z_temp = dcomp(0.0, 1.0) *  Zg * temp4;
-    dcomp Z_temp2 = dcomp(0.0, 1.0) * Z1 * temp4/Zg;
-    dcomp Z2 = (Z1 + Z_temp) / (dcomp(1.0, 0.0) + Z_temp2);
-    dcomp Z3 = dcomp(0.0, 1.0) * Zg * tan(kg * (d - p));
-    dcomp vp = (v2 * Z3) / (Z2 + Z3);
+    // auto temp1 = pow((lambda/(2 * a)), 2);
+    // auto tmp_zg = dcomp(1.0,0.0) - dcomp(temp1,0.0);
+    // dcomp Zg = dcomp(z0,0) / ( sqrt(tmp_zg));
+    // auto tmp_kg = dcomp(1.0,0.0) - dcomp(temp1,0.0);
+    // dcomp kg = dcomp(k0, 0.0) * sqrt(tmp_kg);
+    // dcomp temp22 = kg * p;
+    // dcomp temp32 = cos(temp22) + dcomp(0.0, 1.0) * Z1 / Zg * sin(temp22);
+    // // dcomp v2 = v1 / temp32;
+    // dcomp temp4 = tan(temp22);
+    // dcomp Z_temp = dcomp(0.0, 1.0) *  Zg * temp4;
+    // dcomp Z_temp2 = dcomp(0.0, 1.0) * Z1 * temp4/Zg;
+    // dcomp Z2 = (Z1 + Z_temp) / (dcomp(1.0, 0.0) + Z_temp2);
+    // dcomp Z3 = dcomp(0.0, 1.0) * Zg * tan(kg * (d - p));
+    // dcomp vp = (v2 * Z3) / (Z2 + Z3);
 
 
     // Преобразование в точку A
@@ -220,23 +220,23 @@ double robCalculation::calcSomeRob(int *iter, double freq, double t, double w, d
     }
     return -20 * log10(abs(dcomp(2.0, 0.0) * vp1 / v0));
 }
-double robCalculation::func(double x, double y, double w, double L, double m, double n, double a, double b)
+double Calculation_Funcs::func(double x, double y, double w, double L, double m, double n, double a, double b)
 {
     double temp4 = (a-L)/2;
     double temp6=(b-w)/2;
     return sin((M_PI*m*x)/a) * sin((M_PI*m*(x-temp4))/L)* cos((M_PI*n*y)/b)* cos((M_PI*n*(y-temp6))/w);
 }
-double robCalculation::func2(double x, double m, double a, double L)
+double Calculation_Funcs::func2(double x, double m, double a, double L)
 {
     auto temp4=(a-L)/2;
     return (sin(M_PI*m*x/a) * sin((M_PI*m*(x-temp4))/L));
 }
-double robCalculation::func3(double y, double n, double b, double w)
+double Calculation_Funcs::func3(double y, double n, double b, double w)
 {
     auto temp6=(b-w)/2;
     return (cos(M_PI*n*y/b) * cos((M_PI*n*(y-temp6))/w));
 }
-double robCalculation::doubleintegral(int *iter,double a, double b, double c, double d, double nx, double ny, double w, double L, double m,double n)
+double Calculation_Funcs::doubleintegral(int *iter,double a, double b, double c, double d, double nx, double ny, double w, double L, double m,double n)
 {
     //variable to mesure the time of execution
     QElapsedTimer timer;
@@ -261,7 +261,7 @@ double robCalculation::doubleintegral(int *iter,double a, double b, double c, do
 }
 
 // 2018 Ivanov
-double robCalculation::ren(int *iter,double freq, double a, double b,double p, double d, double t, double w, double L, double nap, double map, double m,double n){
+double Calculation_Funcs::ren(int *iter,double freq, double a, double b,double p, double d, double t, double w, double L, double nap, double map, double m,double n){
     const double c=2.99792458*pow(10,8);
     ++(*iter);
     auto lambda=c/freq;
@@ -293,9 +293,9 @@ double robCalculation::ren(int *iter,double freq, double a, double b,double p, d
 
     // Преобразование в точку A
     dcomp v1=v0*zap/(z0+zap);
-    auto test1=(z0*zap);
-    auto test2= (z0+zap);
-    auto test3=test1/test2;
+    // auto test1=(z0*zap);
+    // auto test2= (z0+zap);
+    // auto test3=test1/test2;
     dcomp z1=(z0*zap)/(z0+zap);
     dcomp vpp(0,0); // суммарное напряжение в точке наблюдения
 
@@ -331,7 +331,7 @@ double robCalculation::ren(int *iter,double freq, double a, double b,double p, d
         }
     return (-20*log10(abs(dcomp(2.0,0.0)*vpp/v0)));
 }
-double robCalculation::fact(double N)
+double Calculation_Funcs::fact(double N)
 {
     if(N < 0) // если пользователь ввел отрицательное число
         return 0; // возвращаем ноль
@@ -340,7 +340,7 @@ double robCalculation::fact(double N)
     else // Во всех остальных случаях
         return N * fact(N - 1); // делаем рекурсию.
 }
-double robCalculation::Dehkhoda_2007(int *iter, double freq, double a, double b,double p, double d, double w, double nap, double map, double m,double n, double dh, double dv)
+double Calculation_Funcs::Dehkhoda_2007(int *iter, double freq, double a, double b,double p, double d, double w, double nap, double map, double m,double n, double dh, double dv)
 {
     auto dd=w;
     ++(*iter);
@@ -439,7 +439,7 @@ double robCalculation::Dehkhoda_2007(int *iter, double freq, double a, double b,
     return SEDeh;
 }
 
-double robCalculation::Nie_2017(int *iter, double freq, double a, double b,double p, double d, double t, double w, double nap, double map, double m,double n, double dh, double dv)
+double Calculation_Funcs::Nie_2017(int *iter, double freq, double a, double b,double p, double d, double t, double w, double nap, double map, double m,double n, double dh, double dv)
 {
     auto larr=dh+(map-1)*dh;
     auto warr=dv+(nap-1)*dv;
@@ -498,18 +498,18 @@ double robCalculation::Nie_2017(int *iter, double freq, double a, double b,doubl
     }
     return -20*log10(abs(dcomp(2.0,0.0)*vp1/v0));
 }
-double robCalculation::integral(double min, double max, double n, double m, double a, double L, int n_of_func)
+double Calculation_Funcs::integral(double min, double max, double n, double m, double a, double L, int n_of_func)
 {
     auto h = (max - min)/n;
     double result;
-    if(n_of_func==2)
+    if(n_of_func == 2)
     {
         result = 0.5 * (func2(min,m,a,L) + func2(max,m,a,L));
         for (int i=1; i<n; i++){
             result += func2(min + i*h,m,a,L);
         }
     }
-    else if(n_of_func==3)
+    else if(n_of_func == 3)
     {
         result = 0.5 * (func3(min,m,a,L) + func3(max,m,a,L));
         for (int i=1; i<n; i++){
@@ -519,7 +519,7 @@ double robCalculation::integral(double min, double max, double n, double m, doub
     result *= h;
     return result;
 }
-double robCalculation::calcsomeYongshi(int *iter,double freq, double t, double w, double b, double L, double a, double d, double p, double xbol, double ybol, double n, double m, double sigma, double intval, bool RungeVal)
+double Calculation_Funcs::calcsomeYongshi(int *iter,double freq, double t, double w, double b, double L, double a, double d, double p, double xbol, double ybol, double n, double m, double sigma, double intval, bool RungeVal)
 {
     auto c0 = 299792458;
     auto mue_r =  1.000023;
@@ -556,17 +556,17 @@ double robCalculation::calcsomeYongshi(int *iter,double freq, double t, double w
     auto Cma=temp8/(xbol*ybol);
     dcomp temp9= (ZL+j*Z0s*tan(k0*L/2)) / (Z0s+j*ZL*tan(k0*L/2));
     dcomp Zap = Cma / 2 * j * Z0s * temp9;
-    auto temp10 = pow((lambda*m/(2*a)),2);
-    auto temp11 = pow((lambda*n/(2*b)),2);
-    dcomp tmp_zg = dcomp(1.0,0.0)-dcomp(temp11,0.0)-dcomp(temp10,0.0);
-    dcomp Zg = Z0 / ( sqrt(tmp_zg));
-    dcomp kg = dcomp(k0,0.0)*sqrt(tmp_zg);
-    dcomp temp12 = kg * p;
-    dcomp v2 = (v0 * Zap/(Z0 + Zap)) / (cos(temp12) + j*( Z0 * Zap / (Z0 + Zap))/Zg*sin(temp12));
-    dcomp Z21=( Z0 * Zap / (Z0 + Zap))+sqrt(dcomp(-1.0,0.0))*Zg*(tan((kg * p)));
-    dcomp Z22=1.0+sqrt(dcomp(-1.0,0.0))*(( Z0 * Zap / (Z0 + Zap))/Zg)*(tan((kg * p)));
-    dcomp Z3 = Zg*(ZL+j*Zg*tan(kg*(d-p)))/(Zg+j*ZL*tan(kg*(d-p)));
-    dcomp vp = (v2*Z3) / ((Z21/Z22)+Z3);
+    // auto temp10 = pow((lambda*m/(2*a)),2);
+    // auto temp11 = pow((lambda*n/(2*b)),2);
+    // dcomp tmp_zg = dcomp(1.0,0.0)-dcomp(temp11,0.0)-dcomp(temp10,0.0);
+    // dcomp Zg = Z0 / ( sqrt(tmp_zg));
+    // dcomp kg = dcomp(k0,0.0)*sqrt(tmp_zg);
+    // dcomp temp12 = kg * p;
+    // dcomp v2 = (v0 * Zap/(Z0 + Zap)) / (cos(temp12) + j*( Z0 * Zap / (Z0 + Zap))/Zg*sin(temp12));
+    // dcomp Z21=( Z0 * Zap / (Z0 + Zap))+sqrt(dcomp(-1.0,0.0))*Zg*(tan((kg * p)));
+    // dcomp Z22=1.0+sqrt(dcomp(-1.0,0.0))*(( Z0 * Zap / (Z0 + Zap))/Zg)*(tan((kg * p)));
+    // dcomp Z3 = Zg*(ZL+j*Zg*tan(kg*(d-p)))/(Zg+j*ZL*tan(kg*(d-p)));
+    // dcomp vp = (v2*Z3) / ((Z21/Z22)+Z3);
 
 
 
@@ -599,7 +599,7 @@ double robCalculation::calcsomeYongshi(int *iter,double freq, double t, double w
 
 }
 
-double robCalculation::CalcTemp(int *iter, bool RungeVal, double xmax, double xmin, double temp6, double m, double a, double L, double intval)
+double Calculation_Funcs::CalcTemp(int *iter, bool RungeVal, double xmax, double xmin, double temp6, double m, double a, double L, double intval)
 {
     if(RungeVal)
     {
@@ -620,7 +620,7 @@ double robCalculation::CalcTemp(int *iter, bool RungeVal, double xmax, double xm
     return temp6;
 }
 
-double robCalculation::calcsomePoad(int *iter,double freq, double t, double w, double b, double L, double a, double d, double p, double xbol, double n, double m, double sigma, double intval, bool RungeVal)
+double Calculation_Funcs::calcsomePoad(int *iter,double freq, double t, double w, double b, double L, double a, double d, double p, double xbol, double n, double m, double sigma, double intval, bool RungeVal)
 {
     auto c0 = 299792458;
     ++(*iter);
@@ -651,18 +651,18 @@ double robCalculation::calcsomePoad(int *iter,double freq, double t, double w, d
     dcomp Zap = 0.5 * Cma  * j * Z0s * temp9;
     dcomp Ztmp = Z0 + Zap;
     auto v1 = v0 * Zap/Ztmp;
-    auto Z1 = Z0 * Zap / Ztmp;
-    auto temp10 = pow((lambda*m/(2*a)),2);
-    auto temp11 = pow((lambda*n/(2*b)),2);
-    dcomp tmp_zg = dcomp(1.0,0.0)-dcomp(temp11,0.0)-dcomp(temp10,0.0);
-    dcomp Zg = Z0 / ( sqrt(tmp_zg));
-    auto kg = dcomp(k0,0.0)*sqrt(tmp_zg);
-    auto temp12 = kg * p;
-    auto v2 = v1 / (cos(temp12) + j*(Z1/Zg)*sin(temp12)*sin((m*M_PI*p)/a));
-    auto temp13 = tan(temp12);
-    dcomp Z2 = (Z1+j*Zg*temp13) / (dcomp(1.0,0.0)+j*Z1/Zg*temp13);
-    dcomp Z3 = j*Zg*tan(kg*(d-p));
-    auto vp = (v2*Z3) / (Z2+Z3);
+    // auto Z1 = Z0 * Zap / Ztmp;
+    // auto temp10 = pow((lambda*m/(2*a)),2);
+    // auto temp11 = pow((lambda*n/(2*b)),2);
+    // dcomp tmp_zg = dcomp(1.0,0.0)-dcomp(temp11,0.0)-dcomp(temp10,0.0);
+    // dcomp Zg = Z0 / ( sqrt(tmp_zg));
+    // auto kg = dcomp(k0,0.0)*sqrt(tmp_zg);
+    // auto temp12 = kg * p;
+    // auto v2 = v1 / (cos(temp12) + j*(Z1/Zg)*sin(temp12)*sin((m*M_PI*p)/a));
+    // auto temp13 = tan(temp12);
+    // dcomp Z2 = (Z1+j*Zg*temp13) / (dcomp(1.0,0.0)+j*Z1/Zg*temp13);
+    // dcomp Z3 = j*Zg*tan(kg*(d-p));
+    // auto vp = (v2*Z3) / (Z2+Z3);
 
     // Преобразование в точку A
     dcomp z1=Z0*Zap/(Z0+Zap);
@@ -691,7 +691,7 @@ double robCalculation::calcsomePoad(int *iter,double freq, double t, double w, d
     return -20*log10(abs(dcomp(2.0,0.0)*vp1/v0));
 }
 
-double robCalculation::calcsomePoadPlus(int *iter,double freq, double t, double w, double b, double L, double a, double d, double p, double xbol, double ybol, double n, double m, double sigma, double intval, bool RungeVal)
+double Calculation_Funcs::calcsomePoadPlus(int *iter,double freq, double t, double w, double b, double L, double a, double d, double p, double xbol, double ybol, double n, double m, double sigma, double intval, bool RungeVal)
 {
     auto c0 = 299792458;
     auto mue_r =  1.000023;
@@ -745,7 +745,7 @@ double robCalculation::calcsomePoadPlus(int *iter,double freq, double t, double 
     return SE2;
 }
 
-double robCalculation::calcsomePoadMultiple(int *iter,double freq, double t, double w, double b, double L, double a, double d, double p, double xbol, double ybol, double n, double m, double sigma, double intval, bool RungeVal)
+double Calculation_Funcs::calcsomePoadMultiple(int *iter,double freq, double t, double w, double b, double L, double a, double d, double p, double xbol, double ybol, double n, double m, double sigma, double intval, bool RungeVal)
 {
     ++(*iter);
     auto c0 = 299792458;
@@ -800,7 +800,7 @@ double robCalculation::calcsomePoadMultiple(int *iter,double freq, double t, dou
     return SE1;
 }
 
-double robCalculation::calcsomeAKC(int *iter,double freq,double t,double w,double b,double L,double a, double d,double p,double xbol,double ybol,double sigma, double m, double n)
+double Calculation_Funcs::calcsomeAKC(int *iter,double freq,double t,double w,double b,double L,double a, double d,double p,double xbol,double ybol,double sigma, double m, double n)
 {
     ++(*iter);
     auto c0 = 299792458;
@@ -828,17 +828,17 @@ double robCalculation::calcsomeAKC(int *iter,double freq,double t,double w,doubl
     dcomp Zap = Cma / dcomp(2.0,0.0) * j * Z0s * temp8;
     dcomp Ztmp = Z0 + Zap;
     dcomp v1 = v0 * Zap/Ztmp;
-    dcomp Z1 = Z0 * Zap / Ztmp;
-    auto temp9 = pow((lambda/(2*a)),2);
-    auto tmp_zg = dcomp(1.0,0.0)-dcomp(temp9,0.0);
-    dcomp Zg = Z0 / ( sqrt(tmp_zg));
-    dcomp kg = dcomp(k0,0.0)*sqrt(tmp_zg);
-    dcomp temp10 = kg * p;
-    dcomp v2 = v1 / (cos(temp10) + j*Z1/Zg*sin(temp10));
-    dcomp temp11 = tan(temp10);
-    dcomp Z2 = (Z1+j*Zg*temp11) / (dcomp(1.0,0.0)+j*Z1/Zg*temp11);
-    dcomp Z3 = Zg*(ZL+j*Zg*tan(kg*(d-p)))/(Zg+j*ZL*tan(kg*(d-p)));
-    dcomp vp = (v2*Z3) / (Z2+Z3);
+    // dcomp Z1 = Z0 * Zap / Ztmp;
+    // auto temp9 = pow((lambda/(2*a)),2);
+    // auto tmp_zg = dcomp(1.0,0.0)-dcomp(temp9,0.0);
+    // dcomp Zg = Z0 / ( sqrt(tmp_zg));
+    // dcomp kg = dcomp(k0,0.0)*sqrt(tmp_zg);
+    // dcomp temp10 = kg * p;
+    // dcomp v2 = v1 / (cos(temp10) + j*Z1/Zg*sin(temp10));
+    // dcomp temp11 = tan(temp10);
+    // dcomp Z2 = (Z1+j*Zg*temp11) / (dcomp(1.0,0.0)+j*Z1/Zg*temp11);
+    // dcomp Z3 = Zg*(ZL+j*Zg*tan(kg*(d-p)))/(Zg+j*ZL*tan(kg*(d-p)));
+    // dcomp vp = (v2*Z3) / (Z2+Z3);
 
     // Преобразование в точку A
     dcomp z1=Z0*Zap/(Z0+Zap);
@@ -868,7 +868,7 @@ double robCalculation::calcsomeAKC(int *iter,double freq,double t,double w,doubl
     return -20*log10(abs(dcomp(2.0,0.0)*vp1/v0));
 }
 //30.08.2018 Komnantov calculation method
-double robCalculation::calcMethod2(double a, double d, double b, double p, double fm, double mnoj, double S11, double m, double n){
+double Calculation_Funcs::calcMethod2(double a, double d, double b, double p, double fm, double mnoj, double S11, double m, double n){
     // IVANOV 1
     double c0 = 299792458.0;
     double f;
@@ -920,7 +920,7 @@ double robCalculation::calcMethod2(double a, double d, double b, double p, doubl
 
 }
 //30.08.2018 Komnantov calculation method
-double robCalculation::calcMethod(double a, double d, double b, double p, double fm, double mnoj, double S11){
+double Calculation_Funcs::calcMethod(double a, double d, double b, double p, double fm, double mnoj, double S11){
     auto c0 = 299792458.0;
     auto f = fm * mnoj;
     dcomp j(0.0,1.0);
@@ -929,7 +929,7 @@ double robCalculation::calcMethod(double a, double d, double b, double p, double
     //Волновое число
     auto k0 = 2.0*M_PI / lambda;
     dcomp kg = k0 * sqrt(1.0-pow(lambda/(dcomp(2.0,0.0)*a),2));
-    double Z0 = 50.0;
+    // double Z0 = 50.0;
     auto nu0 = 120.0 * M_PI;
     dcomp Zg = (nu0)/sqrt(1.0-pow(lambda/(dcomp(2.0,0.0)*a),2));
     dcomp Zsc = j* Zg * tan(kg*(d-p)); // 3.7204066053e-1i
@@ -943,7 +943,7 @@ double robCalculation::calcMethod(double a, double d, double b, double p, double
 
     return 20.0*log10(abs(x));
 }
-double robCalculation::calcsomeAKCintegral(int *iter,double freq, double t, double w, double b, double L, double a, double d, double p, double xbol, double ybol, double n, double m, double sigma, double intval, bool RungeVal)
+double Calculation_Funcs::calcsomeAKCintegral(int *iter,double freq, double t, double w, double b, double L, double a, double d, double p, double xbol, double ybol, double n, double m, double sigma, double intval, bool RungeVal)
 {
     auto c0 = 299792458; // константы подключить в общую структуру проекта
     auto mue_r =  1.000023; //------******--------

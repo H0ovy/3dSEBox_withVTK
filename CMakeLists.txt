@@ -20,8 +20,8 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        robcalculation.h
-        robcalculation.cpp
+        calculation_funcs.h
+        calculation_funcs.cpp
         calculationthread.h
         calculationthread.cpp
         modelsfigure.h
