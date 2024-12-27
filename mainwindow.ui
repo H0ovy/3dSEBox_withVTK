@@ -92,9 +92,9 @@ border: 1px solid #B692F6;
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>757</x>
-      <y>80</y>
-      <width>201</width>
+      <x>761</x>
+      <y>81</y>
+      <width>191</width>
       <height>31</height>
      </rect>
     </property>
@@ -1932,7 +1932,7 @@ color:white;
      <rect>
       <x>860</x>
       <y>120</y>
-      <width>97</width>
+      <width>91</width>
       <height>29</height>
      </rect>
     </property>
@@ -1965,6 +1965,46 @@ color:white;
     </property>
     <property name="text">
      <string>Сохранить</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_Reset">
+    <property name="geometry">
+     <rect>
+      <x>762</x>
+      <y>120</y>
+      <width>91</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>100</width>
+      <height>100</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton{
+background-color: rgba(127,86,217,128);
+border:none;
+border-radius: 5px;
+color:white;
+}
+QPushButton:pressed{
+background-color: rgba(127,86,217,255);
+border:none;
+border-radius: 5px;
+color:white;
+
+}</string>
+    </property>
+    <property name="text">
+     <string>Сбросить</string>
     </property>
    </widget>
   </widget>

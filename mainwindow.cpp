@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
     ui->GRAPH_2D->hide();
     ui->pushButton_Save->hide();
+    ui->pushButton_Reset->hide();
     on_pushButton_Figure_1_clicked();
 
     CalcRAM();
@@ -165,6 +166,7 @@ void MainWindow::Create3DGraph()
     //surface->axisZ()->setRange(mItems[0].z - 0.5, mItems[(ui->lineEdit_POV_NofPoints->text().toInt() * ui->lineEdit_Source_NofPoints->text().toInt()) - 1].z + 0.5);
 
     connect(series1, SIGNAL(selectedPointChanged(const QPoint)), this, SLOT(PointSelected(const QPoint)));
+    ui->pushButton_Reset->show();
 
 }
 
@@ -1016,6 +1018,17 @@ void MainWindow::on_pushButton_Save_clicked()
         QMessageBox box;
         box.setText("Файл не выбран");
         box.exec();
+    }
+}
+
+
+void MainWindow::on_pushButton_Reset_clicked()
+{
+    if (!surface->seriesList().isEmpty()) {
+        surface->removeSeries(series1);
+        delete series1;
+        mItems.clear();
+        ui->pushButton_Reset->hide();
     }
 }
 
