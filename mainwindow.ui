@@ -10,25 +10,25 @@
     <x>0</x>
     <y>0</y>
     <width>1500</width>
-    <height>950</height>
+    <height>1000</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1500</width>
-    <height>950</height>
+    <width>2</width>
+    <height>2</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>1500</width>
-    <height>971</height>
+    <width>16777215</width>
+    <height>16777215</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -50,21 +50,21 @@ border: 1px solid #B692F6;
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
    <property name="minimumSize">
     <size>
-     <width>1500</width>
-     <height>950</height>
+     <width>2</width>
+     <height>2</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>1500</width>
-     <height>950</height>
+     <width>1920</width>
+     <height>1080</height>
     </size>
    </property>
    <property name="layoutDirection">
@@ -76,45 +76,463 @@ border: 1px solid #B692F6;
    <property name="styleSheet">
     <string notr="true"/>
    </property>
-   <widget class="QVTKOpenGLNativeWidget" name="qvtkWidget_3D_MODEL">
-    <property name="geometry">
-     <rect>
-      <x>960</x>
-      <y>540</y>
-      <width>471</width>
-      <height>311</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>761</x>
-      <y>81</y>
-      <width>191</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QPushButton" name="pushButton_2D">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>100</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton{
+   <layout class="QHBoxLayout" name="horizontalLayout_8">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <property name="leftMargin">
+         <number>70</number>
+        </property>
+        <property name="rightMargin">
+         <number>150</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="label_3DSEBOX">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>26</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>3D SE BOX</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="spacing">
+           <number>20</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <property name="spacing">
+             <number>10</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_TIME">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>1</horstretch>
+                <verstretch>1</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>16</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::TextFormat::AutoText</enum>
+              </property>
+              <property name="pixmap">
+               <pixmap resource="resources.qrc">:/pic/resources/pic/image(14) 1.svg</pixmap>
+              </property>
+              <property name="scaledContents">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_TIME_amount">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>1</horstretch>
+                <verstretch>1</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>86</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Open Sans</family>
+                <pointsize>14</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>0.01 сек.</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <property name="spacing">
+             <number>10</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_RAM">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>1</horstretch>
+                <verstretch>1</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>16</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="pixmap">
+               <pixmap resource="resources.qrc">:/pic/resources/pic/image(15) 1.svg</pixmap>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_RAM_amount">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>1</horstretch>
+                <verstretch>1</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Open Sans</family>
+                <pointsize>14</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>800 МБ</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_calc_diff">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>1</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>161</width>
+              <height>52</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>161</width>
+              <height>52</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Open Sans</family>
+              <pointsize>14</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Сложность выч.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressBar_diff">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>1</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>99</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Open Sans</family>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QProgressBar{
+border: 2px solid #D5D7DA;
+border-radius:5px;
+background:#EEEEEE;
+text-align:center;
+color:#E9D7FE;
+}
+
+QProgressBar::chunk{
+background-color:#7F56D9;
+border-radius:5px;
+}</string>
+            </property>
+            <property name="value">
+             <number>56</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <property name="topMargin">
+           <number>50</number>
+          </property>
+          <property name="rightMargin">
+           <number>300</number>
+          </property>
+          <property name="spacing">
+           <number>3</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>1</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Open Sans</family>
+              <pointsize>14</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Моделирование</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <layout class="QGridLayout" name="gridLayout">
+            <property name="horizontalSpacing">
+             <number>3</number>
+            </property>
+            <property name="verticalSpacing">
+             <number>0</number>
+            </property>
+            <item row="0" column="2">
+             <widget class="QPushButton" name="pushButton_Figure_3">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>1</horstretch>
+                <verstretch>1</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>70</width>
+                <height>70</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/pic/resources/pic/Group-2.svg</normaloff>
+                <disabledoff>:/pic/resources/pic/Group-2.svg</disabledoff>
+                <activeoff>:/pic/resources/pic/Group2-1.svg</activeoff>:/pic/resources/pic/Group-2.svg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>120</width>
+                <height>66</height>
+               </size>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QPushButton" name="pushButton_Figure_2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>1</horstretch>
+                <verstretch>1</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>132</width>
+                <height>72</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/pic/resources/pic/Group3.svg</normaloff>
+                <normalon>:/pic/resources/pic/Group3.svg</normalon>
+                <disabledoff>:/pic/resources/pic/Group3.svg</disabledoff>
+                <disabledon>:/pic/resources/pic/Group3.svg</disabledon>
+                <activeoff>:/pic/resources/pic/Group-1.svg</activeoff>:/pic/resources/pic/Group3.svg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>120</width>
+                <height>66</height>
+               </size>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QPushButton" name="pushButton_Figure_1">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>1</horstretch>
+                <verstretch>1</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>132</width>
+                <height>72</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/pic/resources/pic/Group.svg</normaloff>
+                <disabledoff>:/pic/resources/pic/Group.svg</disabledoff>
+                <activeoff>:/pic/resources/pic/Group1-1.svg</activeoff>
+                <selectedoff>:/pic/resources/pic/Group.svg</selectedoff>:/pic/resources/pic/Group.svg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>120</width>
+                <height>66</height>
+               </size>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <property name="leftMargin">
+           <number>125</number>
+          </property>
+          <property name="topMargin">
+           <number>40</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>3</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="pushButton_3D">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>1</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
 background-color: rgba(127,86,217,128);
 border:none;
 border-radius: 5px;
@@ -127,22 +545,34 @@ border-radius: 5px;
 color:white;
 
 }</string>
-       </property>
-       <property name="text">
-        <string>2D</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_3D">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton{
+            </property>
+            <property name="text">
+             <string>3D</string>
+            </property>
+            <property name="autoDefault">
+             <bool>false</bool>
+            </property>
+            <property name="default">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="pushButton_Save">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>1</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
 background-color: rgba(127,86,217,128);
 border:none;
 border-radius: 5px;
@@ -155,1746 +585,1466 @@ border-radius: 5px;
 color:white;
 
 }</string>
-       </property>
-       <property name="text">
-        <string>3D</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QChartView" name="GRAPH_2D">
-    <property name="geometry">
-     <rect>
-      <x>960</x>
-      <y>80</y>
-      <width>471</width>
-      <height>411</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>true</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: transparent;</string>
-    </property>
-   </widget>
-   <widget class="QGraphicsView" name="GRAPH_3D">
-    <property name="geometry">
-     <rect>
-      <x>960</x>
-      <y>80</y>
-      <width>471</width>
-      <height>411</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>true</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: transparent;</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>10</y>
-      <width>1441</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_7">
-     <property name="spacing">
-      <number>120</number>
-     </property>
-     <property name="leftMargin">
-      <number>50</number>
-     </property>
-     <property name="rightMargin">
-      <number>50</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="label_3DSEBOX">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>26</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>3D SE BOX</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <property name="spacing">
-        <number>20</number>
-       </property>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <property name="spacing">
-          <number>10</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="label_TIME">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>30</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>16</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::TextFormat::AutoText</enum>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="resources.qrc">:/pic/resources/pic/image(14) 1.svg</pixmap>
-           </property>
-           <property name="scaledContents">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_TIME_amount">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="font">
-            <font>
-             <family>Open Sans</family>
-             <pointsize>14</pointsize>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>0.01 сек.</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <property name="spacing">
-          <number>10</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="label_RAM">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>16</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="resources.qrc">:/pic/resources/pic/image(15) 1.svg</pixmap>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_RAM_amount">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="font">
-            <font>
-             <family>Open Sans</family>
-             <pointsize>14</pointsize>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>800 МБ</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <widget class="QLabel" name="label_calc_diff">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <family>Open Sans</family>
-           <pointsize>14</pointsize>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Сложность выч.</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QProgressBar" name="progressBar_diff">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <family>Open Sans</family>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QProgressBar{
-border: 2px solid #D5D7DA;
-border-radius:5px;
-background:#EEEEEE;
-text-align:center;
-color:#E9D7FE;
+            </property>
+            <property name="text">
+             <string>Сохранить</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="pushButton_2D">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>1</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgba(127,86,217,128);
+border:none;
+border-radius: 5px;
+color:white;
 }
+QPushButton:pressed{
+background-color: rgba(127,86,217,255);
+border:none;
+border-radius: 5px;
+color:white;
 
-QProgressBar::chunk{
-background-color:#7F56D9;
-border-radius:5px;
 }</string>
-         </property>
-         <property name="value">
-          <number>56</number>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>70</y>
-      <width>412</width>
-      <height>111</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_3">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>14</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Моделирование</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="1">
-        <widget class="QPushButton" name="pushButton_Figure_2">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/pic/resources/pic/Group3.svg</normaloff>
-           <normalon>:/pic/resources/pic/Group3.svg</normalon>
-           <disabledoff>:/pic/resources/pic/Group3.svg</disabledoff>
-           <disabledon>:/pic/resources/pic/Group3.svg</disabledon>
-           <activeoff>:/pic/resources/pic/Group-1.svg</activeoff>:/pic/resources/pic/Group3.svg</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>120</width>
-           <height>66</height>
-          </size>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QPushButton" name="pushButton_Figure_1">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/pic/resources/pic/Group.svg</normaloff>
-           <disabledoff>:/pic/resources/pic/Group.svg</disabledoff>
-           <activeoff>:/pic/resources/pic/Group1-1.svg</activeoff>
-           <selectedoff>:/pic/resources/pic/Group.svg</selectedoff>:/pic/resources/pic/Group.svg</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>120</width>
-           <height>66</height>
-          </size>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="pushButton_Figure_3">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/pic/resources/pic/Group-2.svg</normaloff>
-           <disabledoff>:/pic/resources/pic/Group-2.svg</disabledoff>
-           <activeoff>:/pic/resources/pic/Group2-1.svg</activeoff>:/pic/resources/pic/Group-2.svg</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>120</width>
-           <height>66</height>
-          </size>
-         </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>520</y>
-      <width>881</width>
-      <height>340</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_Source">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>14</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Источник</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_POV">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>14</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Точка наблюдения</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0">
-      <widget class="QLabel" name="label_Source_n">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Режим возбуждения n</string>
-       </property>
-       <property name="statusTip">
-        <string/>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">vertical-align: bottom;</string>
-       </property>
-       <property name="text">
-        <string>n</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="QLineEdit" name="lineEdit_POV_step">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>100</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="label_Source_Fmax">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Максимальное значение частоты</string>
-       </property>
-       <property name="text">
-        <string>F max</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1">
-      <widget class="QLineEdit" name="lineEdit_Source_m">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>1</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="label_Source_NofPoints">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Кол-во точек</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="2">
-      <widget class="QLabel" name="label_POV_func">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>14</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Функция</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QLabel" name="label_POV_NofPoints">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Кол-во точек наблюдения</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_POV_P">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>P</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="2">
-      <widget class="QComboBox" name="comboBox_func">
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <item>
-        <property name="text">
-         <string>Robinson et al.</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Shi et al.</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Po`ad et al.</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Komnatnov M.E.</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Nie et al. (waveguide diagrams)</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="2" column="3">
-      <widget class="QCheckBox" name="checkBox_Runge">
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Правило Рунге</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_Source_Fmin">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Минимальное значение частоты</string>
-       </property>
-       <property name="text">
-        <string>F min</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="0">
-      <widget class="QLineEdit" name="lineEdit_Source_n">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>0</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="3">
-      <widget class="QCheckBox" name="checkBox_File">
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Загрузка из файла</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="1">
-      <widget class="QLabel" name="label_Source_m">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>Режим возбуждения m</string>
-       </property>
-       <property name="text">
-        <string>m</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLineEdit" name="lineEdit_POV_NofPoints">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QLineEdit{
-border: 1px solid #D5D7DA;
+            </property>
+            <property name="text">
+             <string>2D</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="pushButton_Reset">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>1</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color: rgba(127,86,217,128);
+border:none;
 border-radius: 5px;
+color:white;
 }
-QLineEdit:focus{
-border: 1px solid #B692F6;
-}</string>
-       </property>
-       <property name="text">
-        <string>10</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="lineEdit_Source_Fmax">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>1e+09</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLineEdit" name="lineEdit_POV_P">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>0.15</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QLabel" name="label_POV_step">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>14</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Шаг интегрирования</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="2">
-      <widget class="QComboBox" name="comboBox_herz">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <item>
-        <property name="text">
-         <string>Гц</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>МГц</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>ГГц</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QLineEdit" name="lineEdit_Source_NofPoints">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QLineEdit{
-border: 1px solid #D5D7DA;
+QPushButton:pressed{
+background-color: rgba(127,86,217,255);
+border:none;
 border-radius: 5px;
-}
-QLineEdit:focus{
-border: 1px solid #B692F6;
-}</string>
-       </property>
-       <property name="text">
-        <string>1000</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLineEdit" name="lineEdit_Source_Fmin">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>1e+06</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="3">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QLabel" name="label_Calc_time_2">
-         <property name="font">
-          <font>
-           <family>Open Sans</family>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Время вычислений:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_Iter_amount_2">
-         <property name="font">
-          <font>
-           <family>Open Sans</family>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Кол-во итераций:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QLabel" name="label_Calc_time">
-           <property name="font">
-            <font>
-             <family>Open Sans</family>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Прогресс выч.</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QProgressBar" name="progressBar_calc">
-           <property name="font">
-            <font>
-             <family>Open Sans</family>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QProgressBar{
-border: 2px solid #D5D7DA;
-border-radius:5px;
-background:#EEEEEE;
-text-align:center;
-color:#E9D7FE;
-}
+color:white;
 
-QProgressBar::chunk{
-background-color:#7F56D9;
-border-radius:5px;
 }</string>
-           </property>
-           <property name="value">
-            <number>56</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>200</y>
-      <width>881</width>
-      <height>309</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_4">
-     <item row="1" column="1">
-      <widget class="QLabel" name="label_size_b">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Z в декартовой системе координат&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>B</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="lineEdit_size_b">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QLineEdit{
+            </property>
+            <property name="text">
+             <string>Сбросить</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>450</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>3</number>
+        </property>
+        <item row="7" column="1">
+         <widget class="QLineEdit" name="lineEdit_aperture_width">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>0.012</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="label_size_d">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Y в декартовой системе координат&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>D</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="2">
+         <widget class="QLabel" name="label_pos_y">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Y</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2" colspan="2">
+         <widget class="QLabel" name="label_pos">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>1000</width>
+            <height>1000</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>14</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Расположение</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QLabel" name="label_aperture_width">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ширина</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0">
+         <widget class="QLabel" name="label_col">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>120</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>14</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Количество апертур</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_size_a">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>83</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <italic>false</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;X в декартовой системе координат&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>A</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Толщина</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="1">
+         <widget class="QLineEdit" name="lineEdit_col_horizontally">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>7</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="4">
+         <widget class="QLabel" name="label_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>14</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Корпус (в м.)</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLineEdit" name="lineEdit_size_a">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>0.3</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="2">
+         <widget class="QLineEdit" name="lineEdit_pos_y">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>0.06</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLineEdit" name="lineEdit_figure_thickness">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QLineEdit{
 border: 1px solid #D5D7DA;
 border-radius: 5px;
 }
 QLineEdit:focus{
 border: 1px solid #B692F6;
 }</string>
-       </property>
-       <property name="text">
-        <string>0.12</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLineEdit" name="lineEdit_size_a">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>0.3</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_aperture_height">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Высота</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Толщина</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="label_size_d">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Y в декартовой системе координат&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>D</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="3">
-      <widget class="QLabel" name="label_vertically">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Верт.</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="2">
-      <widget class="QLineEdit" name="lineEdit_pos_y">
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>0.06</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1">
-      <widget class="QLineEdit" name="lineEdit_aperture_width">
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>0.012</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="2" colspan="2">
-      <widget class="QLabel" name="label_pos">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>1000</width>
-         <height>1000</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>14</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Расположение</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="3">
-      <widget class="QLineEdit" name="lineEdit_col_vertically">
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>3</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QLabel" name="label_aperture_width">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Ширина</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="2">
-      <widget class="QLabel" name="label_pos_y">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Y</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="3">
-      <widget class="QLineEdit" name="lineEdit_pos_vertically">
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>0.02</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="0">
-      <widget class="QLineEdit" name="lineEdit_pos_x">
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>0.15</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1">
-      <widget class="QLineEdit" name="lineEdit_col_horizontally">
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>7</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_aperture">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>1200</width>
-         <height>1200</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>14</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Апертура</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLineEdit" name="lineEdit_aperture_height">
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>0.012</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" colspan="4">
-      <widget class="QLabel" name="label_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>14</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Корпус (в м.)</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QLineEdit" name="lineEdit_size_d">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>0.3</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_size_a">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>83</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <italic>false</italic>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;X в декартовой системе координат&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>A</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="2">
-      <widget class="QLineEdit" name="lineEdit_pos_horizontally">
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>0.02</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLineEdit" name="lineEdit_figure_thickness">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QLineEdit{
+          </property>
+          <property name="text">
+           <string>0.0015</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="label_aperture_height">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Высота</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QLineEdit" name="lineEdit_size_d">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>0.3</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="3">
+         <widget class="QLineEdit" name="lineEdit_col_vertically">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>3</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="3">
+         <widget class="QLabel" name="label_vertically">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Верт.</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="2">
+         <widget class="QLabel" name="label_horizontally">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Гор.</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="label_size_b">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Z в декартовой системе координат&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>B</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="0">
+         <widget class="QLineEdit" name="lineEdit_pos_x">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>0.15</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="2">
+         <widget class="QLineEdit" name="lineEdit_pos_horizontally">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>0.02</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="0">
+         <widget class="QLabel" name="label_pos_x">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>X</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="3">
+         <widget class="QLineEdit" name="lineEdit_pos_vertically">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>0.02</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="lineEdit_size_b">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QLineEdit{
 border: 1px solid #D5D7DA;
 border-radius: 5px;
 }
 QLineEdit:focus{
 border: 1px solid #B692F6;
 }</string>
-       </property>
-       <property name="text">
-        <string>0.0015</string>
-       </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_col">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>120</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>14</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Количество апертур</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="2">
-      <widget class="QLabel" name="label_horizontally">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Гор.</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0">
-      <widget class="QLabel" name="label_pos_x">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>83</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Open Sans</family>
-         <pointsize>10</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>X</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QPushButton" name="pushButtonCalcStart">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>880</y>
-      <width>150</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="maximumSize">
-     <size>
-      <width>150</width>
-      <height>200</height>
-     </size>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton{
+          </property>
+          <property name="text">
+           <string>0.12</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="label_aperture">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>1200</width>
+            <height>1200</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>14</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Апертура</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <widget class="QLineEdit" name="lineEdit_aperture_height">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>83</width>
+            <height>37</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>0.012</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <property name="sizeConstraint">
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+        </property>
+        <property name="rightMargin">
+         <number>100</number>
+        </property>
+        <property name="spacing">
+         <number>3</number>
+        </property>
+        <item row="3" column="3">
+         <widget class="QCheckBox" name="checkBox_File">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Загрузка из файла</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QComboBox" name="comboBox_herz">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <item>
+           <property name="text">
+            <string>Гц</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>МГц</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>ГГц</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="10" column="2">
+         <widget class="QComboBox" name="comboBox_func">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <item>
+           <property name="text">
+            <string>Robinson et al.</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Shi et al.</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Po`ad et al.</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Komnatnov M.E.</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Nie et al. (waveguide diagrams)</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLineEdit" name="lineEdit_POV_step">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>100</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="2">
+         <widget class="QLabel" name="label_POV_func">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>14</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Функция</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QLineEdit" name="lineEdit_Source_NofPoints">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QLineEdit{
+border: 1px solid #D5D7DA;
+border-radius: 5px;
+}
+QLineEdit:focus{
+border: 1px solid #B692F6;
+}</string>
+          </property>
+          <property name="text">
+           <string>1000</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="1">
+         <widget class="QLineEdit" name="lineEdit_Source_m">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>1</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_POV_P">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>P</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="1">
+         <widget class="QLabel" name="label_Source_m">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Режим возбуждения m</string>
+          </property>
+          <property name="text">
+           <string>m</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="lineEdit_Source_Fmax">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>1e+09</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLineEdit" name="lineEdit_Source_Fmin">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>1e+06</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_Source">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>14</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Источник</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLineEdit" name="lineEdit_POV_P">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>0.15</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="0">
+         <widget class="QLabel" name="label_Source_n">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Режим возбуждения n</string>
+          </property>
+          <property name="statusTip">
+           <string/>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">vertical-align: bottom;</string>
+          </property>
+          <property name="text">
+           <string>n</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="label_Source_NofPoints">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Кол-во точек</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <widget class="QLabel" name="label_POV">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>14</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Точка наблюдения</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="0">
+         <widget class="QLineEdit" name="lineEdit_Source_n">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLabel" name="label_POV_NofPoints">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Кол-во точек наблюдения</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QLabel" name="label_POV_step">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>14</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Шаг интегрирования</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_Source_Fmin">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Минимальное значение частоты</string>
+          </property>
+          <property name="text">
+           <string>F min</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QCheckBox" name="checkBox_Runge">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Правило Рунге</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLineEdit" name="lineEdit_POV_NofPoints">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QLineEdit{
+border: 1px solid #D5D7DA;
+border-radius: 5px;
+}
+QLineEdit:focus{
+border: 1px solid #B692F6;
+}</string>
+          </property>
+          <property name="text">
+           <string>10</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="label_Source_Fmax">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>10</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="toolTip">
+           <string>Максимальное значение частоты</string>
+          </property>
+          <property name="text">
+           <string>F max</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="0">
+         <widget class="QPushButton" name="pushButtonCalcStart">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>300</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LayoutDirection::LeftToRight</enum>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton{
 background-color: rgba(127,86,217,128);
 border:none;
 border-radius: 10px;
@@ -1913,102 +2063,217 @@ border-radius: 10px;
 color:white;
 
 }</string>
-    </property>
-    <property name="text">
-     <string>Вычислить</string>
-    </property>
-    <property name="autoDefault">
-     <bool>false</bool>
-    </property>
-    <property name="default">
-     <bool>false</bool>
-    </property>
-    <property name="flat">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_Save">
-    <property name="geometry">
-     <rect>
-      <x>860</x>
-      <y>120</y>
-      <width>91</width>
-      <height>29</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="maximumSize">
-     <size>
-      <width>100</width>
-      <height>100</height>
-     </size>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton{
-background-color: rgba(127,86,217,128);
-border:none;
-border-radius: 5px;
-color:white;
+          </property>
+          <property name="text">
+           <string>Вычислить</string>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="default">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="1">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>3</number>
+          </property>
+          <property name="sizeConstraint">
+           <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_Calc_time_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>1</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Open Sans</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Время вычислений:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_Iter_amount_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>1</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Open Sans</family>
+              <pointsize>10</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>Кол-во итераций:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QLabel" name="label_Calc_time">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>1</horstretch>
+                <verstretch>1</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Open Sans</family>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Прогресс выч.</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QProgressBar" name="progressBar_calc">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>1</horstretch>
+                <verstretch>1</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>28</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Open Sans</family>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QProgressBar{
+border: 2px solid #D5D7DA;
+border-radius:5px;
+background:#EEEEEE;
+text-align:center;
+color:#E9D7FE;
 }
-QPushButton:pressed{
-background-color: rgba(127,86,217,255);
-border:none;
-border-radius: 5px;
-color:white;
 
+QProgressBar::chunk{
+background-color:#7F56D9;
+border-radius:5px;
 }</string>
-    </property>
-    <property name="text">
-     <string>Сохранить</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_Reset">
-    <property name="geometry">
-     <rect>
-      <x>762</x>
-      <y>120</y>
-      <width>91</width>
-      <height>29</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="maximumSize">
-     <size>
-      <width>100</width>
-      <height>100</height>
-     </size>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton{
-background-color: rgba(127,86,217,128);
-border:none;
-border-radius: 5px;
-color:white;
-}
-QPushButton:pressed{
-background-color: rgba(127,86,217,255);
-border:none;
-border-radius: 5px;
-color:white;
-
-}</string>
-    </property>
-    <property name="text">
-     <string>Сбросить</string>
-    </property>
-   </widget>
+              </property>
+              <property name="value">
+               <number>56</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QChartView" name="GRAPH_2D">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>2</horstretch>
+            <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="autoFillBackground">
+           <bool>true</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: transparent;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGraphicsView" name="GRAPH_3D">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>2</horstretch>
+            <verstretch>2</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="autoFillBackground">
+           <bool>true</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: transparent;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QVTKOpenGLNativeWidget" name="qvtkWidget_3D_MODEL">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="autoFillBackground">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <customwidgets>
   <customwidget>

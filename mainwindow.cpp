@@ -51,10 +51,11 @@ MainWindow::MainWindow(QWidget *parent)
     surface->setShadowQuality(QAbstract3DGraph::ShadowQualityNone);
 
     container = QWidget::createWindowContainer(surface, this);
-    container->setMinimumSize(QSize(631, 400));
+    //container->setMinimumSize(QSize(631, 400));
     QHBoxLayout *layout = new QHBoxLayout();
     ui->GRAPH_3D->setLayout(layout);
     layout->addWidget(container);
+    setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 }
 
 
@@ -285,7 +286,7 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     ui->label_size_b->setToolTip("Z в декартовой системе координат");
     ui->label_pos_x->setText("Гор.");
     ui->label_pos_y->setText("Верт.");
-    ui->label_pos->setText("Расстояние между центрами апертур");
+    ui->label_pos->setText("Расстояние между центрами");
     ui->label_aperture_height->setText("Высота");
 
     // ui->lineEdit_pos_x->hide();
