@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/pic">
+        <file>resources/pic/image(14) 1.svg</file>
+        <file>resources/pic/Group.svg</file>
+        <file>resources/pic/Group-1.svg</file>
+        <file>resources/pic/Group-2.svg</file>
+        <file>resources/pic/image(15) 1.svg</file>
+        <file>resources/pic/Group3.svg</file>
+        <file>resources/pic/Group1-1.svg</file>
+        <file>resources/pic/Group2-1.svg</file>
+    </qresource>
+</RCC>

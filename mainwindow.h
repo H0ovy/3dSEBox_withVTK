@@ -1,4 +1,3 @@
-﻿// mainwindow.h
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -12,13 +11,18 @@
 #include <QtCharts/QValueAxis>
 #include <QMessageBox>
 #include <vtkTransformPolyDataFilter.h>
+#include <QFileDialog>
 
 #include <QDebug>
 #include <cmath>
 
+#include "modelsfigure.h"
+#include "calculationthread.h"
+#include "herzformatter.h"
 #include <vtkBooleanOperationPolyDataFilter.h>
 #include <vtkBox.h>
 #include <vtkTransform.h>
+
 //график
 #include <QVTKOpenGLNativeWidget.h>
 #include <vtkGenericOpenGLRenderWindow.h>
@@ -45,10 +49,21 @@
 #include <vtkAxisActor2D.h>
 #include <vtkCubeAxesActor2D.h>
 
+#include <QtDataVisualization/Q3DSurface>
+#include <QtDataVisualization/QSurfaceDataArray>
+#include <QtDataVisualization/QSurfaceDataRow>
+#include <QtDataVisualization/QSurfaceDataItem>
+#include <QHBoxLayout>
+#include <QWidget>
+#include <QVector3D>
+#include <QVector>
+#include <QSize>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
+
 
 class MainWindow : public QMainWindow
 {
@@ -58,8 +73,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void Create2DGraph(int num);
+    void Create3DGraph();
+
 private slots:
-               ///Графики
+    ///Графики
     void on_pushButton_2D_clicked();
     void on_pushButton_3D_clicked();
 
@@ -67,6 +85,10 @@ private slots:
     void on_pushButton_Figure_3_clicked();
     void on_pushButton_Figure_1_clicked();
     void on_pushButton_Figure_2_clicked();
+
+    void create_figure_1();
+    void create_figure_2();
+    void create_figure_3();
 
     ///Изменение геометрии
     void on_lineEdit_size_a_textChanged(const QString &arg1);
@@ -89,19 +111,61 @@ private slots:
 
     void on_lineEdit_pos_vertically_textChanged(const QString &arg1);
 
+    void on_pushButtonCalcStart_clicked();
+
+    void CalcRAM();
+    void CalcTime();
+    void CalcDif();
+
+    void UpdateProgress(double val);
+    void PrintCalcTime(double val);
+    void PrintCalcIter(double val);
+    void UpdateGUI(QVector<surfaceModelItem> gui);
+
+    void PointSelected(const QPoint &position);
+
+    void on_lineEdit_POV_NofPoints_textChanged(const QString &arg1);
+
+    void on_lineEdit_Source_NofPoints_textChanged(const QString &arg1);
+
+    void on_comboBox_func_currentTextChanged(const QString &arg1);
+
+    void on_lineEdit_POV_P_textChanged(const QString &arg1);
+
+    void on_pushButton_Save_clicked();
+
+    void on_pushButton_Reset_clicked();
+
 private:
     Ui::MainWindow *ui;
-    vtkSmartPointer<vtkCylinderSource> cylinderSource;
-    vtkSmartPointer<vtkCubeSource> rectangleSource;
-    vtkSmartPointer<vtkActor> cylinderActor;
 
-    void updateCylinder(double radius, double height);
     bool graph_2d_exists = false;
     QLineSeries *series;
     QChartView *chartView;
     int figure;
 
     vtkNew<vtkNamedColors> colors;
+    ModelsFigure modelsFigure;
+    CalculationThread* calc_thread;
+    QVector<surfaceModelItem> mItems;
+
+    QSurface3DSeries *series1;
+    QChart *chart;
+    Q3DSurface *surface;
+    QWidget *container;
+
+    HerzFormatter *hzf;
+
+    bool error_occured = false;
+
+    double m_nPointsVal;
+
+    int RAM;
+    int Difficulty;
+    double Time;
+
+    int SelectedPoint;
+
 };
 
 #endif // MAINWINDOW_H

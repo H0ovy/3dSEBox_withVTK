@@ -7,360 +7,347 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    ui->progressBar_calc->setRange(0, 6666);
+    for (int i = 0; i < ui->gridLayout_4->count(); ++i) {
+        QLayoutItem *item = ui->gridLayout_4->itemAt(i);
+        if (item && item->widget()) {
+            ui->gridLayout_4->setAlignment(item->widget(), Qt::AlignLeft);
+        }
+    }
+    for (int i = 0; i < ui->gridLayout_2->count(); ++i) {
+        QLayoutItem *item = ui->gridLayout_2->itemAt(i);
+        if (item && item->widget()) {
+            ui->gridLayout_2->setAlignment(item->widget(), Qt::AlignLeft);
+        }
+    }
     ui->GRAPH_2D->hide();
+    ui->pushButton_Save->hide();
+    ui->pushButton_Reset->hide();
     on_pushButton_Figure_1_clicked();
-    on_pushButton_2D_clicked();
 
+    CalcRAM();
+    CalcTime();
+    CalcDif();
+
+    hzf = new HerzFormatter();
+
+    surface = new Q3DSurface();
+    surface->axisX()->setFormatter(hzf);
+
+    surface->axisZ()->setLabelFormat("%.5f");
+    surface->axisY()->setLabelFormat("%d");
+    surface->axisX()->setLabelFormat("%f");
+
+    surface->axisX()->setTitle("Частота, Гц");
+    surface->axisY()->setTitle("ЭЭ, дБ");
+    surface->axisZ()->setTitle("Точка наблюдения, м");
+
+    surface->axisX()->setTitleVisible(true);
+    surface->axisY()->setTitleVisible(true);
+    surface->axisZ()->setTitleVisible(true);
+
+    surface->setHorizontalAspectRatio(0.8);
+
+    surface->setShadowQuality(QAbstract3DGraph::ShadowQualityNone);
+
+    container = QWidget::createWindowContainer(surface, this);
+    QHBoxLayout *layout = new QHBoxLayout();
+    ui->GRAPH_3D->setLayout(layout);
+    layout->addWidget(container);
+    //setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 }
+
+
+void MainWindow::PointSelected(const QPoint &position)
+{
+    if (position.x() < 0){
+        return;
+    }
+    Create2DGraph(position.x());
+}
+
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+void MainWindow::Create2DGraph(int num)
+{
+    series = new QLineSeries();
+
+    QChart *chart = new QChart();
+
+    SelectedPoint = num * calc_thread->m_nPointsVal;
+
+    for (int i = 0; i < m_nPointsVal; ++i)
+    {
+        double x = mItems[SelectedPoint + i].x;
+        double y = mItems[SelectedPoint + i].y;
+        series->append(x, y);
+    }
+
+    series->setPen(QPen(QColor(46,144,250), 2, Qt::SolidLine));
+    chart->addSeries(series);
+    chart->setAnimationOptions(QChart::AllAnimations);
+
+    QValueAxis *axisX = new QValueAxis;
+    axisX->setTitleText("Частота, Гц");
+    axisX->setTitleFont(QFont("OpenSans", 12, QFont::Bold));
+    axisX->setLabelsFont(QFont("OpenSans", 10));
+    axisX->setLabelFormat("%i");
+    axisX->setTickCount(10);
+    chart->addAxis(axisX, Qt::AlignBottom);
+
+    QValueAxis *axisY = new QValueAxis;
+    axisY->setTitleText("ЭЭ, дБ");
+    axisY->setTitleFont(QFont("OpenSans", 12, QFont::Bold));
+    axisY->setLabelsFont(QFont("OpenSans", 10));
+    axisY->setLabelFormat("%.2f");
+    axisY->setTickCount(10);
+    chart->addAxis(axisY, Qt::AlignLeft);
+
+    series->attachAxis(axisX);
+    series->attachAxis(axisY);
+
+    ui->GRAPH_2D->setChart(chart);
+    ui->GRAPH_2D->setRenderHint(QPainter::Antialiasing);
+    chart->legend()->hide();
+}
+
+void MainWindow::Create3DGraph()
+{
+    if (!surface->seriesList().isEmpty()) {
+        surface->removeSeries(series1);
+        delete series1;
+    }
+
+    QSurfaceDataProxy *dataProxy = new QSurfaceDataProxy();
+    series1 = new QSurface3DSeries(dataProxy);
+
+    QSurfaceDataArray *dataArray = new QSurfaceDataArray();
+    dataArray->reserve(calc_thread->m_pstepVal);
+
+    int k = 0;
+
+    for (int i = 0; i < calc_thread->m_pstepVal; ++i)
+    {
+        QSurfaceDataRow *newRow = new QSurfaceDataRow(calc_thread->m_nPointsVal);
+        for (int j = 0; j < calc_thread->m_nPointsVal; ++j)
+        {
+            double x = mItems[k].x;
+            double y = mItems[k].y;
+            double z = mItems[k].z;
+            k++;
+
+            (*newRow)[j].setPosition(QVector3D(x, y, z));
+        }
+        dataArray->append(newRow);
+    }
+    dataProxy->resetArray(dataArray);
+
+    series1->setDrawMode(QSurface3DSeries::DrawSurface);
+    QLinearGradient gr;
+    gr.setColorAt(0.0, Qt::blue);
+    gr.setColorAt(0.5, Qt::red);
+
+    surface->addSeries(series1);
+
+    surface->seriesList().at(0)->setBaseGradient(gr);
+    surface->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyleRangeGradient);
+
+    connect(series1, SIGNAL(selectedPointChanged(const QPoint)), this, SLOT(PointSelected(const QPoint)));
+    ui->pushButton_Reset->show();
+
+}
+
 void MainWindow::on_pushButton_2D_clicked()
 {
-    ui->qvtkWidget_GRAPH->hide();
-    if (graph_2d_exists)
+    if(mItems.size() == 0)
     {
-        ui->GRAPH_2D->show();
+        QMessageBox box;
+        box.setText("Перед построением графика необходимо\nвыполнить вычисления");
+        box.setWindowTitle("Error");
+        box.exec();
+        return;
     }
-    else
-    {
-        series = new QLineSeries();
-        QChart *chart = new QChart();
 
-
-        int numPoints = 100;
-        for (int i = 0; i < numPoints; ++i)
-        {
-            double x = i;
-            double y = 10 * std::sin(0.1 * i);
-            series->append(x, y);
-        }
-
-        series->setPen(QPen(Qt::blue, 2, Qt::SolidLine));
-        chart->addSeries(series);
-        chart->createDefaultAxes();
-        chart->setAnimationOptions(QChart::AllAnimations);
-
-        QValueAxis *axisX = new QValueAxis;
-        axisX->setTitleText("Частота, Гц");
-        axisX->setTitleFont(QFont("Times New Roman", 12, QFont::Bold));
-        axisX->setLabelsFont(QFont("Arial", 10));
-        axisX->setLabelFormat("%d");
-        axisX->setTickCount(10);
-        chart->setAxisX(axisX, series);
-
-        QValueAxis *axisY = new QValueAxis;
-        axisY->setTitleText("ЭЭ, дБ");
-        axisY->setTitleFont(QFont("Times New Roman", 12, QFont::Bold));
-        axisY->setLabelsFont(QFont("Arial", 10));
-        axisY->setLabelFormat("%.2f");
-        axisY->setTickCount(10);
-        chart->setAxisY(axisY, series);
-
-        ui->GRAPH_2D->setChart(chart);
-        ui->GRAPH_2D->setRenderHint(QPainter::Antialiasing);
-        chart->legend()->hide();
-        ui->GRAPH_2D->show();
-
-        graph_2d_exists = true;
-    }
+    ui->pushButton_Save->show();
+    ui->GRAPH_3D->hide();
+    ui->GRAPH_2D->show();
 }
 
 void MainWindow::on_pushButton_3D_clicked()
 {
-    ui->qvtkWidget_GRAPH->show();
-    ui->GRAPH_2D->hide();
 
-    vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
-    vtkSmartPointer<vtkFloatArray> scalars = vtkSmartPointer<vtkFloatArray>::New();
-
-    int gridSizeX = 50;
-    int gridSizeY = 50;
-    double spacingX = 1.0;
-    double spacingY = 1.0;
-
-    for (int i = 0; i < gridSizeX; i++) {
-        for (int j = 0; j < gridSizeY; j++) {
-            double x = i * spacingX;
-            double y = j * spacingY;
-            double z = sin(sqrt(x * x + y * y * 2)) * 2;
-            points->InsertNextPoint(x, y, z);
-            scalars->InsertNextValue(z);
-        }
+    if(mItems.size() == 0)
+    {
+        QMessageBox box;
+        box.setText("Перед построением графика необходимо\nвыполнить вычисления");
+        box.setWindowTitle("Error");
+        box.exec();
+        return;
     }
 
-    vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
-    polyData->SetPoints(points);
-    polyData->GetPointData()->SetScalars(scalars);
-
-    vtkSmartPointer<vtkDelaunay2D> delaunay = vtkSmartPointer<vtkDelaunay2D>::New();
-    delaunay->SetInputData(polyData);
-    delaunay->Update();
-
-    vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    mapper->SetInputConnection(delaunay->GetOutputPort());
-    mapper->SetScalarRange(polyData->GetPointData()->GetScalars()->GetRange());
-
-    vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
-    actor->SetMapper(mapper);
-
-
-    vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
-    renderer->AddActor(actor);
-    renderer->SetBackground(1.0, 1.0, 1.0);
-
-    vtkSmartPointer<vtkGenericOpenGLRenderWindow> renderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
-    ui->qvtkWidget_GRAPH->setRenderWindow(renderWindow);
-    renderWindow->AddRenderer(renderer);
-
-    vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
-    renderWindow->GetInteractor()->SetInteractorStyle(style);
-
-
-    vtkSmartPointer<vtkAxesActor> orientationAxes = vtkSmartPointer<vtkAxesActor>::New();
-    orientationAxes->SetTotalLength(10.0, 10.0, 10.0);
-
-    vtkSmartPointer<vtkOrientationMarkerWidget> widget = vtkSmartPointer<vtkOrientationMarkerWidget>::New();
-    widget->SetOrientationMarker(orientationAxes);
-    widget->SetInteractor(renderWindow->GetInteractor());
-    widget->SetViewport(0.0, 0.0, 0.2, 0.2);
-    widget->SetEnabled(1);
-    widget->InteractiveOn();
-
-    vtkSmartPointer<vtkCubeAxesActor2D> cubeAxes = vtkSmartPointer<vtkCubeAxesActor2D>::New();
-    cubeAxes->SetInputData(delaunay->GetOutput());
-    cubeAxes->SetFontFactor(3.0);
-    cubeAxes->SetFlyModeToNone();
-    cubeAxes->SetCamera(renderer->GetActiveCamera());
-
-    vtkSmartPointer<vtkCamera> camera = renderer->GetActiveCamera();
-    camera->SetPosition(70, -50, 25);
-    camera->SetFocalPoint(25, 25, 0);
-    camera->SetViewUp(0, 0, 1);
-    renderer->ResetCameraClippingRange();
-
-
-
-    vtkSmartPointer<vtkAxisActor2D> xAxis = cubeAxes->GetXAxisActor2D();
-    xAxis->SetAdjustLabels(1);
-
-    renderer->AddViewProp(cubeAxes);
-    renderWindow->Render();
-
+    ui->pushButton_Save->hide();
+    ui->GRAPH_3D->show();
+    ui->GRAPH_2D->hide();
 }
+
 
 void MainWindow::on_pushButton_Figure_1_clicked()
 {
-    ui->lineEdit_size_d->show();
-    ui->label_size_d->show();
+    figure = 1;
+    ui->comboBox_func->clear();
+    ui->comboBox_func->addItem("Robinson et al.");
+    ui->comboBox_func->addItem("Shi et al.");
+    ui->comboBox_func->addItem("Po`ad et al.");
+    ui->comboBox_func->addItem("Komnatnov M.E.");
+    ui->comboBox_func->addItem("Nie et al. (waveguide diagrams)");
+
     ui->label_size_a->setText("a");
     ui->label_size_b->setText("b");
-    ui->label_pos_x->setText("X");
-    ui->label_pos_x->show();
+    ui->label_size_a->setToolTip("X в декартовой системе координат");
+    ui->label_size_b->setToolTip("Z в декартовой системе координат");
+    ui->label_pos_x->setText("X"); 
     ui->label_pos_y->setText("Y");
-    ui->label_pos_y->show();
     ui->label_pos->setText("Расположение");
-    ui->lineEdit_pos_x->show();
-    ui->lineEdit_pos_y->show();
-    ui->lineEdit_col_horizontally->hide();
-    ui->lineEdit_col_vertically->hide();
-    ui->lineEdit_pos_horizontally->hide();
-    ui->lineEdit_pos_vertically->hide();
-    ui->label_pos->show();
-
     ui->label_aperture_height->setText("Высота");
-    ui->label_aperture_width->show();
-    ui->lineEdit_aperture_width->show();
 
-    ui->label_horizontally->hide();
-    ui->label_vertically->hide();
-    ui->label_col->hide();
-    rectangleSource = vtkSmartPointer<vtkCubeSource>::New();
-    double width = ui->lineEdit_size_d->text().toDouble();      //Y
-    double height = ui->lineEdit_size_b->text().toDouble();     //Z
-    double length = ui->lineEdit_size_a->text().toDouble();     //X
+    ui->lineEdit_size_d->setEnabled(true);
+    ui->label_size_d->setEnabled(true);
+    ui->label_pos_x->setEnabled(true);
+    ui->label_pos_y->setEnabled(true);
+    ui->lineEdit_pos_x->setEnabled(true);
+    ui->lineEdit_pos_y->setEnabled(true);
+    ui->label_pos->setEnabled(true);
+    ui->label_aperture_width->setEnabled(true);
+    ui->lineEdit_aperture_width->setEnabled(true);
 
-    rectangleSource->SetYLength(height);
-    rectangleSource->SetXLength(length);
-    rectangleSource->SetZLength(width);
-    rectangleSource->Update();
+    ui->lineEdit_col_horizontally->setEnabled(false);
+    ui->lineEdit_col_vertically->setEnabled(false);
+    ui->lineEdit_pos_horizontally->setEnabled(false);
+    ui->lineEdit_pos_vertically->setEnabled(false);
 
-    vtkNew<vtkCubeSource> notchSource;
-    double notchWidth = 0.002;                                              //Y
-    double notchHeight = ui->lineEdit_aperture_height->text().toDouble();   //Z - в нормальной системе координат
-    double notchDepth = ui->lineEdit_aperture_width->text().toDouble();     //X
+    ui->label_horizontally->setEnabled(false);
+    ui->label_vertically->setEnabled(false);
+    ui->label_col->setEnabled(false);
 
-    double X_shift = ui->lineEdit_pos_x->text().toDouble();
-    double Y_shift = ui->lineEdit_pos_y->text().toDouble();
-
-
-    ///{ Если размеры выходят за рамки модели
-    if (X_shift + notchDepth >= length && X_shift != 0)
-    {
-        X_shift = 0.0001;
-        notchDepth = length / 4;
-
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::red);
-
-        ui->lineEdit_pos_x->setPalette(*palette);           // X shift
-        ui->lineEdit_aperture_width->setPalette(*palette);  // NotchDepth
-        ui->lineEdit_size_a->setPalette(*palette);          // Length
-
-        goto after_error;
-    }
-    else
-    {
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::white);
-
-        ui->lineEdit_pos_x->setPalette(*palette);
-        ui->lineEdit_aperture_width->setPalette(*palette);
-        ui->lineEdit_size_a->setPalette(*palette);
-    }
-
-    if (Y_shift + notchHeight >= height && Y_shift != 0)
-    {
-        Y_shift = 0.0001;
-        notchHeight = height / 4;
-
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::red);
-
-        ui->lineEdit_pos_y->setPalette(*palette);           //Y shift
-        ui->lineEdit_aperture_height->setPalette(*palette); // NotchHeight
-        ui->lineEdit_size_b->setPalette(*palette);          // Height
-
-        goto after_error;
-    }
-    else
-    {
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::white);
-
-        ui->lineEdit_pos_y->setPalette(*palette);
-        ui->lineEdit_aperture_height->setPalette(*palette);
-        ui->lineEdit_size_b->setPalette(*palette);
-    }
-
-    if (notchHeight >= height)
-    {
-        notchHeight = height / 4;
-
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::red);
-
-        ui->lineEdit_aperture_height->setPalette(*palette); // NotchHeight
-        ui->lineEdit_size_b->setPalette(*palette);          // Height
-
-        goto after_error;
-    }
-    else
-    {
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::white);
-
-        ui->lineEdit_aperture_height->setPalette(*palette);
-        ui->lineEdit_size_b->setPalette(*palette);
-    }
-
-    if (notchDepth >= length)
-    {
-        notchDepth = length / 4;
-
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::red);
-
-        ui->lineEdit_aperture_width->setPalette(*palette);  // NotchDepth
-        ui->lineEdit_size_a->setPalette(*palette);          // Length
-
-        goto after_error;
-    }
-    else
-    {
-        QPalette *palette = new QPalette();
-        palette->setColor(QPalette::Base,Qt::white);
-
-        ui->lineEdit_aperture_width->setPalette(*palette);
-        ui->lineEdit_size_a->setPalette(*palette);
-    }
-    ///}
-
-after_error:
-
-    notchSource->SetYLength(notchHeight);
-    notchSource->SetXLength(notchDepth);
-    notchSource->SetZLength(notchWidth);
-    notchSource->Update();
-
-    vtkNew<vtkTransform> notchTransform;
-    notchTransform->Translate(-(length / 2) + (notchDepth / 2) + X_shift /*X*/, -(height / 2) + (notchHeight / 2) + Y_shift /*Z*/, (width / 2) - 0.00099 /*Y*/ );
-
-    vtkNew<vtkTransformPolyDataFilter>notchTransformFilter;
-    notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
-    notchTransformFilter->SetTransform(notchTransform);
-    notchTransformFilter->Update();
-    vtkNew<vtkPolyDataMapper> notchMapper;
-    notchMapper->SetInputConnection(notchTransformFilter->GetOutputPort());
-
-    vtkNew<vtkActor> notchActor;
-    notchActor->SetMapper(notchMapper);
-    notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
-
-    vtkNew<vtkPolyDataMapper> mapper;
-    mapper->SetInputConnection(rectangleSource->GetOutputPort());
-    vtkNew<vtkActor> rectangleActor;
-    rectangleActor->SetMapper(mapper);
-    rectangleActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
-
-    vtkNew<vtkRenderer> renderer;
-    renderer->SetBackground(colors->GetColor3d("White").GetData());
-    renderer->AddActor(rectangleActor);
-    renderer->AddActor(notchActor);
-
-    vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
-    renderWindow->AddRenderer(renderer);
-
-    ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
-    ui->qvtkWidget_3D_MODEL->update();
+    create_figure_1();
 }
-
 
 void MainWindow::on_pushButton_Figure_2_clicked()
 {
     figure = 2;
-    ui->lineEdit_size_d->show();
-    ui->label_size_d->show();
+
+    ui->comboBox_func->clear();
+    ui->comboBox_func->addItem("Ren et al.");
+    ui->comboBox_func->addItem("Dehkhoda et al.");
+    ui->comboBox_func->addItem("Nie et al.");
+
     ui->label_size_a->setText("a");
     ui->label_size_b->setText("b");
+    ui->label_size_a->setToolTip("X в декартовой системе координат");
+    ui->label_size_b->setToolTip("Z в декартовой системе координат");
     ui->label_pos_x->setText("Гор.");
     ui->label_pos_y->setText("Верт.");
-    ui->label_pos->setText("Расстояние между центрами апертур");
-    ui->lineEdit_pos_x->hide();
-    ui->lineEdit_pos_y->hide();
-    ui->lineEdit_col_horizontally->show();
-    ui->lineEdit_col_vertically->show();
-    ui->lineEdit_pos_horizontally->show();
-    ui->lineEdit_pos_vertically->show();
-    ui->label_horizontally->show();
-    ui->label_vertically->show();
-    ui->label_col->show();
+    ui->label_pos->setText("Расстояние\nмежду\nцентрами");
+    ui->label_aperture_height->setText("Высота");
 
-    rectangleSource = vtkSmartPointer<vtkCubeSource>::New();
-    double width = ui->lineEdit_size_d->text().toDouble();      // Y
-    double height = ui->lineEdit_size_b->text().toDouble();     // Z
-    double length = ui->lineEdit_size_a->text().toDouble();     // X
+    ui->lineEdit_pos_x->setEnabled(false);
+    ui->lineEdit_pos_y->setEnabled(false);
 
-    rectangleSource->SetYLength(height);
-    rectangleSource->SetXLength(length);
-    rectangleSource->SetZLength(width);
-    rectangleSource->Update();
+    ui->lineEdit_col_horizontally->setEnabled(true);
+    ui->lineEdit_col_vertically->setEnabled(true);
+    ui->lineEdit_pos_horizontally->setEnabled(true);
+    ui->lineEdit_pos_vertically->setEnabled(true);
+    ui->lineEdit_aperture_width->setEnabled(true);
+    ui->lineEdit_size_d->setEnabled(true);
 
-    vtkNew<vtkCubeSource> notchSource;
+    ui->label_horizontally->setEnabled(true);
+    ui->label_vertically->setEnabled(true);
+    ui->label_col->setEnabled(true);
+    ui->label_aperture_width->setEnabled(true);
+    ui->label_size_d->setEnabled(true);
+
+
+    create_figure_2();
+}
+
+
+void MainWindow::on_pushButton_Figure_3_clicked()
+{
+    figure = 3;
+    ui->comboBox_func->clear();
+    ui->comboBox_func->addItem("Wamg et al.");
+
+    ui->label_size_a->setText("h");
+    ui->label_size_a->setToolTip("Высота цилиндра");
+    ui->label_size_b->setText("r");
+    ui->label_size_b->setToolTip("Радиус цилиндра");
+    ui->label_aperture_height->setText("Радиус");
+
+    ui->lineEdit_col_horizontally->setEnabled(false);
+    ui->lineEdit_col_vertically->setEnabled(false);
+    ui->lineEdit_pos_horizontally->setEnabled(false);
+    ui->lineEdit_pos_vertically->setEnabled(false);
+    ui->lineEdit_col_vertically->setEnabled(false);
+    ui->lineEdit_col_horizontally->setEnabled(false);
+    ui->lineEdit_pos_x->setEnabled(false);
+    ui->lineEdit_pos_y->setEnabled(false);
+    ui->lineEdit_size_d->setEnabled(false);
+    ui->lineEdit_aperture_width->setEnabled(false);
+
+    ui->label_col->setEnabled(false);
+    ui->label_pos_x->setEnabled(false);
+    ui->label_pos_y->setEnabled(false);
+    ui->label_horizontally->setEnabled(false);
+    ui->label_vertically->setEnabled(false);
+    ui->label_pos->setEnabled(false);
+    ui->label_aperture_width->setEnabled(false);
+    ui->label_size_d->setEnabled(false);
+
+    create_figure_3();
+}
+
+
+void MainWindow::create_figure_1()
+{
+    double length = ui->lineEdit_size_a->text().toDouble();
+    double width = ui->lineEdit_size_d->text().toDouble();
+    double height = ui->lineEdit_size_b->text().toDouble();
+    double notchDepth = ui->lineEdit_aperture_width->text().toDouble();
+    double notchWidth = 0.002;                                                      // фиксированное значение ширины выреза
+    double notchHeight = ui->lineEdit_aperture_height->text().toDouble();
+    double xShift = ui->lineEdit_pos_x->text().toDouble();
+    double yShift = ui->lineEdit_pos_y->text().toDouble();
+
+    auto renderer = modelsFigure.createFigure1(
+        length, width, height, notchDepth, notchWidth, notchHeight, xShift, yShift,
+        ui->lineEdit_pos_x, ui->lineEdit_pos_y,
+        ui->lineEdit_aperture_width, ui->lineEdit_aperture_height,
+        ui->lineEdit_size_a, ui->lineEdit_size_b, ui->lineEdit_POV_P->text().toDouble()
+        );
+
+    error_occured = renderer.second;
+
+    if(renderer.second)
+        return;
+
+    vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
+    renderWindow->AddRenderer(renderer.first);
+    renderWindow->SetAlphaBitPlanes(1);
+    renderWindow->SetMultiSamples(0);
+    ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
+
+    ui->qvtkWidget_3D_MODEL->update();
+}
+
+void MainWindow::create_figure_2()
+{
+    double width = ui->lineEdit_size_d->text().toDouble();
+    double height = ui->lineEdit_size_b->text().toDouble();
+    double length = ui->lineEdit_size_a->text().toDouble();
 
     double notchWidth = ui->lineEdit_aperture_width->text().toDouble();
     double notchHeight = ui->lineEdit_aperture_height->text().toDouble();
@@ -372,176 +359,28 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     double horizontalSpacing = ui->lineEdit_pos_horizontally->text().toDouble();
     double verticalSpacing = ui->lineEdit_pos_vertically->text().toDouble();
 
-    double totalGridWidth = (cols - 1) * horizontalSpacing + notchWidth;
-    double totalGridHeight = (rows - 1) * verticalSpacing + notchHeight;
+    auto renderer = modelsFigure.createFigure2(width, height, length, notchWidth, notchHeight, notchDepth, rows, cols, horizontalSpacing, verticalSpacing,
+                                               ui->lineEdit_aperture_height, ui->lineEdit_pos_vertically, ui->lineEdit_aperture_width,
+                                               ui->lineEdit_pos_horizontally, ui->lineEdit_col_horizontally, ui->lineEdit_size_a, ui->lineEdit_col_vertically, ui->lineEdit_size_b,
+                                               ui->lineEdit_aperture_width, ui->lineEdit_aperture_height,ui->lineEdit_size_a, ui->lineEdit_size_b, ui->lineEdit_POV_P->text().toDouble());
 
-    bool exceedsWidth = totalGridWidth > length;
-    bool exceedsHeight = totalGridHeight > height;
-    bool intersectionDetected = false;
+    error_occured = renderer.second;
 
-    if (notchHeight >= verticalSpacing) {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        ui->lineEdit_aperture_height->setPalette(palette);
-        ui->lineEdit_pos_vertically->setPalette(palette);
-        intersectionDetected = true;
-        goto after_error;
-    } else {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        ui->lineEdit_aperture_height->setPalette(palette);
-        ui->lineEdit_pos_vertically->setPalette(palette);
-    }
-
-    if (notchWidth >= horizontalSpacing) {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        ui->lineEdit_aperture_width->setPalette(palette);
-        ui->lineEdit_pos_horizontally->setPalette(palette);
-        intersectionDetected = true;
-         goto after_error;
-    } else {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        ui->lineEdit_aperture_width->setPalette(palette);
-        ui->lineEdit_pos_horizontally->setPalette(palette);
-    }
-
-
-    if (exceedsWidth) {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        ui->lineEdit_col_horizontally->setPalette(palette);
-        ui->lineEdit_pos_horizontally->setPalette(palette);
-        intersectionDetected = true;
-         goto after_error;
-    } else {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        ui->lineEdit_col_horizontally->setPalette(palette);
-        ui->lineEdit_pos_horizontally->setPalette(palette);
-    }
-
-    if (exceedsHeight) {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        ui->lineEdit_col_vertically->setPalette(palette);
-        ui->lineEdit_pos_vertically->setPalette(palette);
-        intersectionDetected = true;
-         goto after_error;
-    } else {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        ui->lineEdit_col_vertically->setPalette(palette);
-        ui->lineEdit_pos_vertically->setPalette(palette);
-    }
-
-    if (notchWidth >= length) {
-        notchWidth = length / 4;
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        ui->lineEdit_aperture_width->setPalette(palette);
-        intersectionDetected = true;
-         goto after_error;
-    } else {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        ui->lineEdit_aperture_width->setPalette(palette);
-    }
-
-    if (notchHeight >= height) {
-        notchHeight = height / 4;
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::red);
-        ui->lineEdit_aperture_height->setPalette(palette);
-        intersectionDetected = true;
-         goto after_error;
-    } else {
-        QPalette palette;
-        palette.setColor(QPalette::Base, Qt::white);
-        ui->lineEdit_aperture_height->setPalette(palette);
-    }
-after_error:
-    if (intersectionDetected) {
+    if(renderer.second)
         return;
-    }
 
-    notchSource->SetYLength(notchHeight);
-    notchSource->SetXLength(notchWidth);
-    notchSource->SetZLength(notchDepth);
-    notchSource->Update();
 
-    vtkNew<vtkRenderer> renderer;
-    renderer->SetBackground(colors->GetColor3d("White").GetData());
-
-    vtkNew<vtkPolyDataMapper> mapper;
-    mapper->SetInputConnection(rectangleSource->GetOutputPort());
-    vtkNew<vtkActor> rectangleActor;
-    rectangleActor->SetMapper(mapper);
-    rectangleActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
-    renderer->AddActor(rectangleActor);
-
-    double gridOffsetX = -(totalGridWidth / 2.0) + (notchWidth / 2.0);
-    double gridOffsetY = -(totalGridHeight / 2.0) + (notchHeight / 2.0);
-
-    for (int row = 0; row < rows; ++row) {
-        for (int col = 0; col < cols; ++col) {
-            double notchPosX = gridOffsetX + col * horizontalSpacing;
-            double notchPosY = gridOffsetY + row * verticalSpacing;
-
-            vtkSmartPointer<vtkTransform> notchTransform = vtkSmartPointer<vtkTransform>::New();
-            notchTransform->Translate(notchPosX, notchPosY, (width / 2.0) - 0.001);
-
-            vtkSmartPointer<vtkTransformPolyDataFilter> notchTransformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
-            notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
-            notchTransformFilter->SetTransform(notchTransform);
-            notchTransformFilter->Update();
-
-            vtkNew<vtkPolyDataMapper> notchMapper;
-            notchMapper->SetInputConnection(notchTransformFilter->GetOutputPort());
-
-            vtkNew<vtkActor> notchActor;
-            notchActor->SetMapper(notchMapper);
-            notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
-
-            renderer->AddActor(notchActor);
-        }
-    }
 
     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
-    renderWindow->AddRenderer(renderer);
+    renderWindow->SetAlphaBitPlanes(1);
+    renderWindow->SetMultiSamples(0);
+    renderWindow->AddRenderer(renderer.first);
     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
     ui->qvtkWidget_3D_MODEL->update();
 }
 
-
-void MainWindow::on_pushButton_Figure_3_clicked()
+void MainWindow::create_figure_3()
 {
-    figure = 3;
-    ui->lineEdit_size_d->hide();
-    ui->label_size_d->hide();
-    ui->label_size_a->setText("h");
-    ui->label_size_b->setText("r");
-    ui->label_aperture_height->setText("Радиус");
-    ui->label_aperture_width->hide();
-    ui->lineEdit_aperture_width->hide();
-
-    ui->lineEdit_col_horizontally->hide();
-    ui->lineEdit_col_vertically->hide();
-    ui->lineEdit_pos_horizontally->hide();
-    ui->lineEdit_pos_vertically->hide();
-    ui->label_pos_x->hide();
-    ui->label_pos_y->hide();
-    ui->lineEdit_pos_x->hide();
-    ui->lineEdit_pos_y->hide();
-
-    ui->label_col->hide();
-    ui->lineEdit_col_vertically->hide();
-    ui->lineEdit_col_horizontally->hide();
-    ui->label_horizontally->hide();
-    ui->label_vertically->hide();
-    ui->label_pos->hide();
-
     double radius = ui->lineEdit_size_b->text().toDouble();
     double height = ui->lineEdit_size_a->text().toDouble();
 
@@ -550,11 +389,12 @@ void MainWindow::on_pushButton_Figure_3_clicked()
 
     if(notchRadius >= radius)
     {
-        notchRadius = radius / 4;
         QPalette palette;
         palette.setColor(QPalette::Base, Qt::red);
         ui->lineEdit_aperture_height->setPalette(palette);
         ui->lineEdit_size_b->setPalette(palette);
+        error_occured = true;
+        return;
     }
     else
     {
@@ -562,131 +402,54 @@ void MainWindow::on_pushButton_Figure_3_clicked()
         palette.setColor(QPalette::Base, Qt::white);
         ui->lineEdit_aperture_height->setPalette(palette);
         ui->lineEdit_size_b->setPalette(palette);
+        error_occured = false;
     }
 
-    cylinderSource = vtkSmartPointer<vtkCylinderSource>::New();
-    cylinderSource->SetResolution(40);
-
-    vtkNew<vtkPolyDataMapper> mapper;
-    mapper->SetInputConnection(cylinderSource->GetOutputPort());
-
-    cylinderSource->SetHeight(height);
-    cylinderSource->SetRadius(radius);
-    cylinderSource->Update();
-
-
-    vtkNew<vtkCylinderSource> notchSource;
-    notchSource->SetResolution(40);
-
-    notchSource->SetHeight(notchHeight);
-    notchSource->SetRadius(notchRadius);
-    notchSource->Update();
-
-    vtkNew<vtkTransform> notchTransform;
-    notchTransform->Translate(0, -(height / 2 - notchHeight / 2+ 0.001), 0);
-    notchTransform->Update();
-
-    vtkNew<vtkTransformPolyDataFilter> notchTransformFilter;
-    notchTransformFilter->SetInputConnection(notchSource->GetOutputPort());
-    notchTransformFilter->SetTransform(notchTransform);
-    notchTransformFilter->Update();
-
-    vtkNew<vtkPolyDataMapper> notchMapper;
-    notchMapper->SetInputConnection(notchTransformFilter->GetOutputPort());
-
-    vtkNew<vtkActor> notchActor;
-    notchActor->SetMapper(notchMapper);
-    notchActor->GetProperty()->SetColor(colors->GetColor3d("Black").GetData());
-
-    vtkNew<vtkPolyDataMapper> cylinderMapper;
-    cylinderMapper->SetInputConnection(cylinderSource->GetOutputPort());
-
-    vtkNew<vtkActor> cylinderActor;
-    cylinderActor->SetMapper(cylinderMapper);
-    cylinderActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
-
-
-    vtkNew<vtkRenderer> renderer;
-    renderer->AddActor(cylinderActor);
-    renderer->AddActor(notchActor);
-    renderer->SetBackground(colors->GetColor3d("White").GetData());
+    vtkSmartPointer<vtkRenderer> renderer = modelsFigure.createFigure3(height, radius, notchHeight, notchRadius, ui->lineEdit_POV_P->text().toDouble());
 
     vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
     renderWindow->AddRenderer(renderer);
+
     ui->qvtkWidget_3D_MODEL->setRenderWindow(renderWindow);
     ui->qvtkWidget_3D_MODEL->update();
-
 }
+
 void MainWindow::on_lineEdit_size_a_textChanged(const QString &arg1)
 {
     if(arg1.toDouble() <= 0)
         return;
 
-    // if(arg1.toDouble() <= ui->lineEdit_aperture_width->text().toDouble()){
-    //     QPalette *palette = new QPalette();
-    //     palette->setColor(QPalette::Base,Qt::red);
-    //     return;
-    // }
-    // else{
-    //     QPalette *palette = new QPalette();
-    //     palette->setColor(QPalette::Base,Qt::white);
-    //     ui->lineEdit_size_a->setPalette(*palette);
-    // }
-
-    double length = arg1.toDouble();
-    switch (figure) {
+    switch (figure)
+    {
     case 3:
-        cylinderSource->SetHeight(length);
-        cylinderSource->Update();
-        ui->qvtkWidget_3D_MODEL->renderWindow()->Render();
-        ui->qvtkWidget_3D_MODEL->update();
+        create_figure_3();
         break;
     case 2:
-        rectangleSource->SetXLength(length);
-        rectangleSource->Update();
-        ui->qvtkWidget_3D_MODEL->renderWindow()->Render();
-        ui->qvtkWidget_3D_MODEL->update();
+        create_figure_2();
         break;
     case 1:
-        on_pushButton_Figure_1_clicked();
+        create_figure_1();
         break;
     }
 }
+
+
 void MainWindow::on_lineEdit_size_b_textChanged(const QString &arg1)
 {
     if(arg1.toDouble() <= 0)
         return;
 
-    // if(arg1.toDouble() <= ui->lineEdit_aperture_height->text().toDouble()){
-    //     QPalette *palette = new QPalette();
-    //     palette->setColor(QPalette::Base,Qt::red);
-    //     ui->lineEdit_size_b->setPalette(*palette);
-    //     return;
-    // }
-    // else{
-    //     QPalette *palette = new QPalette();
-    //     palette->setColor(QPalette::Base,Qt::white);
-    //     ui->lineEdit_size_b->setPalette(*palette);
-    // }
-
-    double height = arg1.toDouble();
-    switch (figure) {
+    switch (figure)
+    {
     case 3:
-        cylinderSource->SetHeight(height);
-        cylinderSource->Update();
-        ui->qvtkWidget_3D_MODEL->renderWindow()->Render();
-        ui->qvtkWidget_3D_MODEL->update();
+        create_figure_3();
         break;
     case 2:
-        rectangleSource->SetYLength(height);
-        rectangleSource->Update();
-        ui->qvtkWidget_3D_MODEL->renderWindow()->Render();
-        ui->qvtkWidget_3D_MODEL->update();
+        create_figure_2();
         break;
     case 1:
-        on_pushButton_Figure_1_clicked();
+        create_figure_1();
         break;
-
     }
 }
 
@@ -696,12 +459,13 @@ void MainWindow::on_lineEdit_size_d_textChanged(const QString &arg1)
     if(arg1.toDouble() <= 0)
         return;
 
-    //double width = arg1.toDouble();
-    switch (figure) {
+    switch (figure)
+    {
     case 2:
+        create_figure_2();
         break;
     case 1:
-        on_pushButton_Figure_1_clicked();
+        create_figure_1();
         break;
     }
 }
@@ -709,28 +473,31 @@ void MainWindow::on_lineEdit_size_d_textChanged(const QString &arg1)
 
 void MainWindow::on_lineEdit_pos_x_textChanged(const QString &arg1)
 {
-    on_pushButton_Figure_1_clicked();
+    create_figure_1();
 }
 
 
 void MainWindow::on_lineEdit_pos_y_textChanged(const QString &arg1)
 {
-    on_pushButton_Figure_1_clicked();
+    create_figure_1();
 }
+
 
 void MainWindow::on_lineEdit_aperture_height_textChanged(const QString &arg1)
 {
     if(arg1.toDouble() <= 0)
         return;
-    switch (figure) {
+
+    switch (figure)
+    {
     case 3:
-        on_pushButton_Figure_3_clicked();
+        create_figure_3();
         break;
     case 2:
-        on_pushButton_Figure_2_clicked();
+        create_figure_2();
         break;
     case 1:
-        on_pushButton_Figure_1_clicked();
+        create_figure_1();
         break;
     }
 
@@ -741,12 +508,14 @@ void MainWindow::on_lineEdit_aperture_width_textChanged(const QString &arg1)
 {
     if(arg1.toDouble() <= 0)
         return;
-    switch (figure) {
+
+    switch (figure)
+    {
     case 2:
-        on_pushButton_Figure_2_clicked();
+        create_figure_2();
         break;
     case 1:
-        on_pushButton_Figure_1_clicked();
+        create_figure_1();
         break;
     }
 
@@ -758,7 +527,7 @@ void MainWindow::on_lineEdit_col_horizontally_textChanged(const QString &arg1)//
     if(arg1.toDouble() <= 0)
         return;
 
-    on_pushButton_Figure_2_clicked();
+    create_figure_2();
 }
 
 
@@ -767,7 +536,7 @@ void MainWindow::on_lineEdit_col_vertically_textChanged(const QString &arg1)//к
     if(arg1.toDouble() <= 0)
         return;
 
-    on_pushButton_Figure_2_clicked();
+    create_figure_2();
 }
 
 
@@ -776,7 +545,7 @@ void MainWindow::on_lineEdit_pos_horizontally_textChanged(const QString &arg1)//
     if(arg1.toDouble() <= 0)
         return;
 
-    on_pushButton_Figure_2_clicked();
+    create_figure_2();
 }
 
 
@@ -785,5 +554,408 @@ void MainWindow::on_lineEdit_pos_vertically_textChanged(const QString &arg1)//р
     if(arg1.toDouble() <= 0)
         return;
 
-    on_pushButton_Figure_2_clicked();
+    create_figure_2();
 }
+
+
+
+void MainWindow::on_pushButtonCalcStart_clicked()
+{
+    if (error_occured)
+    {
+        QMessageBox box;
+        box.setText("Перед началом вычислений исправьте ошибку в параметрах");
+        box.setWindowTitle("Error");
+        box.exec();
+        return;
+    }
+
+    double m_aVal = ui->lineEdit_size_a->text().toDouble();             // У цилиндра - h
+    double m_bVal = ui->lineEdit_size_b->text().toDouble();             // У цилиндра - r
+    double m_dVal = ui->lineEdit_size_d->text().toDouble();
+
+    double m_apVal = ui->lineEdit_aperture_height->text().toDouble();   // У цилиндра - R апертуры
+
+    double m_tVal = ui->lineEdit_figure_thickness->text().toDouble();   // Толщина
+
+    double m_wVal = 0;
+    double m_lVal = 0;
+    double m_dvVal = 0;
+    double m_dhVal = 0;
+    int m_napVal = 0;
+    int m_mapVal = 0;
+    double m_xVal = 0;
+    double m_yVal = 0;
+
+    if (figure == 1)
+    {
+        m_wVal = ui->lineEdit_aperture_width->text().toDouble();         // Ширина апертуры
+        m_lVal = ui->lineEdit_aperture_height->text().toDouble();        // Высота апертуры
+
+        m_xVal = ui->lineEdit_pos_x->text().toDouble();                  // Расположение X в аппертуре
+        m_yVal = ui->lineEdit_pos_y->text().toDouble();                  // Расположение Y в аппертуре
+    }
+
+    if (figure == 2)
+    {
+        m_wVal = ui->lineEdit_aperture_width->text().toDouble();         // Ширина апертуры
+        m_lVal = ui->lineEdit_aperture_height->text().toDouble();        // Высота апертуры
+
+        // Расстояние между центрами аппертур для 2-ой фигуры
+        m_dvVal = ui->lineEdit_pos_vertically->text().toDouble();        // Гор
+        m_dhVal = ui->lineEdit_pos_horizontally->text().toDouble();      // Вер
+
+        // Количество аппертур для 2-ой фигуры
+        m_napVal = ui->lineEdit_col_vertically->text().toInt();          // Гор
+        m_mapVal = ui->lineEdit_col_horizontally->text().toInt();        // Вер
+    }
+
+
+    double m_fMinVal = ui->lineEdit_Source_Fmin->text().toDouble();         // F min
+    double m_fMaxVal = ui->lineEdit_Source_Fmax->text().toDouble();         // F max
+
+    m_nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();        // Количество точек
+    double m_integralVal = ui->lineEdit_POV_step->text().toInt();               // Шаг интегрирования
+    double m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();             // Количество точек наблюдения
+    double m_pVal = ui->lineEdit_POV_P->text().toDouble();                      // P - точка наблюдения
+    double m_sigmaVal = 37000000;                                               // Сигма
+
+    double m_nVal = ui->lineEdit_Source_n->text().toInt();                     // n
+    double m_mVal = ui->lineEdit_Source_m->text().toInt();                     // m
+
+    bool m_RungeVal = ui->checkBox_Runge->isChecked();                        // Правило Рунге
+    bool m_fileBool = ui->checkBox_File->isChecked();                         // Загрузка из файла
+
+    double  perc_step = (m_dVal - m_pVal)/(m_pstepVal);
+
+    calc_thread = new CalculationThread(m_fMinVal, m_fMaxVal, m_tVal, m_wVal, m_bVal, m_bVal, m_aVal, m_apVal, m_lVal, m_aVal,
+                                  m_dVal, m_pVal, m_nPointsVal, m_xVal, m_yVal, m_napVal, m_mapVal, m_nVal,
+                                  m_mVal, m_dvVal, m_dhVal, m_sigmaVal, m_integralVal, m_RungeVal, m_fileBool);
+
+    int m_funcVal = 0;
+
+    calc_thread->m_pstepVal = m_pstepVal;
+
+    if(ui->comboBox_func->currentText() == "Robinson et al."){
+        m_funcVal = 0;
+    }
+    else if(ui->comboBox_func->currentText() == "Shi et al."){
+        m_funcVal = 1;
+    }
+    else if(ui->comboBox_func->currentText() == "Po`ad et al."){
+        m_funcVal = 2;
+    }
+    else if(ui->comboBox_func->currentText() == "Komnatnov M.E."){
+        m_funcVal = 3;
+    }
+    else if(ui->comboBox_func->currentText() == "Nie et al. (waveguide diagrams)"){
+        m_funcVal = 4;
+    }
+    else if(ui->comboBox_func->currentText() == "Ren et al."){
+        m_funcVal = 5;
+    }
+    else if(ui->comboBox_func->currentText() == "Dehkhoda et al."){
+        m_funcVal = 6;
+    }
+    else if(ui->comboBox_func->currentText() == "Nie et al."){
+        m_funcVal = 7;
+    }
+    else if(ui->comboBox_func->currentText() == "Wamg et al."){
+        m_funcVal = 8;
+    }
+
+    calc_thread->mod = m_funcVal;
+    calc_thread->perc_step = perc_step;
+    calc_thread->modS = ui->comboBox_herz->currentIndex();          // Для загрузки из файла
+
+    connect(calc_thread, SIGNAL(progress(double)), this, SLOT(UpdateProgress(double)));
+    connect(calc_thread, SIGNAL(time(double)), this, SLOT(PrintCalcTime(double)));
+    connect(calc_thread, SIGNAL(iterCount(double)), this, SLOT(PrintCalcIter(double)));
+    connect(calc_thread, SIGNAL(GUI(QVector<surfaceModelItem>)), this, SLOT(UpdateGUI(QVector<surfaceModelItem>)));
+
+    calc_thread->start();
+
+}
+
+void MainWindow::CalcRAM()
+{
+    double m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();
+    double nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();
+
+    double tmp = (((((m_pstepVal / 100) * nPointsVal)*3*8)/1024)/1024 + (((m_pstepVal / 100) * nPointsVal)*3)/1024 + 50);
+    tmp = tmp + 0.5 - (tmp < 0);
+    RAM = (int)tmp;
+
+    ui->label_RAM_amount->setText(tr("%1 МБ").arg(RAM));
+}
+
+void MainWindow::CalcTime()
+{
+    int m_funcVal = 0;
+
+    if(ui->comboBox_func->currentText() == "Robinson et al."){
+        m_funcVal = 0;
+    }
+    else if(ui->comboBox_func->currentText() == "Shi et al."){
+        m_funcVal = 1;
+    }
+    else if(ui->comboBox_func->currentText() == "Po`ad et al."){
+        m_funcVal = 2;
+    }
+    else if(ui->comboBox_func->currentText() == "Komnatnov M.E."){
+        m_funcVal = 3;
+    }
+    else if(ui->comboBox_func->currentText() == "Nie et al. (waveguide diagrams)"){
+        m_funcVal = 4;
+    }
+    else if(ui->comboBox_func->currentText() == "Ren et al."){
+        m_funcVal = 5;
+    }
+    else if(ui->comboBox_func->currentText() == "Dehkhoda et al."){
+        m_funcVal = 6;
+    }
+    else if(ui->comboBox_func->currentText() == "Nie et al."){
+        m_funcVal = 7;
+    }
+    else if(ui->comboBox_func->currentText() == "Wamg et al."){
+        m_funcVal = 8;
+    }
+
+    double nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();
+    double m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();
+
+    switch (m_funcVal)
+    {
+    case 0:
+        Time = (m_pstepVal * nPointsVal) / 1000000 * 3;
+        break;
+    case 1:
+        Time = (1000*(m_pstepVal) * nPointsVal) / 2000000;
+        break;
+    case 2:
+        Time = (2*(m_pstepVal) * nPointsVal) / 1000000;
+        break;
+    case 3:
+        Time = (3*(m_pstepVal) * nPointsVal) / 1000000;
+        break;
+    case 4:
+        Time = (3*(m_pstepVal) * nPointsVal) / 1000000;
+        break;
+    case 5:
+        Time = ((m_pstepVal) * nPointsVal) / 1000000;
+        break;
+    case 6:
+        Time = (3*(m_pstepVal) * nPointsVal) / 1000000;
+        break;
+    case 7:
+        Time = (10*(m_pstepVal) * nPointsVal) / 1000000;
+        break;
+    case 8:
+        Time = (14*(m_pstepVal) * nPointsVal) / 1000000;
+        break;
+    case 9:
+        Time = (10*(m_pstepVal) * nPointsVal) / 1000000;
+        break;
+    default:
+        break;
+    }
+
+    ui->label_TIME_amount->setText(tr("%1 сек.").arg(Time));
+}
+
+void MainWindow::CalcDif()
+{
+    int m_funcVal = 0;
+
+    if(ui->comboBox_func->currentText() == "Robinson et al."){
+        m_funcVal = 0;
+    }
+    else if(ui->comboBox_func->currentText() == "Shi et al."){
+        m_funcVal = 1;
+    }
+    else if(ui->comboBox_func->currentText() == "Po`ad et al."){
+        m_funcVal = 2;
+    }
+    else if(ui->comboBox_func->currentText() == "Komnatnov M.E."){
+        m_funcVal = 3;
+    }
+    else if(ui->comboBox_func->currentText() == "Nie et al. (waveguide diagrams)"){
+        m_funcVal = 4;
+    }
+    else if(ui->comboBox_func->currentText() == "Ren et al."){
+        m_funcVal = 5;
+    }
+    else if(ui->comboBox_func->currentText() == "Dehkhoda et al."){
+        m_funcVal = 6;
+    }
+    else if(ui->comboBox_func->currentText() == "Nie et al."){
+        m_funcVal = 7;
+    }
+    else if(ui->comboBox_func->currentText() == "Wamg et al."){
+        m_funcVal = 8;
+    }
+
+    double nPointsVal = ui->lineEdit_Source_NofPoints->text().toInt();
+    double m_pstepVal = ui->lineEdit_POV_NofPoints->text().toInt();
+
+    switch (m_funcVal) {
+    case 0:
+        Difficulty = (m_pstepVal * nPointsVal) / 10000000;
+        break;
+    case 1:
+        Difficulty = (1000*(m_pstepVal) * nPointsVal) / 20000000;
+        break;
+    case 2:
+        Difficulty = (2*(m_pstepVal) * nPointsVal) / 10000000;
+        break;
+    case 3:
+        Difficulty = (3*(m_pstepVal) * nPointsVal) / 10000000;
+        break;
+    case 4:
+        Difficulty = (3*(m_pstepVal) * nPointsVal) / 10000000;
+        break;
+    case 5:
+        Difficulty = ((m_pstepVal) * nPointsVal) / 10000000;
+        break;
+    case 6:
+        Difficulty = (3*(m_pstepVal) * nPointsVal) / 10000000;
+        break;
+    case 7:
+        Difficulty = (10*(m_pstepVal) * nPointsVal) / 10000000;
+        break;
+    case 8:
+        Difficulty = (14*(m_pstepVal) * nPointsVal) / 10000000 ;
+        break;
+    default:
+        break;
+    }
+
+    ui->progressBar_diff->setValue(Difficulty);
+}
+
+void MainWindow::UpdateProgress(double val)
+{
+    if(val == 0)
+    {
+        ui->progressBar_calc->reset();
+    }
+    ui->progressBar_calc->setValue(val);
+}
+
+void MainWindow::PrintCalcTime(double val)
+{
+    ui->label_Calc_time_2->setText(tr("Время вычислений: %1 мс").arg(val));
+}
+
+void MainWindow::PrintCalcIter(double val)
+{
+    ui->label_Iter_amount_2->setText(tr("Кол-во итераций: %1").arg(val));
+}
+
+void MainWindow::UpdateGUI(QVector<surfaceModelItem> gui)
+{
+    mItems = gui;
+    Create3DGraph();
+}
+
+
+void MainWindow::on_lineEdit_POV_NofPoints_textChanged(const QString &arg1)
+{
+    if(arg1.toDouble() <= 0)
+        return;
+
+    CalcRAM();
+    CalcTime();
+    CalcDif();
+}
+
+
+void MainWindow::on_lineEdit_Source_NofPoints_textChanged(const QString &arg1)
+{
+    if(arg1.toDouble() <= 0)
+        return;
+
+    CalcRAM();
+    CalcTime();
+    CalcDif();
+}
+
+void MainWindow::on_comboBox_func_currentTextChanged(const QString &arg1)
+{  
+    CalcTime();
+    CalcDif();
+}
+
+
+void MainWindow::on_lineEdit_POV_P_textChanged(const QString &arg1)
+{
+    if(arg1.toDouble() <= 0)
+        return;
+
+    switch (figure) {
+    case 3:
+        create_figure_3();
+        break;
+    case 2:
+        create_figure_2();
+        break;
+    case 1:
+        create_figure_1();
+        break;
+    }
+}
+
+
+void MainWindow::on_pushButton_Save_clicked()
+{
+    QString filePath = QFileDialog::getSaveFileName(nullptr, "Save Data File", "", "Text Files (*.txt);;All Files (*)");
+
+    if (!filePath.isEmpty())
+    {
+        QFile file(filePath);
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QTextStream out(&file);
+
+            out << "Частота, Гц\tЭЭ, дБ\n";
+            out << mItems[SelectedPoint].x << "\t\t" << mItems[SelectedPoint].y << "\n";
+            for (int i = 1; i < m_nPointsVal; ++i)
+            {
+                double x = mItems[SelectedPoint + i].x;
+                double y = mItems[SelectedPoint + i].y;
+                out << x << "\t" << y << "\n";
+            }
+            file.close();
+
+            QMessageBox box;
+            box.setText("Файл создан: " + filePath);
+            box.exec();
+        }
+        else
+        {
+            QMessageBox box;
+            box.setText("Не удалось открыть файл для записи");
+            box.exec();
+        }
+    }
+    else
+    {
+        QMessageBox box;
+        box.setText("Файл не выбран");
+        box.exec();
+    }
+}
+
+
+void MainWindow::on_pushButton_Reset_clicked()
+{
+    if (!surface->seriesList().isEmpty())
+    {
+        on_pushButton_3D_clicked();
+        surface->removeSeries(series1);
+        delete series1;
+        mItems.clear();
+        ui->pushButton_Reset->hide();
+    }
+}
+

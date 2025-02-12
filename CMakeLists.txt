@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5)
 
 project(3dSEBox_withVTK VERSION 0.1 LANGUAGES CXX)
 
@@ -13,21 +13,29 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS OpenGLWidgets)
 find_package(Qt6 REQUIRED COMPONENTS Charts)
-
-
+find_package(Qt6 REQUIRED COMPONENTS DataVisualization)
 
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        calculation_funcs.h
+        calculation_funcs.cpp
+        calculationthread.h
+        calculationthread.cpp
+        modelsfigure.h
+        modelsfigure.cpp
+	resources.qrc
 )
 
 set(VTK_DIR "C:/Work/VTK-9.3.0-install-no-CASCADE/lib/cmake/vtk-9.3")
 
 find_package(VTK COMPONENTS
   CommonColor
+  CommonComputationalGeometry
   CommonCore
+  FiltersCore
   FiltersSources
   CommonDataModel
   InteractionStyle
@@ -36,8 +44,8 @@ find_package(VTK COMPONENTS
   RenderingFreeType
   RenderingGL2PSOpenGL2
   RenderingOpenGL2
+  fmt
 )
-
 
 if (NOT VTK_FOUND)
   message(FATAL_ERROR "Cube: Unable to find the VTK build folder.")
@@ -47,7 +55,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(3dSEBox_withVTK
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-
+        herzformatter.h herzformatter.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET 3dSEBox_withVTK APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -70,16 +78,15 @@ endif()
 target_link_libraries(3dSEBox_withVTK PRIVATE
     "C:/Work/VTK-9.3.0-install-no-CASCADE/lib/vtkGUISupportQt-9.3.lib"
     "C:/Work/VTK-9.3.0-install-no-CASCADE/lib/vtkInteractionWidgets-9.3.lib"
-    "C:/Work/VTK-9.3.0-install-no-CASCADE/lib/vtkRenderingAnnotation-9.3.lib"
+   "C:/Work/VTK-9.3.0-install-no-CASCADE/lib/vtkRenderingAnnotation-9.3.lib"
     Qt6::Core
     Qt6::Gui
     Qt6::Charts
     Qt6::Widgets
     Qt6::OpenGL
     Qt6::OpenGLWidgets
+    Qt6::DataVisualization
         ${VTK_LIBRARIES})
-target_link_libraries(3dSEBox_withVTK PRIVATE Qt6::Charts)
-
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
