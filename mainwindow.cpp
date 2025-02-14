@@ -51,11 +51,9 @@ MainWindow::MainWindow(QWidget *parent)
     surface->setShadowQuality(QAbstract3DGraph::ShadowQualityNone);
 
     container = QWidget::createWindowContainer(surface, this);
-    //container->setMinimumSize(QSize(631, 400));
     QHBoxLayout *layout = new QHBoxLayout();
     ui->GRAPH_3D->setLayout(layout);
     layout->addWidget(container);
-    setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 }
 
 
