@@ -54,17 +54,20 @@ MainWindow::MainWindow(QWidget *parent)
     QHBoxLayout *layout = new QHBoxLayout();
     ui->GRAPH_3D->setLayout(layout);
     layout->addWidget(container);
-    //setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 }
 
 
 void MainWindow::PointSelected(const QPoint &position)
 {
-    if (position.x() < 0){
+    if (position.x() < 0 || position.x() >= calc_thread->m_pstepVal)
+    {
+        SelectedPoint = -1;
         return;
     }
+
     Create2DGraph(position.x());
 }
+
 
 
 MainWindow::~MainWindow()
@@ -95,7 +98,7 @@ void MainWindow::Create2DGraph(int num)
     axisX->setTitleText("Частота, Гц");
     axisX->setTitleFont(QFont("OpenSans", 12, QFont::Bold));
     axisX->setLabelsFont(QFont("OpenSans", 10));
-    axisX->setLabelFormat("%i");
+    axisX->setLabelFormat("%d");
     axisX->setTickCount(10);
     chart->addAxis(axisX, Qt::AlignBottom);
 
@@ -155,7 +158,6 @@ void MainWindow::Create3DGraph()
 
     surface->seriesList().at(0)->setBaseGradient(gr);
     surface->seriesList().at(0)->setColorStyle(Q3DTheme::ColorStyleRangeGradient);
-
     connect(series1, SIGNAL(selectedPointChanged(const QPoint)), this, SLOT(PointSelected(const QPoint)));
     ui->pushButton_Reset->show();
 
@@ -167,6 +169,13 @@ void MainWindow::on_pushButton_2D_clicked()
     {
         QMessageBox box;
         box.setText("Перед построением графика необходимо\nвыполнить вычисления");
+        box.setWindowTitle("Error");
+        box.exec();
+        return;
+    }
+    if(SelectedPoint < 0 || SelectedPoint >= mItems.size()){
+        QMessageBox box;
+        box.setText("Перед построением 2D-графика необходимо\nвыбрать точку на 3D-графике");
         box.setWindowTitle("Error");
         box.exec();
         return;
@@ -198,6 +207,7 @@ void MainWindow::on_pushButton_3D_clicked()
 void MainWindow::on_pushButton_Figure_1_clicked()
 {
     figure = 1;
+
     ui->comboBox_func->clear();
     ui->comboBox_func->addItem("Robinson et al.");
     ui->comboBox_func->addItem("Shi et al.");
@@ -214,6 +224,16 @@ void MainWindow::on_pushButton_Figure_1_clicked()
     ui->label_pos->setText("Расположение");
     ui->label_aperture_height->setText("Высота");
 
+    // ui->lineEdit_size_d->show();
+    // ui->label_size_d->show();
+    // ui->label_pos_x->show();
+    // ui->label_pos_y->show();
+    // ui->lineEdit_pos_x->show();
+    // ui->lineEdit_pos_y->show();
+    // ui->label_pos->show();
+    // ui->label_aperture_width->show();
+    // ui->lineEdit_aperture_width->show();
+
     ui->lineEdit_size_d->setEnabled(true);
     ui->label_size_d->setEnabled(true);
     ui->label_pos_x->setEnabled(true);
@@ -223,6 +243,20 @@ void MainWindow::on_pushButton_Figure_1_clicked()
     ui->label_pos->setEnabled(true);
     ui->label_aperture_width->setEnabled(true);
     ui->lineEdit_aperture_width->setEnabled(true);
+
+    // ui->lineEdit_col_horizontally->hide();
+    // ui->lineEdit_col_vertically->hide();
+    // ui->lineEdit_pos_horizontally->hide();
+    // ui->lineEdit_pos_vertically->hide();
+
+    /// ui->lineEdit_col_horizontally->setDisabled(true);
+    /// ui->lineEdit_col_vertically->setDisabled(true);
+    /// ui->lineEdit_pos_horizontally->setDisabled(true);
+    /// ui->lineEdit_pos_vertically->setDisabled(true);
+
+    /// ui->label_horizontally->setDisabled(true);
+    /// ui->label_vertically->setDisabled(true);
+    /// ui->label_col->setDisabled(true);
 
     ui->lineEdit_col_horizontally->setEnabled(false);
     ui->lineEdit_col_vertically->setEnabled(false);
@@ -251,8 +285,24 @@ void MainWindow::on_pushButton_Figure_2_clicked()
     ui->label_size_b->setToolTip("Z в декартовой системе координат");
     ui->label_pos_x->setText("Гор.");
     ui->label_pos_y->setText("Верт.");
-    ui->label_pos->setText("Расстояние\nмежду\nцентрами");
+    ui->label_pos->setText("Расстояние\nмежду центрами");
     ui->label_aperture_height->setText("Высота");
+
+    // ui->lineEdit_pos_x->hide();
+    // ui->lineEdit_pos_y->hide();
+
+    // ui->lineEdit_col_horizontally->show();
+    // ui->lineEdit_col_vertically->show();
+    // ui->lineEdit_pos_horizontally->show();
+    // ui->lineEdit_pos_vertically->show();
+    // ui->lineEdit_aperture_width->show();
+    // ui->lineEdit_size_d->show();
+
+    // ui->label_horizontally->show();
+    // ui->label_vertically->show();
+    // ui->label_col->show();
+    // ui->label_aperture_width->show();
+    // ui->label_size_d->show();
 
     ui->lineEdit_pos_x->setEnabled(false);
     ui->lineEdit_pos_y->setEnabled(false);
@@ -278,6 +328,7 @@ void MainWindow::on_pushButton_Figure_2_clicked()
 void MainWindow::on_pushButton_Figure_3_clicked()
 {
     figure = 3;
+
     ui->comboBox_func->clear();
     ui->comboBox_func->addItem("Wamg et al.");
 
@@ -286,6 +337,27 @@ void MainWindow::on_pushButton_Figure_3_clicked()
     ui->label_size_b->setText("r");
     ui->label_size_b->setToolTip("Радиус цилиндра");
     ui->label_aperture_height->setText("Радиус");
+
+
+    // ui->lineEdit_col_horizontally->hide();
+    // ui->lineEdit_col_vertically->hide();
+    // ui->lineEdit_pos_horizontally->hide();
+    // ui->lineEdit_pos_vertically->hide();
+    // ui->lineEdit_col_vertically->hide();
+    // ui->lineEdit_col_horizontally->hide();
+    // ui->lineEdit_pos_x->hide();
+    // ui->lineEdit_pos_y->hide();
+    // ui->lineEdit_size_d->hide();
+    // ui->lineEdit_aperture_width->hide();
+
+    // ui->label_col->hide();
+    // ui->label_pos_x->hide();
+    // ui->label_pos_y->hide();
+    // ui->label_horizontally->hide();
+    // ui->label_vertically->hide();
+    // ui->label_pos->hide();
+    // ui->label_aperture_width->hide();
+    // ui->label_size_d->hide();
 
     ui->lineEdit_col_horizontally->setEnabled(false);
     ui->lineEdit_col_vertically->setEnabled(false);
@@ -840,15 +912,18 @@ void MainWindow::UpdateProgress(double val)
         ui->progressBar_calc->reset();
     }
     ui->progressBar_calc->setValue(val);
+    //qDebug() <<val;
 }
 
 void MainWindow::PrintCalcTime(double val)
 {
+    //qDebug() <<"Time: " <<val <<"\n";
     ui->label_Calc_time_2->setText(tr("Время вычислений: %1 мс").arg(val));
 }
 
 void MainWindow::PrintCalcIter(double val)
 {
+    //qDebug() <<"Iter: " <<val <<"\n";
     ui->label_Iter_amount_2->setText(tr("Кол-во итераций: %1").arg(val));
 }
 
@@ -955,6 +1030,7 @@ void MainWindow::on_pushButton_Reset_clicked()
         surface->removeSeries(series1);
         delete series1;
         mItems.clear();
+        SelectedPoint = -1;
         ui->pushButton_Reset->hide();
     }
 }
